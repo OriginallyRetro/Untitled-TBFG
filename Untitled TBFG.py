@@ -193,11 +193,11 @@ def fight(Player, firstWindSpirit)-> None:
 
     if firstWindSpirit.defense >= 0:
         firstWindSpirit.defense -= Player.attack
-                    
+            
             ### On the other hand if it is less than or equal to zero it'll attack the persons health
     if firstWindSpirit.defense <= 0:
-            firstWindSpirit.defense = 0
-            firstWindSpirit.health -= Player.attack
+        firstWindSpirit.defense = 0
+        firstWindSpirit.health -= Player.attack
 
     if Player.defense >= 0:
         Player.defense -= firstWindSpirit.attack
@@ -207,17 +207,16 @@ def fight(Player, firstWindSpirit)-> None:
         Player.health -= firstWindSpirit.attack
 
 
-        print("----------------------------------------------------------------")
-        print(f"Wind spirit has dealt {random.choice(windSpiritDamage)} DAMAGE!\n{userName} has dealt {random.choice(damage)} DAMAGE!")
-        print("----------------------------------------------------------------------")
-        print(f"Wind Spirit health: {firstWindSpirit.health},\nWind Spirit defense: {firstWindSpirit.defense}\n----------\n")
-        print(f"{userName} health: {Player.health},\n{userName} defense: {Player.defense}")
+    print("----------------------------------------------------------------")
+    print(f"Wind spirit has dealt {random.choice(windSpiritDamage)} DAMAGE!\n{userName} has dealt {random.choice(damage)} DAMAGE!")
+    print("----------------------------------------------------------------------")
+    print(f"Wind Spirit health: {firstWindSpirit.health},\nWind Spirit defense: {firstWindSpirit.defense}\n----------\n")
+    print(f"{userName} health: {Player.health},\n{userName} defense: {Player.defense}")
 
     if firstWindSpirit.health < 1:
         print("Wind spirit has died")
         input(firstAfterMath())
                     
-    return story_point
                     
 
             
@@ -246,10 +245,10 @@ def storyMode():
         input('\n')
         #f
         print('   ???:\n"Look a wind spirit, attack fend for you life!"  ')
-        input('\n\n')
-        os.system("cls")
+        input('***Brace yourself for BATTLE!***\n\n')
         #f
         #This is to begin so when you press enter it doesnt automatticaly start the fight
+        print('------------------------------------------------------------')
         print("Wind spirit stats:\n--------------------\n")
         print(f"HLTH = {firstWindSpirit.health}")
         print(f"ATK =  8-17 DMGE")
@@ -261,10 +260,11 @@ def storyMode():
         print(f"DEF = {Player.defense}")
         print(f"LIGHT MAG PWR = {Player.light_level}")
         input()
+        os.system("cls")
         while True:
             fight(Player, firstWindSpirit)
             input()
-            os.system("cls")
+    
 
     if Player.victories == 1:
         #f
@@ -328,7 +328,6 @@ def userProgression():
 
         
 mainMenu()
-
 
 
 
