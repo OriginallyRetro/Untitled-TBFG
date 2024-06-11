@@ -48,23 +48,64 @@ victories = 0
 
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
+class weapon:
+    def __init__(weapon: str, name: str, description: str, price: int, level_requirement: int, attack: int, style: str) -> None:
+        weapon.name = name
+        weapon.description = description
+        weapon.price = price
+        weapon.level_requirement = level_requirement
+        weapon.attack = attack
+        weapon.style = style
+
+#ALL SWORDS
+stone_sword_damage = (60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 90)
+stone_sword_description = 'The Stone Sword: a primal weapon, born from the earths core. With rugged charm and unwavering strength, it serves as a steadfast companion for those beginning their journey into the realm of combat.'
+
+iron_sword_damage = (90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130)
+iron_sword_description = 'The Iron Sword: forged in the heart of roaring flames, it bears the mark of resilience and strength. With its sleek design and formidable edge, it stands as a symbol of progress for fledgling warriors venturing into the fray.'
+
+diamond_sword_damage = (130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175)
+diamond_sword_description = 'The Diamond Sword: a gleaming beacon of power and prestige, crafted from the rarest of gems. Its radiant edge, sharp and unyielding, embodies the aspirations of champions-to-be as they embark on their quest for glory.'
+
+stone_sword = weapon(name = 'Granite Edge', description = stone_sword_description, price = 500, attack = stone_sword_damage, style = "Slashing")
+
+iron_sword = weapon(name = 'Ironwill Scimitar', description = iron_sword_description, price = 1500, level_requirement = 8, attack = iron_sword_damage, style = "Slashing"  )
+
+diamond_sword = weapon(name ='Gemfire Greatsword', description = diamond_sword_description, price = 3000, level_requirement = 15, attack = diamond_sword_damage, style = 'Heavy Hitting Slashing') 
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#All Scythes
+#idea name for legendary scythe: Backstory:
+
+#Forged in secrecy by the solitary figure known only as the Shadowweaver, the Shadowsoul Requiem emerged from the depths of the forsaken realm. Once revered as a master of the arcane arts, the Shadowweaver's name fell into obscurity when whispers of betrayal tainted their legacy.
+
+#Driven by a desire to redeem their tarnished honor, the Shadowweaver delved into forbidden rituals, channeling dark magic to imbue the scythe with unearthly power. Each swing of the Shadowsoul Requiem carried the weight of forgotten heroes, echoing their silent cries for justice.
+
+#As the dark clouds of war gathered on the horizon, the Shadowweaver emerged from the shadows, wielding the legendary scythe against the forces of darkness. Despite the world's condemnation, the Shadowsoul Requiem became a beacon of hope for those who dared to challenge the tyranny of evil, forever etching its name into the annals of history as a symbol of redemption and defiance.
+
+
+
+#---------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------
 class defaultCharacter:
-    def __init__(player, name, Xp: int, level: int, attack: int, health: int, defense: int, light_level: int, startingFight: int, victories: int, xp: int) -> None:
+    def __init__(player, name, Xp: int, level: int, attack: int, health: int, defense: int, weapon: str, light_level: int, startingFight: int, victories: int, xp: int) -> None:
         player.name = name
         player.Xp = Xp
         player.level = level
         player.attack = attack
         player.health = health
         player.defense = defense
+        player.weapon = weapon
         player.light_level = light_level
         player.startingFight = startingFight
         player.victories = victories
         player.xp = xp
         
-damage = (30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43 ,44 ,45 ,46, 47, 48, 49, 50, 51, 52, 53)
-(random.choice(damage))
+    #Code to have random amount of damage 30-53    
+player_damage = (30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43 ,44 ,45 ,46, 47, 48, 49, 50, 51, 52, 53, 55)
 
-Player = defaultCharacter(name = {userName}, Xp = 0, level = 0, attack =(random.choice(damage)), health = 750, defense = 500, light_level = 0, startingFight = 0, victories = 0, xp = 0)
+Player = defaultCharacter(name = {userName}, Xp = 0, level = 0, attack = player_damage, health = 750, defense = 500, light_level = 0, startingFight = 0, victories = 0, xp = 0)
 
 
 #---------------------------------------------------------------------------------------------------------
@@ -112,9 +153,9 @@ class windMinion:
 
 #This is to make it more like an actual fighting game the damage is random
 windSpiritDamage = (8, 9, 10, 11, 12, 13, 14, 15, 16, 17,)
-(random.choice(windSpiritDamage))
 
-firstWindSpirit = windMinion(name = "Wind Spirit", attack = (random.choice(windSpiritDamage)), health = 150, defense = 60)
+
+firstWindSpirit = windMinion(name = "Wind Spirit", attack = windSpiritDamage, health = 150, defense = 60)
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 
@@ -190,25 +231,27 @@ def tutorialMode():
 
 
 def fight(Player, firstWindSpirit)-> None:
+    damage = random.choice(Player.attack)
+    WSdamage = random.choice(firstWindSpirit.attack)
 
     if firstWindSpirit.defense >= 0:
-        firstWindSpirit.defense -= Player.attack
+        firstWindSpirit.defense -= damage
             
             ### On the other hand if it is less than or equal to zero it'll attack the persons health
     if firstWindSpirit.defense <= 0:
         firstWindSpirit.defense = 0
-        firstWindSpirit.health -= Player.attack
+        firstWindSpirit.health -= damage
 
     if Player.defense >= 0:
-        Player.defense -= firstWindSpirit.attack
+        Player.defense -= WSdamage
 
     if Player.defense <= 0:
         Player.defense = 0
-        Player.health -= firstWindSpirit.attack
+        Player.health -= WSdamage
 
 
     print("----------------------------------------------------------------")
-    print(f"Wind spirit has dealt {random.choice(windSpiritDamage)} DAMAGE!\n{userName} has dealt {random.choice(damage)} DAMAGE!")
+    print(f"Wind spirit has dealt {WSdamage} DAMAGE!\n{userName} has dealt {damage} DAMAGE!")
     print("----------------------------------------------------------------------")
     print(f"Wind Spirit health: {firstWindSpirit.health},\nWind Spirit defense: {firstWindSpirit.defense}\n----------\n")
     print(f"{userName} health: {Player.health},\n{userName} defense: {Player.defense}")
@@ -222,7 +265,7 @@ def fight(Player, firstWindSpirit)-> None:
             
 
     # the 'f' and the 'd' stands for delay print and fast print
-    # the reason that its like that because its faster to test when I 
+    # the reason that its like that because its faster to test when I go through it.
 
 def storyMode():
     if Player.victories == 0:
@@ -256,7 +299,8 @@ def storyMode():
         print("---------------------------------------------------")
         print(f"{userName} stats:\n--------------------\n")
         print(f"HLTH = {Player.health}")
-        print(f"ATK =  8-17 DMGE")
+        print(f"ATK =  30-53 DMGE")
+        print(f"WPN = Fists")
         print(f"DEF = {Player.defense}")
         print(f"LIGHT MAG PWR = {Player.light_level}")
         input()
