@@ -67,7 +67,7 @@ iron_sword_description = 'The Iron Sword: forged in the heart of roaring flames,
 diamond_sword_damage = (130, 131, 132, 133, 134, 135, 136, 137, 138, 139, 140, 141, 142, 143, 144, 145, 146, 147, 148, 149, 150, 151, 152, 153, 154, 155, 156, 157, 158, 159, 160, 161, 162, 163, 164, 165, 166, 167, 168, 169, 170, 171, 172, 173, 174, 175)
 diamond_sword_description = 'The Diamond Sword: a gleaming beacon of power and prestige, crafted from the rarest of gems. Its radiant edge, sharp and unyielding, embodies the aspirations of champions-to-be as they embark on their quest for glory.'
 
-stone_sword = weapon(name = 'Granite Edge', description = stone_sword_description, price = 500, attack = stone_sword_damage, style = "Slashing")
+stone_sword = weapon(name = 'Granite Edge', description = stone_sword_description, price = 500, level_requirement = 5, attack = stone_sword_damage, style = "Slashing")
 
 iron_sword = weapon(name = 'Ironwill Scimitar', description = iron_sword_description, price = 1500, level_requirement = 8, attack = iron_sword_damage, style = "Slashing"  )
 
@@ -89,7 +89,7 @@ diamond_sword = weapon(name ='Gemfire Greatsword', description = diamond_sword_d
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 class defaultCharacter:
-    def __init__(player, name, Xp: int, level: int, attack: int, health: int, defense: int, weapon: str, light_level: int, startingFight: int, victories: int, xp: int) -> None:
+    def __init__(player, name, Xp: int, level: int, attack: int, health: int, defense: int, weapon: str, light_level: int, startingFight: int, victories: int, xp: int,) -> None:
         player.name = name
         player.Xp = Xp
         player.level = level
@@ -230,17 +230,17 @@ def tutorialMode():
 #First fight
 
 
-def fight(Player, firstWindSpirit)-> None:
+def fight(Player, target)-> None:
     damage = random.choice(Player.attack)
-    WSdamage = random.choice(firstWindSpirit.attack)
+    WSdamage = random.choice(target.attack)
 
-    if firstWindSpirit.defense >= 0:
-        firstWindSpirit.defense -= damage
+    if target.defense >= 0:
+        target.defense -= damage
             
             ### On the other hand if it is less than or equal to zero it'll attack the persons health
-    if firstWindSpirit.defense <= 0:
-        firstWindSpirit.defense = 0
-        firstWindSpirit.health -= damage
+    if target.defense <= 0:
+        target.defense = 0
+        target.health -= damage
 
     if Player.defense >= 0:
         Player.defense -= WSdamage
@@ -253,10 +253,11 @@ def fight(Player, firstWindSpirit)-> None:
     print("----------------------------------------------------------------")
     print(f"Wind spirit has dealt {WSdamage} DAMAGE!\n{userName} has dealt {damage} DAMAGE!")
     print("----------------------------------------------------------------------")
-    print(f"Wind Spirit health: {firstWindSpirit.health},\nWind Spirit defense: {firstWindSpirit.defense}\n----------\n")
+    print(f"Wind Spirit health: {target.health},\nWind Spirit defense: {target.defense}\n----------\n")
     print(f"{userName} health: {Player.health},\n{userName} defense: {Player.defense}")
 
-    if firstWindSpirit.health < 1:
+    if target.health < 1:
+        Player.victories +=1
         print("Wind spirit has died")
         input(firstAfterMath())
                     
@@ -358,7 +359,7 @@ def userProgression():
     print(f"Light Level: {Player.light_level}")
     print(f"Attack Strength: {Player.attack}")
     print(f"Health: {Player.health}\n")
-    print(f"Number of victories: {victories}")
+    print(f"Number of victories: {Player.victories}")
     match input("-------------------------------\nHeres is where you can view all your stats/inventory Type 'm' to go to main menu "):
         case 'm':
             mainMenu()
