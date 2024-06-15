@@ -20,13 +20,7 @@ def fast_print(s):
         sys.stdout.flush()
         time.sleep(0.02)
 
-def afterMath_print(s):
-    for c in s:
-        sys.stdout.write(c)
-        sys.stdout.flush()
-        time.sleep(0.02)
-
-#--- ALL GLOBAL VARIABLES ---#
+#--- GLOBAL VARIABLES ---#
 global attack_buff, health_buff, fire_level_buff, water_level_buff, Xp, Experience, storyExperience, starting_point
 
 attack_buff = 0
@@ -44,6 +38,7 @@ storyExperience = 0
 
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
+#--- CODE FOR WEAPON CLASS ---#
 class weapon:
     def __init__(weapon: str, name: str, description: str, price: int, level_requirement: int, attack: int, style: str) -> None:
         weapon.name = name
@@ -56,7 +51,7 @@ class weapon:
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#ALL SWORDS
+#--- CODE FOR ALL SWORDS ---#
 stone_sword_damage = (60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 90)
 stone_sword_description = 'The Stone Sword: a primal weapon, born from the earths core. With rugged charm and unwavering strength, it serves as a steadfast companion for those beginning their journey into the realm of combat.'
 
@@ -74,7 +69,7 @@ diamond_sword = weapon(name ='Gemfire Greatsword', description = diamond_sword_d
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#ALL SCYTHES
+#--- CODE FOR ALL SCYTHES ---#
 shadowsoul_requiem_damage = (1000, 1001, 1002, 1003, 1004, 1005, 1006, 1007, 1008, 1009, 1010, 1011, 1012, 1013, 1014, 1015, 1016, 1017, 1018, 1019, 1020, 1021, 1022, 1023, 1024, 1025, 1026, 1027, 1028, 1029, 1030, 1031, 1032, 1033, 1034, 1035, 1036, 1037, 1038, 1039, 1040, 1041, 1042, 1043, 1044, 1045, 1046, 1047, 1048, 1049, 1050, 1051, 1052, 1053, 1054, 1055, 1056, 1057, 1058, 1059, 1060, 1061, 1062, 1063, 1064, 1065, 1066, 1067, 1068, 1069, 1070, 1071, 1072, 1073, 1074, 1075, 1076, 1077, 1078, 1079, 1080, 1081, 1082, 1083, 1084, 1085, 1086, 1087, 1088, 1089, 1090, 1091, 1092, 1093, 1094, 1095, 1096, 1097, 1098, 1099, 1100, 1101, 1102, 1103, 1104, 1105, 1106, 1107, 1108, 1109, 1110, 1111, 1112, 1113, 1114, 1115, 1116, 1117, 1118, 1119, 1120, 1121, 1122, 1123, 1124, 1125, 1126, 1127, 1128, 1129, 1130, 1131, 1132, 1133, 1134, 1135, 1136, 1137, 1138, 1139, 1140, 1141, 1142, 1143, 1144, 1145, 1146, 1147, 1148, 1149, 1150, 1151, 1152, 1153, 1154, 1155, 1156, 1157, 1158, 1159, 1160, 1161, 1162, 1163, 1164, 1165, 1166, 1167, 1168, 1169, 1170, 1171, 1172, 1173, 1174, 1175, 1176, 1177, 1178, 1179, 1180, 1181, 1182, 1183, 1184, 1185, 1186, 1187, 1188, 1189, 1190, 1191, 1192, 1193, 1194, 1195, 1196, 1197, 1198, 1199, 1200, 1201, 1202, 1203, 1204, 1205, 1206, 1207, 1208, 1209, 1210, 1211, 1212, 1213, 1214, 1215, 1216, 1217, 1218, 1219, 1220, 1221, 1222, 1223, 1224, 1225, 1226, 1227, 1228, 1229, 1230, 1231, 1232, 1233, 1234, 1235, 1236, 1237, 1238, 1239, 1240, 1241, 1242, 1243, 1244, 1245, 1246, 1247, 1248, 1249, 1250)
 shadowsoul_requiem_description = ('Forged in secrecy by the solitary figure known only as the Shadowweaver, the Shadowsoul Requiem emerged from the depths of the forsaken realm. Once revered as a master of the arcane arts, the Shadowweavers name fell into obscurity when whispers of betrayal tainted their legacy. Driven by a desire to redeem their tarnished honor, the Shadowweaver delved into forbidden rituals, channeling dark magic to imbue the scythe with unearthly power. Each swing of the Shadowsoul Requiem carried the weight of forgotten heroes, echoing their silent cries for justice. As the dark clouds of war gathered on the horizon, the Shadowweaver emerged from the shadows, wielding the legendary scythe against the forces of darkness. Despite the worlds condemnation, the Shadowsoul Requiem became a beacon of hope for those who dared to challenge the tyranny of evil, forever etching its name into the annals of history as a symbol of redemption and defiance.')
 shadowsoul_requiem = weapon(name = 'shadowsoul_requiem', description = shadowsoul_requiem_description, price = 15000, level_requirement = 50, attack = shadowsoul_requiem_damage, style = 'Mythical Sweeping, Slashing Weapon (SCYTHE)'  )
@@ -84,7 +79,7 @@ peasant_reaper_description = ('The Peasant\'s Reaper is a formidable scythe-like
 peasant_reaper = weapon(name = 'Peasants\' reaper', description = peasant_reaper_description, price = 3500, level_requirement = 10, attack = peasant_reaper_damage, style = 'Heavy Hitting Slashing (SCYTHE)')
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-#ALL STAFFS
+#--- CODE FOR ALL STAFFS ---#
 celestial_staff_description = ('The Celestial Emberstaff: a divine oakwood staff adorned with celestial symbols, housing a radiant crystal. With it, wielders command the fury of flames, becoming beacons of celestial power, purging darkness with righteous fire.')
 celestial_staff_damage = (350, 351, 352, 353, 354, 355, 356, 357, 358, 359, 360, 361, 362, 363, 364, 365, 366, 367, 368, 369, 370, 371, 372, 373, 374, 375, 376, 377, 378, 379, 380, 381, 382, 383, 384, 385, 386, 387, 388, 389, 390, 391, 392, 393, 394, 395, 396, 397, 398, 399, 400, 401, 402, 403, 404, 405, 406, 407, 408, 409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 435, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453, 454, 455, 456, 457, 458, 459, 460, 461, 462, 463, 464, 465, 466, 467, 468, 469, 470, 471, 472, 473, 474, 475, 476, 477, 478, 479, 480, 481, 482, 483, 484, 485, 486, 487, 488, 489, 490, 491, 492, 493, 494, 495, 496, 497, 498, 499, 500, 501, 502, 503, 504, 505, 506, 507, 508, 509, 510, 511, 512, 513, 514, 515, 516, 517, 518, 519, 520, 521, 522, 523, 524, 525, 526, 527, 528, 529, 530, 531, 532, 533, 534, 535, 536, 537, 538, 539, 540, 541, 542, 543, 544, 545, 546, 547, 548, 549, 550, 551, 552, 553, 554, 555, 556, 557, 558, 559, 560, 561, 562, 563, 564, 565, 566, 567, 568, 569, 570, 571, 572, 573, 574, 575, 576, 577, 578, 579, 580, 581, 582, 583, 584, 585, 586, 587, 588, 589, 590, 591, 592, 593, 594, 595, 596, 597, 598, 599, 600)
 celestial_staff = weapon(name = 'Celestial Staff', description = celestial_staff_description, price = 4500, level_requirement = 20, attack = celestial_staff_damage, style = 'Stabbing Thrusting Weapon (STAFF)')
@@ -94,11 +89,13 @@ nova_nexus_damage = (600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611,
 nova_nexus = weapon(name = 'Nova Nexus Staff', description = nova_nexus_description, price = 12500, level_requirement = 25, attack = nova_nexus_damage, style = 'Stabbing Thrusting Weapon (STAFF)')
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
+#--- CLASSES FOR ARMOR
 class armor:
     def __init__(armor, name: str, added_defense: int, level_requirement: int, description: str):
         armor.name = name
         armor.added_defense = added_defense
         armor.level_requirement = level_requirement
+        armor.description = description
 
 leather_tunic_description = ('A simple leather tunic, stitched together with basic craftsmanship. Provides basic protection against minor threats.')
 leather_tunic = armor(name = "Leather Tunic", added_defense = 50, level_requirement = 1, description = leather_tunic_description)
@@ -117,6 +114,7 @@ aetherial_armor = armor(name = "Ethereal armor", added_defense = 1250, level_req
 
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
+#-- DEFAULT CHARACTER CLASS {WIP} ---#
 class defaultCharacter:
     def __init__(player, name, Xp: int, level: int, attack: int, light_attack: int, equipped_weapon, health: int, defense: int, armor, light_level: int, startingFight: int, victories: int, xp: int, coins: int) -> None:
         player.name = name
@@ -141,6 +139,7 @@ Player = defaultCharacter(name = {userName}, Xp = 0, level = 0, attack = player_
 
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
+#--- CLASSES CODE FOR BOSSES AND MINIONS FOR DUNGEON
 class elemntalBoss:
     def __init__(elementalBoss, attack: int, health:int) -> None:
         elementalBoss.attack = attack
@@ -158,7 +157,6 @@ windSpiritDamage = (8, 9, 10, 11, 12, 13, 14, 15, 16, 17,)
 firstWindSpirit = elementalMinion(name = "Wind Spirit", attack = windSpiritDamage, health = 150, defense = 60)
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
-
 #--- MAIN MENU ---#
 def mainMenu():
     os.system("cls")
@@ -207,7 +205,6 @@ def inspiration():
 #--- ENDLESS MODE WIP ---#
 def endlessMode():
     print('WIP')
-        
 
 #--- EXPLAINS BASIC GAME MECHANICS ---#
 def tutorialMode():
@@ -223,45 +220,55 @@ def tutorialMode():
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 
+#--- CODE FOR EQUIPPING WEAPON ---#
 def equip_weapon(self, weapon):
     self.equipped_weapon = weapon
     print(f"{Player.name} has equipped {weapon.name}")
 
-
-
-
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 
 
-#--- CODE FOR  FIGHT ---#
-def status(Player, target)-> None:
-    global Rdamage, damage
-    damage = random.choice(Player.attack)
-    Rdamage = random.choice(target.attack)
-
-    print(f"{target.name} DEALT {Rdamage}!")
-    print("\n------------------------------------\n")
-    print(f"{userName}s' HLTH {Player.health}" )
-    print(f"{userName}s' DEF {Player.defense}" )
-    print("\n------------------------------------\n")
-    print(f"{userName} DEALT {damage}!")
-    print("\n------------------------------------\n")
-    print(f"{target.name}s' HLTH {target.health}" )
-    print(f"{target.name}s' DEF {target.defense}" )
-    print("-------------------------------------")
 
 
 
+#--- CODE FOR FIGHT ---#
 def fight(Player, target)-> None:
-    Haste = f"With haste choose your next attack, {userName}: "
-    Wise = f"Be wise with your next attack for it may be your last, {userName}: "
-    Regular = f"Choose your next attack: "
+    def light_attack_status(Player, target)-> None:
+        print(f"{target.name} DEALT {Rdamage}!")
+        print("\n------------------------------------\n")
+        print(f"{userName}s' HLTH {Player.health}" )
+        print(f"{userName}s' DEF {Player.defense}" )
+        print("\n------------------------------------\n")
+        print(f"{userName} DEALT {Player.light_attack}!")
+        print("\n------------------------------------\n")
+        print(f"{target.name}s' HLTH {target.health}" )
+        print(f"{target.name}s' DEF {target.defense}" )
+        print("-------------------------------------")
+    def status(Player, target)-> None:
+    #--- CODE FOR STATUS UPDATES HEALTH
+        print(f"{target.name} DEALT {Rdamage}!")
+        print("\n------------------------------------\n")
+        print(f"{userName}s' HLTH {Player.health}" )
+        print(f"{userName}s' DEF {Player.defense}" )
+        print("\n------------------------------------\n")
+        print(f"{userName} DEALT {damage}!")
+        print("\n------------------------------------\n")
+        print(f"{target.name}s' HLTH {target.health}" )
+        print(f"{target.name}s' DEF {target.defense}" )
+        print("-------------------------------------")
+
+    #-------------------------------------#
+    #--- Randomized word choice to keep the game from being bland --#
+    global Rdamage, damage
+    Haste = (f"With haste choose your next attack, {userName}: ")
+    Wise = (f"Be wise with your next attack for it may be your last, {userName}: ")
+    Regular = (f"Choose your next attack: ")
     fighting_words = (Haste, Wise, Regular)
     rcf = random.choice(fighting_words)
-    #-------------------------------------#
+    #--- Code for randomized damage for more game authenticity ---#
     damage = random.choice(Player.attack)
-    WSdamage = random.choice(target.attack)
+    Rdamage = random.choice(target.attack)
     while True:
         print(f"---------{userName}s' Turn---------")
         print("1. Regular Attack")
@@ -269,6 +276,7 @@ def fight(Player, target)-> None:
         print(f"\n")
         match input(f"{rcf}"):
             case '1':
+                 #--- Game Logic attack the defense until its zero if it is zero then keep it there and attack at the health instead.
                  if target.defense >= 0:
                     target.defense -= damage
         
@@ -283,9 +291,14 @@ def fight(Player, target)-> None:
                         Player.defense = 0
                         Player.health -= Rdamage
 
-                    status(Player, target)
-                    status(Player, target)
+                    if target.health <= 0:
+                        good_aftermath()
 
+                    if Player.health <= 0:
+                        bad_aftermath()
+
+                    status(Player, target)
+                    input()
             case '2':
                 if target.defense >= 0:
                     target.defense -= Player.light_attack
@@ -300,9 +313,36 @@ def fight(Player, target)-> None:
                     if Player.defense <= 0:
                         Player.defense = 0
                         Player.health -= Rdamage
+
+                    if target.health <= 0:
+                        good_aftermath(target)
+
+                    if Player.health <= 0:
+                        bad_aftermath()
                     
-                    status(Player, target)
-                    status(Player, target)
+                    light_attack_status(Player, target)
+                    input()
+            case _:
+                Regular2 = (f"You've lost your turn {userName}!")
+                Mean = (f"Look alive to stay alive {userName}!")
+                Funny = (f"Bozo He hit you!")
+                invalid_words = (Regular2, Mean, Funny)
+                random.choice(invalid_words)
+                print(f"{userName} takes 10 damage!")
+                Player.health -= 10
+
+                if Player.defense >= 0:
+                    Player.defense -= Rdamage
+
+                if Player.defense <= 0:
+                    Player.defense = 0
+                    Player.health -= 10
+
+                status(Player, target)
+                input()
+
+                    
+                
                         
                     
 #--- ENTIRE STORY/DIALOUGE ---#
@@ -314,7 +354,6 @@ def storyMode():
         #fast
         print('     Narrator: "Within the foreboding depths of the Elemental Spirit Dungeon, darkness reigns supreme. Its twisted corridors are a ghastly tapestry of jagged stone and flickering torchlight, casting eerie shadows that seem to dance with malevolent intent.\nTraps lie in wait, eager to ensnare the unwary, while spectral entities haunt every corner, their mournful wails a constant reminder of the horrors that dwell within. Yet amidst the peril, there are treasures to be found and challenges to be overcome, for those brave or foolish enough to dare the dungeons depths.\nBut beware, for in the heart of darkness, even the most valiant souls may find themselves consumed by the abyss. Prepare for the unknown and prepare your heart, light mage..."\n\n\n     ')
         input()
-        os.system("cls")
         #Delay
         print('  ???:\n"Hey! Get up, you alright, man?"   ')
         input('\n')
@@ -326,11 +365,9 @@ def storyMode():
         print('  ???:\n"Thats not important, you got knocked out by a spirit, right now lets get through this dungeon!" ')
         input('\n')
         os.system('cls')
-
         #d
         print('  "(Thinking to yourself): So, he ignored my question then answered it? This guy is a weirdo. Wait, a dungeon?!?! And a spirit too?"  ')
         input('\n')
-        os.system("cls")
         #f
         print('   ???:\n"Look a wind spirit, attack! Fend for you life!"  ')
         input('***Brace yourself for BATTLE!***\n\n')
@@ -354,21 +391,24 @@ def storyMode():
             fight(Player, firstWindSpirit)
             
             
-
+    #IMPROVE THE STORY PELASESEEEEE
     if Player.victories == 1:
         #f
         fast_print('   Narrator: "Emerging from the depths of the evil elemental spirit dungeon, You breathe a sigh of relief, your holy heart blazes with triumphant victory. The burden of darkness lifts, but a flicker of concern remains for the lingering shadows left behind. As you step into the light outside of the dungeon, victorious yet vigilant, the need for tranquillity resonates within..."   ')
         input('\n')
         print('  ???:\n"Good moves back there!"   ')
         input('\n')
+        os.system("cls")
         print('  You:\n"What the hell was that back there?!"  ')
         input('\n')
-        print('  ???:\n"That was a dungeon, full of treasure, and despair!"   ')
+        print('  ???:\n"That was a dungeon, full of treasure, scrolls and despair!"   ')
         input('\n')
+        os.system("cls")
         print('  You:\n"What does that even mean"  ')
         input('\n')
         print('  ???:\n"I recommend getting armor next time you go through one though that fight looked a little rough"   ')
         input('\n')
+        os.system("cls")
         print('  You:\n(To yourself) "WHY DOES HE KEEP IGNORING MY QUESTIONS"  ')
         input('\n')
         print('  You:\n(To yourself) "Hes most likely correct sadly..."  ')
@@ -404,30 +444,34 @@ def storyMode():
         input('\n')
         print(' ???:\n"Ill ignore the last part but...I assume up to us light mages to take care of em."')
         input('\n')
+        os.system("cls")
         print(' ???:\n"Indeed" ')
         input('\n')
         print(' You:\n"So whats a light mage? Also do we get a super cool base or something?" ')
         input('\n')
+        os.system("cls")
         print(' ???:\n"A light mage are people who fight against the darkness of evil, born with the gift of being able to use light magic abilities."')
         input('\n')
         print(' You:\n"Thats cool."')
         input('\n')
+        os.system("cls")
         print(' ???:\n"Indudably my names Myles by the way but you can call me Isaiah" ')
         input('\n')
         print(' Isaiah:\n"Lets head back to our base ill explain more there" ')
         input('\n')
+        os.system("cls")
         print(' Narrator: \n"Returning to your base, you walk side by side, your sudden found unity a beacon of hope in the ongoing struggle against the forces of darkness." ')
         input('\n')
-        os.system('cls')
         print(' Narrator:\n"Upon returning to your newfound base, the other light mages greeted you with a scene of bustling activity and camaraderie. Within the safety of their stronghold, you find not only weapons and provisions but also the warm embrace of fellow allies and friends. Amidst the flickering torchlight, laughter and conversation filled the air, a testament to the resilience of their bond forged in battle. Strengthened by their unity and fortified by the support of their companions, they prepared to face the challenges ahead with renewed determination and unwavering resolve. In this sanctuary of light and friendship, they found solace and strength to confront the darkness that loomed beyond their walls, united in their shared quest for peace and prosperity." ')
         input('\n')
+        os.system("cls")
         print(' Isaiah:\n"Let me teach you the basics real quick on how to fight and get weapons and armor! First off to get weapons you can buy them from the shop and you can also switch weapons in your inventory. You get paid in coins when you defeat spirits, which you use to buy weapons, as well as armor. Your armor provides a boost of defense as well!" ') 
         input('\n')
         print(' Isaiah:\n"Here kid, I saved up some money to use for other purposes, but you seem like you\'re worth here heres 5000 coin. Dont spend it in one place! Lets head over to the shop and pick you out a fine weapon!"')
         input('\n')
+        os.system("cls")
         print(' (To yourself) How are you going to tell me not to spend it all in one place even though you said that I can only spend it on weapons and armor which are in the same place techinaly...')
         Player.coins += 5000
-        os.system("cls")
         input()
         os.system("cls")
         shop()
@@ -548,20 +592,27 @@ def staffs_shop():
 
 #--- CUSTOM AFTERMATH WORDS SO THAT THE GAME DOESNT FEEL 'CHEAP' ---#
 Day = "Another day another victory! "
-Easy = "That wasnt so bad, nice victory light mage! "
-victoryWords = (Day, Easy)
-random.choice(victoryWords)
+Easy = "That wasnt so bad, nice victory light mage!"
+victory_words = (Day, Easy)
 
-def firstAfterMath():    
-    victoryWords = (Day, Easy)
+def good_aftermath():    
     os.system("cls")
-    afterMath_print(random.choice(victoryWords))
+    fast_print(random.choice(victory_words))
     Player.xp += 100
-    Player.level += 1
-    afterMath_print(f"Level up! {Player.level} Total XP: {Player.xp} Items gained: None\n")
+    Player.level += 5
+    fast_print(f"Level up! {Player.level} Total XP: {Player.xp} Items gained: None\n")
     input()
     mainMenu()
-        
+
+Regular = "You have fallen in battle! No rewards"
+Rough = "Better luck next time eh? No rewards for you!"
+loser_words = (Regular, Rough)  
+def bad_aftermath():       
+    os.system("cls")
+    input()
+    fast_print(random.choice(loser_words))
+    mainMenu()
+
 
 
 #--- USERS PROGRESSION TO SHOW HOW FAR THE PLAYER HAS CAME ---#
