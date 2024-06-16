@@ -25,6 +25,7 @@ global attack_buff, health_buff, fire_level_buff, water_level_buff, Xp, Experien
 
 attack_buff = 0
 health_buff = 0
+
 Xp = 0
 
 
@@ -122,7 +123,7 @@ class defaultCharacter:
         player.level = level
         player.attack = attack
         player.light_attack = light_attack
-        player.equippied_weapon = None
+        player.equipped_weapon = None
         player.health = health
         player.defense = defense
         player.armor = None
@@ -233,7 +234,25 @@ def equip_weapon(self, weapon):
 
 
 #--- CODE FOR FIGHT ---#
+
+    
 def fight(Player, target)-> None:
+    def weapon_reponse_status(Player, target)-> None:
+        print("\n------------------------------------\n")
+        print(f"{userName}s' HLTH {Player.health}" )
+        print(f"{userName}s' DEF {Player.defense}")
+        print("\n------------------------------------\n")
+        print(f"{target.name}s' HLTH {target.health}" )
+        print(f"{target.name}s' DEF {target.defense}" )
+        print("-------------------------------------")  
+    def invalid_response_status(Player, target)-> None:
+        print("\n------------------------------------\n")
+        print(f"{userName}s' HLTH {Player.health}" )
+        print(f"{userName}s' DEF {Player.defense}")
+        print("\n------------------------------------\n")
+        print(f"{target.name}s' HLTH {target.health}" )
+        print(f"{target.name}s' DEF {target.defense}" )
+        print("-------------------------------------")  
     def light_attack_status(Player, target)-> None:
         print(f"{target.name} DEALT {Rdamage}!")
         print("\n------------------------------------\n")
@@ -257,8 +276,8 @@ def fight(Player, target)-> None:
         print(f"{target.name}s' HLTH {target.health}" )
         print(f"{target.name}s' DEF {target.defense}" )
         print("-------------------------------------")
-
-    #-------------------------------------#
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
     #--- Randomized word choice to keep the game from being bland --#
     global Rdamage, damage
     Haste = (f"With haste choose your next attack, {userName}: ")
@@ -271,11 +290,13 @@ def fight(Player, target)-> None:
     Rdamage = random.choice(target.attack)
     while True:
         print(f"---------{userName}s' Turn---------")
-        print("1. Regular Attack")
+        print("1. Fists Attack")
         print("2. Light Magic Attack")
+        print("3. Weapon Attack")
         print(f"\n")
         match input(f"{rcf}"):
             case '1':
+
                  #--- Game Logic attack the defense until its zero if it is zero then keep it there and attack at the health instead.
                  if target.defense >= 0:
                     target.defense -= damage
@@ -315,36 +336,57 @@ def fight(Player, target)-> None:
                         Player.health -= Rdamage
 
                     if target.health <= 0:
-                        good_aftermath(target)
+                        good_aftermath()
 
                     if Player.health <= 0:
                         bad_aftermath()
                     
                     light_attack_status(Player, target)
                     input()
+            case '3':#still WIP
+                    if Player.equiiped_weapon == iron_sword:
+                        
+                        diamond_sword.attack = (random.choice(diamond_sword.attack))
+                        if Player.equipped_weapon == diamond_sword:
+                            target.health -= diamond_sword.attack
+                            input(f"{target.health}")
+
+                        weapon_reponse_status(Player, target)
+
+                    else:
+                        input(f"You have no weapon, [Seen as an invalid turn] {userName} loses turn [-10 HLTH and -10 DEF]")
+                        print(f"{userName} takes 10 damage!")
+                        Player.health -= 10
+
+                    if Player.defense >= 0:
+                        Player.defense -= 10
+
+                    if Player.defense <= 0:
+                        Player.defense = 0
+                        Player.health -= 10
+
+                    invalid_response_status(Player, target)
+                    input()
             case _:
                 Regular2 = (f"You've lost your turn {userName}!")
                 Mean = (f"Look alive to stay alive {userName}!")
                 Funny = (f"Bozo He hit you!")
                 invalid_words = (Regular2, Mean, Funny)
-                random.choice(invalid_words)
-                print(f"{userName} takes 10 damage!")
+                print(random.choice(invalid_words))
+                print("\n[-10 HLTH and -10 DEF]")
                 Player.health -= 10
 
                 if Player.defense >= 0:
-                    Player.defense -= Rdamage
+                    Player.defense -= 10
 
                 if Player.defense <= 0:
                     Player.defense = 0
                     Player.health -= 10
 
-                status(Player, target)
+                invalid_response_status(Player, target)
                 input()
 
-                    
-                
-                        
-                    
+                                       
 #--- ENTIRE STORY/DIALOUGE ---#
     # the 'f' and the 'd' stands for delay print and fast print
     # the reason that its like that because its faster to test when I go through it.
@@ -389,8 +431,8 @@ def storyMode():
         os.system("cls")
         while True:
             fight(Player, firstWindSpirit)
-            
-            
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
     #IMPROVE THE STORY PELASESEEEEE
     if Player.victories == 1:
         #f
@@ -414,7 +456,6 @@ def storyMode():
         print('  You:\n(To yourself) "Hes most likely correct sadly..."  ')
         input('\n')
         print(' ???:\n"Here I might as well show you this, its a sketch of a larger more vital dungeon" ')
-        os.system("cls")
         input('\n')
         #FAST PRINT ALL OF THIS
         print("                                    WATER BOSS                                                    ")
@@ -475,7 +516,8 @@ def storyMode():
         input()
         os.system("cls")
         shop()
-
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
 #--- ENTRY POINT FOR SHOP ---#
 def shop():
     os.system("cls")
@@ -492,49 +534,53 @@ def shop():
         case _:
             input("Please enter a weapons name you would like to buy!")
             shop()
-            
-
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
 #--- SWORDS WEAPON SHOP ---#
 def swords_shop():
     os.system("cls")
     print(f"Your current number of coins: {Player.coins}\n-------------------------------------------------------------------------------------------------------------------------------\n")
-    print(f"[1] - Stone sword: {stone_sword.name} DMGE: 60-90.\nDescription: {stone_sword_description}\nPrice: {stone_sword.price}\n\n")
-    print(f"[2] - Iron sword: {iron_sword.name} DMGE: 90-130.\nDescription: {iron_sword_description}\nPrice: {iron_sword.price}\n\n")
-    print(f"[3] - Diamond sword: {diamond_sword.name} DMGE: 90-130.\nDescription: {diamond_sword_description}\nPrice: {diamond_sword.price}\n\n")
+    print(f"[1] - {stone_sword.name}: DMGE: 60-90.\nDescription: {stone_sword_description}\nPrice: {stone_sword.price}\n\n")
+    print(f"[2] - {iron_sword.name}: DMGE: 90-130.\nDescription: {iron_sword_description}\nPrice: {iron_sword.price}\n\n")
+    print(f"[3] - {diamond_sword.name}: DMGE: 90-130.\nDescription: {diamond_sword_description}\nPrice: {diamond_sword.price}\n\n")
     print("\n\n\nType 'm' to go to main menu")
     match input("Which weapon would you like lad?"):
         case '1':
             if Player.coins < stone_sword.price:
                 print("You dont have enough money young man. You try to scam the legendary Ryker?")
             else:
-                Player.equippied_weapon = stone_sword
+                Player.equip_weapon(stone_sword)
                 Player.coins -= 500
                 print("Pleasure doin business with you ya bo-yo!")
-                input(f"You have equipped a Stone Sword")
+                input(f"You have equipped a {Player.equippied_weapon(stone_sword)}")
         case '2':
             if Player.coins < iron_sword.price:
                 print("You dont have enough money young man. You try to scam the legendary Ryker?")
             else:
-                Player.equippied_weapon = iron_sword
+                Player.equip_weapon(iron_sword)
                 Player.coins -= 1500
                 print("Pleasure doin business with you ya bo-yo!")
-                input(f"You have equipped a Iron Sword")  
+                input(f"You have equipped a {Player.equip_weapon(iron_sword)}")  
         case '3':
             if Player.coins < diamond_sword.price:
                 print("You dont have enough money young man. You try to scam the legendary Ryker?")
             else:
-                Player.equippied_weapon = diamond_sword
+                Player.equipped_weapon = diamond_sword
                 Player.coins -= 3000
                 print("Pleasure doin business with you ya bo-yo!")
-                input(f"You have equipped a Diamond Sword")
+                input(f"You have equipped a {diamond_sword.name}")
+                test()
         case _:
             input(random.choice(choose_words))
             swords_shop()
-        
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------        
 global choose_words, Already, Hurry
 Already = "Ryker:\n'Hurry up we dont got all day we got a line going young man."
 Hurry = "Ryker:\n'Get on with it kid."
 choose_words = (Already, Hurry)
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
 #--- SCYTHES WEAPON SHOP ---#
 def scythes_shop():
     os.system("cls")
@@ -547,10 +593,10 @@ def scythes_shop():
             if Player.coins < peasant_reaper.price:
                 print("Ryker:\nYou dont have enough money young man. You try to scam the legendary Ryker?")
             else:
-                Player.equippied_weapon = peasant_reaper
+                Player.equip_weapon(peasant_reaper)
                 Player.coins -= 3500
                 print("Pleasure doin business with you ya bo-yo!")
-                input(f"You have equipped {Player.equippied_weapon}")
+                input(f"You have equipped {Player.equip_weapon(peasant_reaper)}")
         case '2':
             if Player.coins < shadowsoul_requiem.price:
                 Player.coins -= 15000
@@ -558,10 +604,12 @@ def scythes_shop():
             else:
                 Player.equippied_weapon = shadowsoul_requiem
                 print("Pleasure doin business with you ya bo-yo!")
-                input(f"You have equipped {Player.equippied_weapon}")  
+                input(f"You have equipped {Player.equip_weapon(shadowsoul_requiem)}")  
         case _:
             input(random.choice(choose_words))
             scythes_shop()
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
 #--- STAFFS WEAPON SHOP ---#
 def staffs_shop():
     os.system("cls")
@@ -577,7 +625,7 @@ def staffs_shop():
                 Player.equippied_weapon = celestial_staff
                 Player.coins -= 4500 
                 print("Pleasure doin business with you ya bo-yo!")
-                input(f"You have equipped {Player.equippied_weapon}")
+                input(f"You have equipped {Player.equip_weapon(celestial_staff)}")
         case '2':
             if Player.coins < nova_nexus.price:
                 print("You dont have enough money young man. You try to scam the legendary Ryker?")
@@ -585,12 +633,13 @@ def staffs_shop():
                 Player.equippied_weapon = nova_nexus
                 Player.coins -= 12500
                 print("Pleasure doin business with you ya bo-yo!")
-                input(f"You have equipped {Player.equippied_weapon}")  
+                input(f"You have equipped {Player.equip_weapon(nova_nexus)}")  
         case _:
             input(random.choice(choose_words))
             scythes_shop()
-
-#--- CUSTOM AFTERMATH WORDS SO THAT THE GAME DOESNT FEEL 'CHEAP' ---#
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
+#--- CUSTOM AFTERMATH WORDS SO THAT THE GAME DOESNT FEEL BLAND ---#
 Day = "Another day another victory! "
 Easy = "That wasnt so bad, nice victory light mage!"
 victory_words = (Day, Easy)
@@ -600,10 +649,16 @@ def good_aftermath():
     fast_print(random.choice(victory_words))
     Player.xp += 100
     Player.level += 5
+    Player.light_level += 3
+    if Player.light_level > 3:
+        Player.light_attack + 30
+    Player.victories += 1
+    Player.coins += 750
     fast_print(f"Level up! {Player.level} Total XP: {Player.xp} Items gained: None\n")
     input()
     mainMenu()
-
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
 Regular = "You have fallen in battle! No rewards"
 Rough = "Better luck next time eh? No rewards for you!"
 loser_words = (Regular, Rough)  
@@ -612,9 +667,8 @@ def bad_aftermath():
     input()
     fast_print(random.choice(loser_words))
     mainMenu()
-
-
-
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
 #--- USERS PROGRESSION TO SHOW HOW FAR THE PLAYER HAS CAME ---#
 def userProgression():
     os.system("cls")
@@ -633,12 +687,14 @@ def userProgression():
         case _:
             os.system("cls")
             userProgression()
-                
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
 
-
-
-
-        
+def test():
+    fight(Player, firstWindSpirit)
+    input('TEST')
 mainMenu()
 
 
