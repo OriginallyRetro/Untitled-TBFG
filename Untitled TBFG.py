@@ -361,16 +361,56 @@ def fight(Player, target)-> None:
                     
                     light_attack_status(Player, target)
                     input()
-            case '3':#Fix
+            case '3':#add defensive logic
                     if Player.equipped_weapon == diamond_sword:
-                        
                         diamond_sword.attack = (random.choice(diamond_sword.attack))
-                        if Player.equipped_weapon == diamond_sword:
-                            target.health -= diamond_sword.attack
-                            input(f"{target.health}")
+                        target.health -= diamond_sword.attack
+                        input(f"{target.health}")
 
                         weapon_reponse_status(Player, target)
 
+                    elif Player.equipped_weapon == stone_sword:
+                        stone_sword.attack = (random.choice(stone_sword.attack))
+                        target.health -= stone_sword.attack
+
+                        weapon_reponse_status(Player, target)
+
+                    elif Player.equipped_weapon == iron_sword:
+                        iron_sword.attack = (random.choice(iron_sword.attack))
+                        target.health -= iron_sword.attack
+
+                        weapon_reponse_status(Player, target)
+
+                    elif Player.equipped_weapon == peasant_reaper:
+                        peasant_reaper.attack = (random.choice(peasant_reaper.attack))
+                        target.health -= peasant_reaper.
+                        
+                        weapon_reponse_status(Player, target)
+
+                    elif Player.equipped_weapon == peasant_reaper:
+                        peasant_reaper.attack = (random.choice(peasant_reaper.attack))
+                        target.health -= peasant_reaper.attack
+
+                        weapon_reponse_status(Player, target)
+                    
+                    elif Player.equipped_weapon == shadowsoul_requiem:
+                        shadowsoul_requiem.attack = (random.choice(shadowsoul_requiem.attack))
+                        target.health -=  shadowsoul_requiem.attack
+
+                        weapon_reponse_status(Player, target)
+
+                    elif Player.equipped_weapon == celestial_staff:
+                         celestial_staff.attack = (random.choice(celestial_staff.attack))
+                         target.health -=  celestial_staff.attack
+
+                         weapon_reponse_status(Player, target)
+
+                    elif Player.equipped_weapon == nova_nexus:
+                         nova_nexus.attack = (random.choice(nova_nexus.attack))
+                         target.health -=  nova_nexus.attack
+
+                         weapon_reponse_status(Player, target)
+                
                     else:
                         input(f"You have no weapon, [Seen as an invalid turn] {userName} loses turn [-10 HLTH and -10 DEF]")
                         print(f"{userName} takes 10 damage!")
@@ -391,7 +431,7 @@ def fight(Player, target)-> None:
                 Funny = (f"Bozo He hit you!")
                 invalid_words = (Regular2, Mean, Funny)
                 print(random.choice(invalid_words))
-                print("\n[-10 HLTH and -10 DEF]")
+                print("-10 HLTH and -10 DEF]")
                 Player.health -= 10
 
                 if Player.defense >= 0:
@@ -840,6 +880,8 @@ def userProgression():
 #--------------------------------------------------------------------------------------------------------------------
 
 mainMenu()
+
+
 
 
 
