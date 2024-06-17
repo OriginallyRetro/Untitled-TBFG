@@ -117,7 +117,7 @@ aetherial_armor = armor(name = "Ethereal armor", added_defense = 1250, level_req
 #---------------------------------------------------------------------------------------------------------
 #-- DEFAULT CHARACTER CLASS {WIP} ---#
 class defaultCharacter:
-    def __init__(player, name, Xp: int, level: int, attack: int, light_attack: int, equipped_weapon, health: int, defense: int, armor, light_level: int, startingFight: int, victories: int, xp: int, coins: int) -> None:
+    def __init__(player, name, Xp: int, level: int, attack: int, light_attack: int, equipped_weapon, health: int, defense: int, equipped_armor, armor, light_level: int, startingFight: int, victories: int, xp: int, coins: int) -> None:
         player.name = name
         player.Xp = Xp
         player.level = level
@@ -126,6 +126,7 @@ class defaultCharacter:
         player.equipped_weapon = None
         player.health = health
         player.defense = defense
+        player.equipped_armor = equipped_armor
         player.armor = None
         player.light_level = light_level
         player.startingFight = startingFight
@@ -136,7 +137,7 @@ class defaultCharacter:
     #Code to have random amount of damage 30-53    
 player_damage = (30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43 ,44 ,45 ,46, 47, 48, 49, 50, 51, 52, 53, 55)
 
-Player = defaultCharacter(name = {userName}, Xp = 0, level = 0, attack = player_damage, light_attack = 60, equipped_weapon = None, health = 750, defense = 500, armor = None, light_level = 0, startingFight = 0, victories = 0, xp = 0, coins = 0)
+Player = defaultCharacter(name = {userName}, Xp = 0, level = 0, attack = player_damage, light_attack = 60, equipped_weapon = None, health = 750, defense = 500, equipped_armor = None, armor = None, light_level = 0, startingFight = 0, victories = 0, xp = 0, coins = 0)
 
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
@@ -558,12 +559,14 @@ def shop():
 #--------------------------------------------------------------------------------------------------------------------
 #--- ARMOR SHOP ---# WORK ON THE  SHOP #
 def armor_shop():
+    os.system("cls")
     print(f"Your current number of coins: {Player.coins}\n-------------------------------------------------------------------------------------------------------------------------------\n")
-    print(f"[1] - {leather_tunic.name}: ADDED DEF: +{leather_tunic.added_defense}\nDescription: {leather_tunic.description}\nPrice: {stone_sword.price}\n\n ")
-    print(f"[2] - {ironweaved_chainmail_armor.name}: ADDED DEF: +{ironweaved_chainmail_armor.added_defense}\nDescription: {ironweaved_chainmail_armor.description}\nPrice: {ironweaved_chainmail_armor.price}\n\n ")
-    print(f"[3] - {astral_armor.name}: ADDED DEF: +{astral_armor.added_defense}\nDescription: {astral_armor.description}\nPrice: {astral_armor.price}\n\n ")
-    print(f"[4] - {pheonix_armor.name}: ADDED DEF: +{pheonix_armor.added_defense}\nDescription: {pheonix_armor.description}\nPrice: {pheonix_armor.price}\n\n ")
-    print(f"[5] - {aetherial_armor.name}: ADDED DEF: +{aetherial_armor.added_defense}\nDescription: {aetherial_armor.description}\nPrice: {aetherial_armor.price}\n\n ")
+    print(f"[1] - NAME: {leather_tunic.name}: ADDED DEF: +{leather_tunic.added_defense}\nDescription: {leather_tunic.description}\nPrice: {stone_sword.price}\n\n ")
+    print(f"[2] - NAME: {ironweaved_chainmail_armor.name} ADDED DEF: +{ironweaved_chainmail_armor.added_defense}\nDescription: {ironweaved_chainmail_armor.description}\nPrice: {ironweaved_chainmail_armor.price}\n\n ")
+    print(f"[3] - NAME: {astral_armor.name}: ADDED DEF: +{astral_armor.added_defense}\nDescription: {astral_armor.description}\nPrice: {astral_armor.price}\n\n ")
+    print(f"[4] - NAME: {pheonix_armor.name}: ADDED DEF: +{pheonix_armor.added_defense}\nDescription: {pheonix_armor.description}\nPrice: {pheonix_armor.price}\n\n ")
+    print(f"[5] - NAME: {aetherial_armor.name}: ADDED DEF: +{aetherial_armor.added_defense}\nDescription: {aetherial_armor.description}\nPrice: {aetherial_armor.price}\n\n ")
+    print("\n\n\nType m to go to main menu")
     match input("Which weapon would you like lad?"):
         case '1':
             if Player.coins < leather_tunic.price:
@@ -573,28 +576,74 @@ def armor_shop():
                 input(f"You need to be at least level {leather_tunic.level_requirement} to wear {leather_tunic.name}.")
                 scythes_shop()
             else:
-                Player.equipped_weapon = peasant_reaper
+                Player.equipped_armor = leather_tunic
                 Player.coins -= leather_tunic.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {leather_tunic.name}. Press ENTER to continue.")
                 scythes_shop()
         case '2': 
-            ...
-        case '3':
-            ...
+            if Player.coins < ironweaved_chainmail_armor.price:
+                print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                scythes_shop() 
+            elif ironweaved_chainmail_armor.level_requirement > Player.level:
+                input(f"You need to be at least level {ironweaved_chainmail_armor.level_requirement} to wear {ironweaved_chainmail_armor.name}.")
+                scythes_shop()
+            else:
+                Player.equipped_armor = ironweaved_chainmail_armor
+                Player.coins -= ironweaved_chainmail_armor.price
+                print("Ryker:\nPleasure doing business with you, ya bo-yo!")
+                input(f"You have equipped {ironweaved_chainmail_armor.name}. Press ENTER to continue.")
+                scythes_shop()
+        case '3': 
+            if Player.coins < astral_armor.price:
+                print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                scythes_shop() 
+            elif astral_armor.level_requirement > Player.level:
+                input(f"You need to be at least level {astral_armor.level_requirement} to wear {astral_armor.name}.")
+                scythes_shop()
+            else:
+                Player.equipped_armor = astral_armor
+                Player.coins -= astral_armor.price
+                print("Ryker:\nPleasure doing business with you, ya bo-yo!")
+                input(f"You have equipped {astral_armor.name}. Press ENTER to continue.")
+                scythes_shop()
         case '4':
-            ...
+            if Player.coins < pheonix_armor.price:
+                print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                scythes_shop() 
+            elif pheonix_armor.level_requirement > Player.level:
+                input(f"You need to be at least level {pheonix_armor.level_requirement} to wear {pheonix_armor.name}.")
+                scythes_shop()
+            else:
+                Player.equipped_armor = pheonix_armor
+                Player.coins -= pheonix_armor.price
+                print("Ryker:\nPleasure doing business with you, ya bo-yo!")
+                input(f"You have equipped {pheonix_armor.name}. Press ENTER to continue.")
+                scythes_shop()
         case '5':
-            ...
+            if Player.coins < aetherial_armor.price:
+                print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                scythes_shop() 
+            elif aetherial_armor.level_requirement > Player.level:
+                input(f"You need to be at least level {aetherial_armor.level_requirement} to wear {aetherial_armor.name}.")
+                scythes_shop()
+            else:
+                Player.equipped_armor = aetherial_armor
+                Player.coins -= aetherial_armor.price
+                print("Ryker:\nPleasure doing business with you, ya bo-yo!")
+                input(f"You have equipped {aetherial_armor.name}. Press ENTER to continue.")
+                scythes_shop()
+        case _:
+            armor_shop()
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 #--- SWORDS WEAPON SHOP ---#
 def swords_shop():
     os.system("cls")
     print(f"Your current number of coins: {Player.coins}\n-------------------------------------------------------------------------------------------------------------------------------\n")
-    print(f"[1] - {stone_sword.name}: DMGE: 60-90.\nDescription: {stone_sword.description}\nPrice: {stone_sword.price}\n\n")
-    print(f"[2] - {iron_sword.name}: DMGE: 90-130.\nDescription: {iron_sword.description}\nPrice: {iron_sword.price}\n\n")
-    print(f"[3] - {diamond_sword.name}: DMGE: 90-130.\nDescription: {diamond_sword.description}\nPrice: {diamond_sword.price}\n\n")
+    print(f"[1] - NAME: {stone_sword.name}: DMGE: 60-90.\nDescription: {stone_sword.description}\nPrice: {stone_sword.price}\n\n")
+    print(f"[2] - NAME: {iron_sword.name}: DMGE: 90-130.\nDescription: {iron_sword.description}\nPrice: {iron_sword.price}\n\n")
+    print(f"[3] - NAME: {diamond_sword.name}: DMGE: 90-130.\nDescription: {diamond_sword.description}\nPrice: {diamond_sword.price}\n\n")
     print("\n\n\nType 'm' to go to main menu")
     match input("Which weapon would you like lad?"):
         case '1':
@@ -654,8 +703,8 @@ choose_words = (Already, Hurry)
 def scythes_shop():
     os.system("cls")
     print(f"Your current # of coins: {Player.coins}\n-------------------------------------------------------------------------------------------------------------------------------\n")
-    print(f"[1] - Peasants Reaper: {peasant_reaper.name} DMGE: 250-365.\nDescription: {peasant_reaper_description}\nPrice: {peasant_reaper.price}\n\n")
-    print(f"[2] - ShadowSoul Requiem: {shadowsoul_requiem.name} DMGE: 1000-1250.\nDescription: {shadowsoul_requiem_description}\nPrice: {shadowsoul_requiem.price}\n\n")
+    print(f"[1] - NAME: {peasant_reaper.name} DMGE: 250-365.\nDescription: {peasant_reaper_description}\nPrice: {peasant_reaper.price}\n\n")
+    print(f"[2] - NAME: {shadowsoul_requiem.name} DMGE: 1000-1250.\nDescription: {shadowsoul_requiem_description}\nPrice: {shadowsoul_requiem.price}\n\n")
     print("\n\n\nType 'm' to go to main menu")
     match input("Which weapon would you like lad?"):
         case '1':
@@ -695,8 +744,8 @@ def scythes_shop():
 def staffs_shop():
     os.system("cls")
     print(f"Your current # of coins: {Player.coins}\n-------------------------------------------------------------------------------------------------------------------------------\n")
-    print(f"[1] - Celestial Staff Nexus: {celestial_staff.name} DMGE: 600-825.\nDescription: {celestial_staff_description}\nPrice: {celestial_staff.price}\n\n")
-    print(f"[2] - Nova Nexus: {nova_nexus.name} DMGE: 600-825.\nDescription: {nova_nexus_description}\nPrice: {nova_nexus.price}\n\n")
+    print(f"[1] - NAME: {celestial_staff.name} DMGE: 600-825.\nDescription: {celestial_staff_description}\nPrice: {celestial_staff.price}\n\n")
+    print(f"[2] - NAME: {nova_nexus.name} DMGE: 600-825.\nDescription: {nova_nexus_description}\nPrice: {nova_nexus.price}\n\n")
     print("\n\n\nType 'm' to go to main menu")
     match input("Which weapon would you like lad?"):
         case '1':
@@ -747,7 +796,7 @@ def good_aftermath():
     Player.level += 5
     Player.light_level += 3
     if Player.light_level > 3:
-        Player.light_attack + 30
+        Player.light_attack + 35
     Player.victories += 1
     Player.coins += 750
     fast_print(f"Level up! {Player.level} Total XP: {Player.xp} Items gained: None\n")
@@ -777,7 +826,8 @@ def userProgression():
     print(f"Health: {Player.health}\n")
     print(f"Number of Victories: {Player.victories}")
     print(f"Number of Coins: {Player.coins}")
-    print(f"Weapon = {Player.equipped_weapon}")
+    print(f"Weapon {Player.equipped_weapon}")
+    print(f"Armor {Player.equipped_armor}")
     match input("-------------------------------\nHeres is where you can view all your stats/inventory Type 'm' to go to main menu "):
         case 'm':
             mainMenu()
@@ -790,8 +840,6 @@ def userProgression():
 #--------------------------------------------------------------------------------------------------------------------
 
 mainMenu()
-
-
 
 
 
