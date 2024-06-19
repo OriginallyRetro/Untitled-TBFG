@@ -137,7 +137,7 @@ class defaultCharacter:
     #Code to have random amount of damage 30-53    
 player_damage = (30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43 ,44 ,45 ,46, 47, 48, 49, 50, 51, 52, 53, 55)
 
-Player = defaultCharacter(name = {userName}, Xp = 0, level = 0, attack = player_damage, light_attack = 60, equipped_weapon = None, health = 750, defense = 500, equipped_armor = None, armor = None, light_level = 0, startingFight = 0, victories = 0, xp = 0, coins = 0)
+Player = defaultCharacter(name = {userName}, Xp = 0, level = 0, attack = player_damage, light_attack = 60, equipped_weapon = None, health = 750, defense = 300, equipped_armor = None, armor = None, light_level = 0, startingFight = 0, victories = 0, xp = 0, coins = 0)
 
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
@@ -157,10 +157,10 @@ class elementalMinion:
         elementalMinion.defense = defense
 
 #This is to make it more like an actual fighting game. The damaage is randomized.
-test_subject_damage = (1, 2, 3)
+test_subject_damage = (1,1)
 windSpiritDamage = (8, 9, 10, 11, 12, 13, 14, 15, 16, 17,)
 firstWindSpirit = elementalMinion(name = "Wind Spirit", attack = windSpiritDamage, health = 150, defense = 60)
-test_subject = elementalBoss(attack = test_subject_damage, health = 1000000, name = "test subject", defense = 0)
+test_subject = elementalBoss(attack = test_subject_damage, health = 1000, name = "test subject", defense = 1000)
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 #--- MAIN MENU ---#
@@ -261,6 +261,9 @@ def equip_weapon(self, weapon):
 def fight(Player, target)-> None:
     def weapon_reponse_status(Player, target)-> None:
         os.system("cls")
+        print(f"{target.name} DEALT {Rdamage}!")
+        print("\n------------------------------------\n")
+        print(f"{userName} DEALT {DSG}!")
         print("\n------------------------------------\n")
         print(f"{userName}s' HLTH {Player.health}" )
         print(f"{userName}s' DEF {Player.defense}")
@@ -311,7 +314,8 @@ def fight(Player, target)-> None:
     fighting_words = (Haste, Wise, Regular)
     rcf = random.choice(fighting_words)
     #--- Code for randomized damage for more game authenticity ---#
-    global damage, Rdamage
+    global damage, Rdamage, DSG
+    DSG = random.choice(diamond_sword_damage)
     damage = random.choice(Player.attack)
     Rdamage = random.choice(target.attack)
     while True:
@@ -374,243 +378,62 @@ def fight(Player, target)-> None:
                     light_attack_status(Player, target)
                     input()
             case '3':
-                    if Player.equipped_weapon == diamond_sword:
-                        diamond_sword.attack = (random.choice(diamond_sword.attack))
-                        target.health -= diamond_sword.attack
-    
-                        if target.defense >= 0:
-                            target.defense -= diamond_sword.attack
-                
-                        if target.defense <= 0:
-                            target.defense = 0
-                            target.health -= diamond_sword.attack
+                if Player.equipped_weapon == diamond_sword:
+                    DSG = random.choice(diamond_sword_damage)
 
-                        if Player.defense >= 0:
-                            Player.defense -= Rdamage
+                    if target.defense >= 0:
+                        target.defense -= DSG
 
-                        if Player.defense <= 0:
-                            Player.defense = 0
-                            Player.health -= Rdamage
-
-                        if target.health <= 0:
-                            good_aftermath()
-                            break
-
-                        if Player.health <= 0:
-                            bad_aftermath()
-                            break
-
-                        weapon_reponse_status(Player, target)
-                        input()
-
-                    elif Player.equipped_weapon == stone_sword:
-                        stone_sword.attack = (random.choice(stone_sword.attack))
-                        target.health -= stone_sword.attack
-
-                        if target.defense >= 0:
-                            target.defense -= stone_sword.attack
-                
-                        if target.defense <= 0:
-                            target.defense = 0
-                            target.health -= stone_sword.attack
-
-                        if Player.defense >= 0:
-                            Player.defense -= Rdamage
-
-                        if Player.defense <= 0:
-                            Player.defense = 0
-                            Player.health -= Rdamage
-
-                        if target.health <= 0:
-                            good_aftermath()
-                            break
-
-                        if Player.health <= 0:
-                            bad_aftermath()
-                            break
-                        weapon_reponse_status(Player, target)
-                        input()
-
-                    elif Player.equipped_weapon == iron_sword:
-                        iron_sword.attack = (random.choice(iron_sword.attack))
-                        target.health -= iron_sword.attack
-
-                        if target.defense >= 0:
-                            target.defense -= iron_sword.attack
-                
-                        if target.defense <= 0:
-                            target.defense = 0
-                            target.health -= iron_sword.attack
-
-                        if Player.defense >= 0:
-                            Player.defense -= Rdamage
-
-                        if Player.defense <= 0:
-                            Player.defense = 0
-                            Player.health -= Rdamage
-
-                        if target.health <= 0:
-                            good_aftermath()
-                            break
-
-                        if Player.health <= 0:
-                            bad_aftermath()
-                            break
-
-
-                        weapon_reponse_status(Player, target)
-
-                    elif Player.equipped_weapon == peasant_reaper:
-                        peasant_reaper.attack = (random.choice(peasant_reaper.attack))
-                        target.health -= peasant_reaper.attack
-
-                        if target.defense >= 0:
-                            target.defense -= peasant_reaper.attack
-                
-                        if target.defense <= 0:
-                            target.defense = 0
-                            target.health -= peasant_reaper.attack
-
-                        if Player.defense >= 0:
-                            Player.defense -= Rdamage
-
-                        if Player.defense <= 0:
-                            Player.defense = 0
-                            Player.health -= Rdamage
-
-                        if target.health <= 0:
-                            good_aftermath()
-                            break
-
-                        if Player.health <= 0:
-                            bad_aftermath()
-                            break
-                        
-                        weapon_reponse_status(Player, target)
-                    
-                    elif Player.equipped_weapon == shadowsoul_requiem:
-                        shadowsoul_requiem.attack = (random.choice(shadowsoul_requiem.attack))
-                        target.health -=  shadowsoul_requiem.attack
-
-                        if target.defense >= 0:
-                            target.defense -= shadowsoul_requiem.attack
-                
-                        if target.defense <= 0:
-                            target.defense = 0
-                            target.health -= shadowsoul_requiem.attack
-
-                        if Player.defense >= 0:
-                            Player.defense -= Rdamage
-
-                        if Player.defense <= 0:
-                            Player.defense = 0
-                            Player.health -= Rdamage
-
-                        if target.health <= 0:
-                            good_aftermath()
-                            break
-
-                        if Player.health <= 0:
-                            bad_aftermath()
-                            break
-
-                        weapon_reponse_status(Player, target)
-
-                    elif Player.equipped_weapon == celestial_staff:
-                        celestial_staff.attack = (random.choice(celestial_staff.attack))
-                        target.health -=  celestial_staff.attack
-
-                        if target.defense >= 0:
-                            target.defense -= shadowsoul_requiem.attack
-                
-                        if target.defense <= 0:
-                            target.defense = 0
-                            target.health -= shadowsoul_requiem.attack
-
-                        if Player.defense >= 0:
-                            Player.defense -= Rdamage
-
-                        if Player.defense <= 0:
-                            Player.defense = 0
-                            Player.health -= Rdamage
-
-                        if target.health <= 0:
-                            good_aftermath()
-                            break
-
-                        if Player.health <= 0:
-                            bad_aftermath()
-                            break
-
-                        weapon_reponse_status(Player, target)
-
-                    elif Player.equipped_weapon == nova_nexus:
-                        nova_nexus.attack = (random.choice(nova_nexus.attack))
-                        target.health -=  nova_nexus.attack
-
-                        if target.defense >= 0:
-                            target.defense -= nova_nexus.attack
-                
-                        if target.defense <= 0:
-                            target.defense = 0
-                            target.health -= nova_nexus.attack
-
-                        if Player.defense >= 0:
-                            Player.defense -= Rdamage
-
-                        if Player.defense <= 0:
-                            Player.defense = 0
-                            Player.health -= Rdamage
-
-                        if target.health <= 0:
-                            good_aftermath()
-                            break
-
-                        if Player.health <= 0:
-                            bad_aftermath()
-                            break
-                            
-
-                        weapon_reponse_status(Player, target)
-
-                    else:
-                        input(f"You have no weapon, [Seen as an invalid turn] {userName} loses turn [-10 HLTH and -10 DEF]")
-                        print(f"{userName} takes 10 damage!")
-                        Player.health -= 10
+                    if target.defense <= 0:
+                        target.defense = 0
+                        target.health -= DSG
 
                     if Player.defense >= 0:
-                        Player.defense -= 10
-
+                        Player.defense -= Rdamage
+        
                     if Player.defense <= 0:
                         Player.defense = 0
-                        Player.health -= 10
+                        Player.health -= Rdamage
 
-                    if target.health <= 0:
-                        good_aftermath()
-                        break
+                    weapon_reponse_status(Player, target)
+                    input()   
 
-                    if Player.health <= 0:
-                        bad_aftermath()
-                        break
+                else:
+                    input(f"You have no weapon, [Seen as an invalid turn] {userName} loses turn [-10 HLTH and -10 DEF]")
+                    print(f"{userName} takes 10 damage!")
+                    Player.health -= 10
+
+                if Player.defense >= 0:
+                    Player.defense -= 10
+
+                if Player.defense <= 0:
+                    Player.defense = 0
+                    Player.health -= 10
+
+                if target.health <= 0:
+                    good_aftermath()
+                    break
+
+                if Player.health <= 0:
+                    bad_aftermath()
+                    break
                         
 
-                    invalid_response_status(Player, target)
-                    input()
+                invalid_response_status(Player, target)
+                input()
+
             case _:
                 Regular2 = (f"You've lost your turn {userName}!")
                 Mean = (f"Look alive to stay alive {userName}!")
                 Funny = (f"Bozo He hit you!")
                 invalid_words = (Regular2, Mean, Funny)
                 input(("[-10 HLTH and -10 DEF]", ((random.choice(invalid_words)))))
-                Player.health -= 10
-                Player.defense -= 10
 
                 if Player.health <= 0:
                     bad_aftermath()
                     break
                 
                 invalid_response_status(Player, target)
-                input()
         
                             
 #--- ENTIRE STORY/DIALOUGE ---#
@@ -747,6 +570,7 @@ def storyMode():
         shop()
         if Player.victories == 2:
             input("test fight")
+        
             test(Player, test_subject)
 
 #--------------------------------------------------------------------------------------------------------------------
@@ -1059,7 +883,6 @@ def test(Player, test_subject):
 
 
 mainMenu()
-
 
 
 
