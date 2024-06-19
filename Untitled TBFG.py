@@ -117,18 +117,17 @@ aetherial_armor = armor(name = "Ethereal armor", added_defense = 1250, level_req
 #---------------------------------------------------------------------------------------------------------
 #-- DEFAULT CHARACTER CLASS {WIP} ---#
 class defaultCharacter:
-    def __init__(player, name, Xp: int, level: int, attack: int, light_attack: int, equipped_weapon, health: int, defense: int, equipped_armor, armor, light_level: int, startingFight: int, victories: int, xp: int, coins: int) -> None:
+    def __init__(player, name, Xp: int, level: int, attack: int, light_attack: int, equipped_weapon, health: int, defense: int, equipped_armor, light_level: int, startingFight: int, victories: int, xp: int, coins: int) -> None:
         player.name = name
         player.Xp = Xp
-        player.level = level
-        player.attack = attack
-        player.light_attack = light_attack
-        player.equipped_weapon = None
         player.health = health
-        player.defense = defense
-        player.equipped_armor = equipped_armor
-        player.armor = None
+        player.attack = attack
+        player.equipped_weapon = None
+        player.light_attack = light_attack
+        player.level = level
         player.light_level = light_level
+        player.defense = defense
+        player.equipped_armor = None
         player.startingFight = startingFight
         player.victories = victories
         player.xp = xp
@@ -137,7 +136,7 @@ class defaultCharacter:
     #Code to have random amount of damage 30-53    
 player_damage = (30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43 ,44 ,45 ,46, 47, 48, 49, 50, 51, 52, 53, 55)
 
-Player = defaultCharacter(name = {userName}, Xp = 0, level = 0, attack = player_damage, light_attack = 60, equipped_weapon = None, health = 750, defense = 300, equipped_armor = None, armor = None, light_level = 0, startingFight = 0, victories = 0, xp = 0, coins = 0)
+Player = defaultCharacter(name = {userName}, Xp = 0, level = 0, attack = player_damage, light_attack = 60, equipped_weapon = None, health = 750, defense = 300, equipped_armor = None, light_level = 0, startingFight = 0, victories = 0, xp = 0, coins = 0)
 
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
@@ -314,8 +313,15 @@ def fight(Player, target)-> None:
     fighting_words = (Haste, Wise, Regular)
     rcf = random.choice(fighting_words)
     #--- Code for randomized damage for more game authenticity ---#
-    global damage, Rdamage, DSG
+    global damage, Rdamage, DSG, SSD, ISD, PRD, SSRD, CSD, NND
     DSG = random.choice(diamond_sword_damage)
+    SSD = random.choice(stone_sword_damage)
+    ISD = random.choice(iron_sword_damage)
+    PRD = random.choice(peasant_reaper_damage)
+    SSRD = random.choice(shadowsoul_requiem_damage)
+    CSD = random.choice(celestial_staff_damage)
+    NND = random.choice(nova_nexus_damage)
+
     damage = random.choice(Player.attack)
     Rdamage = random.choice(target.attack)
     while True:
@@ -387,6 +393,123 @@ def fight(Player, target)-> None:
                     if target.defense <= 0:
                         target.defense = 0
                         target.health -= DSG
+
+                    if Player.defense >= 0:
+                        Player.defense -= Rdamage
+        
+                    if Player.defense <= 0:
+                        Player.defense = 0
+                        Player.health -= Rdamage
+
+                    weapon_reponse_status(Player, target)
+                    input()  
+
+                if Player.equipped_weapon == stone_sword:
+                    SSD = random.choice(stone_sword_damage)
+
+                    if target.defense >= 0:
+                        target.defense -= SSD
+
+                    if target.defense <= 0:
+                        target.defense = 0
+                        target.health -= SSD
+
+                    if Player.defense >= 0:
+                        Player.defense -= Rdamage
+        
+                    if Player.defense <= 0:
+                        Player.defense = 0
+                        Player.health -= Rdamage
+
+                    weapon_reponse_status(Player, target)
+                    input()   
+
+                if Player.equipped_weapon == iron_sword:
+                    SSD = random.choice(stone_sword_damage)
+
+                    if target.defense >= 0:
+                        target.defense -= ISD
+
+                    if target.defense <= 0:
+                        target.defense = 0
+                        target.health -= ISD
+
+                    if Player.defense >= 0:
+                        Player.defense -= Rdamage
+        
+                    if Player.defense <= 0:
+                        Player.defense = 0
+                        Player.health -= Rdamage
+
+                    weapon_reponse_status(Player, target)
+                    input()   
+
+                if Player.equipped_weapon == peasant_reaper:
+                    SSD = random.choice(peasant_reaper_damage)
+
+                    if target.defense >= 0:
+                        target.defense -= PRD
+
+                    if target.defense <= 0:
+                        target.defense = 0
+                        target.health -= PRD
+
+                    if Player.defense >= 0:
+                        Player.defense -= Rdamage
+        
+                    if Player.defense <= 0:
+                        Player.defense = 0
+                        Player.health -= Rdamage
+
+                    weapon_reponse_status(Player, target)
+                    input()   
+                
+                if Player.equipped_weapon == shadowsoul_requiem:
+                    SSD = random.choice(shadowsoul_requiem_damage)
+
+                    if target.defense >= 0:
+                        target.defense -= SSRD
+
+                    if target.defense <= 0:
+                        target.defense = 0
+                        target.health -= SSRD
+
+                    if Player.defense >= 0:
+                        Player.defense -= Rdamage
+        
+                    if Player.defense <= 0:
+                        Player.defense = 0
+                        Player.health -= Rdamage
+
+                    weapon_reponse_status(Player, target)
+                    input()   
+                
+                if Player.equipped_weapon == celestial_staff:
+                    SSD = random.choice(celestial_staff_damage)
+
+                    if target.defense >= 0:
+                        target.defense -= CSD
+
+                    if target.defense <= 0:
+                        target.defense = 0
+                        target.health -= CSD
+
+                    if Player.defense >= 0:
+                        Player.defense -= Rdamage
+        
+                    if Player.defense <= 0:
+                        Player.defense = 0
+                        Player.health -= Rdamage
+
+                if Player.equipped_weapon == nova_nexus:
+                    SSD = random.choice(nova_nexus_damage)
+
+                    if target.defense >= 0:
+                        target.defense -= NND
+
+                    if target.defense <= 0:
+                        target.defense = 0
+                        target.health -= NND
 
                     if Player.defense >= 0:
                         Player.defense -= Rdamage
