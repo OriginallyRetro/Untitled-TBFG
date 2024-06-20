@@ -117,7 +117,7 @@ aetherial_armor = armor(name = "Ethereal armor", added_defense = 1250, level_req
 #---------------------------------------------------------------------------------------------------------
 #-- DEFAULT CHARACTER CLASS {WIP} ---#
 class defaultCharacter:
-    def __init__(player, name, Xp: int, level: int, attack: int, light_attack: int, equipped_weapon, health: int, defense: int, equipped_armor, light_level: int, startingFight: int, victories: int, xp: int, coins: int) -> None:
+    def __init__(player, name, Xp: int, level: int, attack: int, light_attack: int, equipped_weapon, health: int, defense: int, equipped_armor, light_level: int, startingFight: int, victories: int, xp: int, coins: int, first_time_in_light_mage_hideout: int) -> None:
         player.name = name
         player.Xp = Xp
         player.health = health
@@ -132,11 +132,12 @@ class defaultCharacter:
         player.victories = victories
         player.xp = xp
         player.coins = coins
+        player.first_time_in_light_mage_hideout = first_time_in_light_mage_hideout
         
     #Code to have random amount of damage 30-53    
 player_damage = (30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43 ,44 ,45 ,46, 47, 48, 49, 50, 51, 52, 53, 55)
 
-Player = defaultCharacter(name = {userName}, Xp = 0, level = 0, attack = player_damage, light_attack = 60, equipped_weapon = None, health = 750, defense = 300, equipped_armor = None, light_level = 0, startingFight = 0, victories = 0, xp = 0, coins = 0)
+Player = defaultCharacter(name = {userName}, Xp = 0, level = 0, attack = player_damage, light_attack = 60, equipped_weapon = None, health = 750, defense = 300, equipped_armor = None, light_level = 0, startingFight = 0, victories = 0, xp = 0, coins = 0, first_time_in_light_mage_hideout = 0)
 
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
@@ -185,6 +186,9 @@ def mainMenu():
         print("[2] Tutorial")
         print("[3] Inspiration")
         print("[4] Progress")     
+        print("[5] Go to (Weapons) Inventory")
+        print("[6] Go to (Armor) Inventory")	
+        print("[7] Go to Light Mages Hideout ")		
         match input(f"Choose, {userName}: "):
             case ('1'):
                 storyMode()
@@ -194,6 +198,12 @@ def mainMenu():
                 inspiration()
             case ('4'):
                 userProgression()
+            case ('5'):
+                weapons_inventory()
+            case ('6'):
+                armor_inventory()
+            case ('7'):
+                light_mages_hideout()
             case _:
                 os.system("cls")
                 mainMenu()
@@ -238,21 +248,10 @@ def tutorialMode():
                 os.system("cls")
                 tutorialMode()
     else:
-        print("Alright, here's the rundown. In battle, you'll have three options: a Light Magic Attack for a guaranteed 60 DMGE, a regular fists attack (or basic attack for those without a weapon), and a weapon attack, whether it's with a sword, staff, or other.\nAfter each victory, you'll earn rewards like armor and weapons through story mode. So, gear up and embark on your adventure, light mage!")
+        input("Alright, here's the rundown. In battle, you'll have three options: a Light Magic Attack for a guaranteed 60 DMGE, a regular fists attack (or basic attack for those without a weapon), and a weapon attack, whether it's with a sword, staff, or other.\nAfter each victory, you'll earn rewards like armor and weapons through story mode. So, gear up and embark on your adventure, light mage!")
+        mainMenu()
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
-
-#--- CODE FOR EQUIPPING WEAPON ---#
-def equip_weapon(self, weapon):
-    self.equipped_weapon = weapon
-    print(f"{Player.name} has equipped {weapon.name}")
-
-#--------------------------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------------------------
-
-
-
-
 
 #--- CODE FOR FIGHT ---#
 
@@ -321,9 +320,6 @@ def fight(Player, target)-> None:
     SSRD = random.choice(shadowsoul_requiem_damage)
     CSD = random.choice(celestial_staff_damage)
     NND = random.choice(nova_nexus_damage)
-
-    damage = random.choice(Player.attack)
-    Rdamage = random.choice(target.attack)
     while True:
         print(f"---------{userName}s' Turn---------")
         print("1. Fists Attack")
@@ -333,11 +329,15 @@ def fight(Player, target)-> None:
         match input(f"{rcf}"):
             case '1':
 
-                 #--- Game Logic attack the defense until its zero if it is zero then keep it there and attack at the health instead.
+                 #--- Game Logic attack the defense until its zero if it is zero then keep it there and attack at the health instead. ---#
                  if target.defense >= 0:
+                    damage = random.choice(Player.attack)
+                    Rdamage = random.choice(target.attack)
                     target.defense -= damage
         
                     if target.defense <= 0:
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         target.defense = 0
                         target.health -= damage
         
@@ -367,9 +367,13 @@ def fight(Player, target)-> None:
                         target.health -= Player.light_attack
         
                     if Player.defense >= 0:
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         Player.defense -= Rdamage
 
                     if Player.defense <= 0:
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         Player.defense = 0
                         Player.health -= Rdamage
 
@@ -395,10 +399,14 @@ def fight(Player, target)-> None:
                         target.health -= DSG
 
                     if Player.defense >= 0:
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         Player.defense -= Rdamage
         
                     if Player.defense <= 0:
                         Player.defense = 0
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         Player.health -= Rdamage
 
                     weapon_reponse_status(Player, target)
@@ -415,10 +423,14 @@ def fight(Player, target)-> None:
                         target.health -= SSD
 
                     if Player.defense >= 0:
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         Player.defense -= Rdamage
         
                     if Player.defense <= 0:
                         Player.defense = 0
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         Player.health -= Rdamage
 
                     weapon_reponse_status(Player, target)
@@ -435,10 +447,14 @@ def fight(Player, target)-> None:
                         target.health -= ISD
 
                     if Player.defense >= 0:
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         Player.defense -= Rdamage
         
                     if Player.defense <= 0:
                         Player.defense = 0
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         Player.health -= Rdamage
 
                     weapon_reponse_status(Player, target)
@@ -455,10 +471,14 @@ def fight(Player, target)-> None:
                         target.health -= PRD
 
                     if Player.defense >= 0:
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         Player.defense -= Rdamage
         
                     if Player.defense <= 0:
                         Player.defense = 0
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         Player.health -= Rdamage
 
                     weapon_reponse_status(Player, target)
@@ -475,10 +495,14 @@ def fight(Player, target)-> None:
                         target.health -= SSRD
 
                     if Player.defense >= 0:
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         Player.defense -= Rdamage
         
                     if Player.defense <= 0:
                         Player.defense = 0
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         Player.health -= Rdamage
 
                     weapon_reponse_status(Player, target)
@@ -495,9 +519,13 @@ def fight(Player, target)-> None:
                         target.health -= CSD
 
                     if Player.defense >= 0:
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         Player.defense -= Rdamage
         
                     if Player.defense <= 0:
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         Player.defense = 0
                         Player.health -= Rdamage
 
@@ -512,9 +540,13 @@ def fight(Player, target)-> None:
                         target.health -= NND
 
                     if Player.defense >= 0:
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         Player.defense -= Rdamage
         
                     if Player.defense <= 0:
+                        damage = random.choice(Player.attack)
+                        Rdamage = random.choice(target.attack)
                         Player.defense = 0
                         Player.health -= Rdamage
 
@@ -610,7 +642,7 @@ def storyMode():
     #IMPROVE THE STORY PELASESEEEEE
     if Player.victories == 1:
         #f
-        print('   Narrator: "Emerging from the depths of the evil elemental spirit dungeon, You breathe a sigh of relief, your holy heart blazes with triumphant victory. The burden of darkness lifts, but a flicker of concern remains for the lingering shadows left behind. As you step into the light outside of the dungeon, victorious yet vigilant, the need for tranquillity resonates within..."   ')
+        print('   Narrator:\n"Emerging from the depths of the evil elemental spirit dungeon, You breathe a sigh of relief, your holy heart blazes with triumphant victory. The burden of darkness lifts, but a flicker of concern remains for the lingering shadows left behind. As you step into the light outside of the dungeon, victorious yet vigilant, the need for tranquillity resonates within..."   ')
         input('\n')
         print('  ???:\n"Good moves back there!"   ')
         input('\n')
@@ -679,6 +711,13 @@ def storyMode():
         input('\n')
         print(' Narrator:\n"Upon returning to your newfound base, the other light mages greeted you with a scene of bustling activity and camaraderie. Within the safety of their stronghold, you find not only weapons and provisions but also the warm embrace of fellow allies and friends. Amidst the flickering torchlight, laughter and conversation filled the air, a testament to the resilience of their bond forged in battle. Strengthened by their unity and fortified by the support of their companions, they prepared to face the challenges ahead with renewed determination and unwavering resolve. In this sanctuary of light and friendship, they found solace and strength to confront the darkness that loomed beyond their walls, united in their shared quest for peace and prosperity." ')
         input('\n')
+        print(' Isaiah:\n"The light mages have come together to defeat the darkness and restore peace to the world. It is truly a sacred place to remember for generations to come." ')
+        input('\n')
+        os.system("cls")
+        print(' Narrator:\n"Hidden within a sacred mountain and concealed by an illusionary rock face, the Ancient Light Hideout was once a refuge for a mystical order of light-wielding mages.\nInside, the walls are embedded with luminous crystals that emit a soft, ambient light, creating an atmosphere of calm and serenity.\nThe architecture is elegant and ethereal, with high vaulted ceilings, sweeping archways, and intricate carvings depicting scenes of light’s triumph over darkness.\nThe central area of the hideout is a large, circular chamber with a domed ceiling featuring a grand mosaic of a radiant sun, serving as a gathering place and housing a central altar for light-based rituals.\nUnderneath the mosaic is a fireplace. Branching off from the main chamber are living quarters with simple, comfortable furnishings, and a vast library filled with ancient texts detailing the secrets of light magic.\nAdditionally, there is a spacious training hall with mirrored walls for practicing light magic, and an indoor garden illuminated by sunlight channeled through crystal prisms, filled with bioluminescent plants and flowers.\nGuarding the hideout are ethereal light spirits and ancient statues that come to life in times of need. There is a quest board area where mages can take challenges in exchange for weapons or money.\nAll of this makes up the Ancient Light Hideout a place of mystery, discovery, and adventure.')
+        os.system("cls")
+        print(' Narrator:\n"As you make your way through the Ancient Light Hideout, you come to see a training hall full of light mages practicing their light magic. Isaiah then pulls you aside to tell you a few things...')
+        input('\n')
         os.system("cls")
         print(' Isaiah:\n"Let me teach you the basics real quick on how to fight and get weapons and armor! First off to get weapons you can buy them from the shop and you can also switch weapons in your inventory. You get paid in coins when you defeat spirits, which you use to buy weapons, as well as armor. Your armor provides a boost of defense as well!" ') 
         input('\n')
@@ -692,9 +731,8 @@ def storyMode():
         os.system("cls")
         shop()
         if Player.victories == 2:
-            input("test fight")
-        
-            test(Player, test_subject)
+            print('   Narrator:\n"Your journey through the dungeon has been a testament to your strength and resilience. As you continue your journey, you may encounter more dungeons and encounters, but for now you can rest easily and rest in peace." ')
+
 
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
@@ -763,6 +801,8 @@ def armor_shop():
                 scythes_shop()
             else:
                 Player.equipped_armor = astral_armor
+                Player.defense = Player.defense + astral_armor.added_defense
+                #Maybe the above would work  i truly got no idea but thats coding for ya
                 Player.coins -= astral_armor.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {astral_armor.name}. Press ENTER to continue.")
@@ -823,7 +863,7 @@ def swords_shop():
                 swords_shop()
         case '2':
             if Player.coins < iron_sword.price:
-                print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                input("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
             elif iron_sword.level_requirement > Player.level:
                 input(f"Ryker:\nYou need to be at least level {iron_sword.level_requirement} to wield {iron_sword.name}.")
                 swords_shop()
@@ -835,7 +875,7 @@ def swords_shop():
                 swords_shop()
         case '3':
             if Player.coins < diamond_sword.price:
-                print("You dont have enough money young man. You try to scam the legendary Ryker?")
+                input("You dont have enough money young man. You try to scam the legendary Ryker?")
                 swords_shop()
                 if diamond_sword.level_requirement > Player.level:
                     input(f"You have to be at least level {diamond_sword.level_requirement} to buy this weapon!")
@@ -869,7 +909,7 @@ def scythes_shop():
     match input("Which weapon would you like lad?"):
         case '1':
             if Player.coins < peasant_reaper.price:
-                print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                input("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
                 scythes_shop() 
             elif peasant_reaper.level_requirement > Player.level:
                 input(f"You need to be at least level {peasant_reaper.level_requirement} to wield {peasant_reaper.name}.")
@@ -882,7 +922,7 @@ def scythes_shop():
                 scythes_shop()
         case '2':
             if Player.coins < shadowsoul_requiem.price:
-                print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                input("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
                 scythes_shop()  
             elif shadowsoul_requiem.level_requirement > Player.level:
                 print(f"You need to be at least level {shadowsoul_requiem.level_requirement} to wield {shadowsoul_requiem.name}.")
@@ -911,7 +951,7 @@ def staffs_shop():
         case '1':
             # Check if the player has enough coins to buy the celestial_staff
             if Player.coins < celestial_staff.price:
-                print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                input("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
                 staffs_shop() 
             # Check if the player meets the level requirement for the stone_sword
             elif celestial_staff.level_requirement > Player.level:
@@ -926,7 +966,7 @@ def staffs_shop():
                 staffs_shop()
         case '2':
             if Player.coins < nova_nexus.price:
-                print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                input("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
                 staffs_shop()
             elif nova_nexus.level_requirement > Player.level:
                 print(f"You need to be at least level {nova_nexus.level_requirement} to wield {nova_nexus.name}.")
@@ -998,14 +1038,93 @@ def userProgression():
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
+#THIS DOESNT WORK
+def weapons_inventory():
+    os.system("cls")
+    try:
+        os.systeM("cls")
+        print(f"{userName}'s Inventory:")
+        print(f"\n-------------------------\n")
+        print(f"\nWeapons:")
+        for equipped_weapon in Player.equipped_weapons:
+            print(f"{equipped_weapon.name} - {equipped_weapon.description} - {equipped_weapon.price} - DMGE: {equipped_weapon.damage} - Level Requirement: {equipped_weapon.level_requirement}") 
+        print(f"\nArmor:")
+        for equipped_armor in Player.equipped_armor:
+            print(f"{equipped_armor.name} - {equipped_armor.description}")
+        match input("-------------------------------\nHeres is where you can view all your items/weapons/armor Type 'm' to go back to main menu "):
+            case 'm':
+                mainMenu()
+            case _:
+                os.system("cls")
+                weapons_inventory()
+    except:
+        fast_print("No weapons in inventory")
+        input()
+        mainMenu()
 
-def test(Player, test_subject):
-    while True:
-        fight(Player, test_subject)
-        
+def armor_inventory():
+    os.system("cls")
+    try:
+        os.system("cls")
+        print(f"{userName}'s Armor collection:")
+        print(f"\n-------------------------\n")
+        print(f"\nArmor:")
+        for equipped_armor in Player.equipped_armor:
+            print(f"Armor Name: {equipped_armor.name}\n{equipped_armor.description}\nDefense: {equipped_armor.added_defense}")
+        match input("-------------------------------\nHeres is where you can view all your items/weapons/armor Type 'm' to go back to main menu "):
+            case 'm':
+                mainMenu()
+            case _:
+                os.system("cls")
+                armor_inventory()
+    except:
+        fast_print("No armor in inventory")
+        input()
+        mainMenu()
 
+def light_mages_hideout():
+    os.system("cls")
+    if Player.first_time_in_light_mage_hideout == 0:
+        print("Welcome to the Light Mage Hideout!")
+        print(f"\n-------------------------\n")
+        print(f"You find yourself in a hidden chamber filled with ancient runes and mystical creatures.")
+        print(f"A group of friendly light mages are gathered around a fireplace, discussing their latest magical tricks.")
+        print(f"One of the mages, a wisdom radiating wizard, reveals a hidden passage leading to the next chamber.")
+        print(f"You decide to follow the wizard's lead, but you soon come across a dark and treacherous cave.")
+        print(f"A powerful dragon lurks in the shadows, and you must outwit it and retrieve a legendary weapon!")
+        match input("Do you want to go through the dark cave? (Y/N): "):
+            case 'Y':
+                dragon_battle()
+                Player.first_time_in_light_mage_hideout =+  1
+            case 'N':
+                Player.first_time_in_light_mage_hideout =+ 1
+                print('You decide to backtrack and return to the Light Mage Hideout. Knowing that you might not be the best choice in this situation. Isaiah says, "Ima going to go fight that dragon I need some more coin sent I just gave you a pretty penny I\' probably just sell like usual...See ya later."\n\n')
+                print('Isaiah\n"Wait! But before I go you never told me you name."')
+                print(f'Its {userName}')
+                print(f'Isaiah\n"Well, see ya soon {userName}!"')
+                print("You return to the Light Mage Hideout, feeling a bit disappointed. While Isaiah ventures deeper into the passage to go fight the dragon.")
+                input()
+                os.system("cls")
+                light_mages_hideout()
+            case _:
+                print("Invalid input, please try again.")
+                light_mages_hideout()
+    if Player.first_time_in_light_mage_hideout == 1:
+        print("[1] You look around, wandering")
+        print("[2] You look at the fireplace, and think?")
+        print("[3] You go to the shop to get weapons?")
+        print("[4] You decide to go back to shop to get more weapons")
+        match input("Choose your action: "):
+            case '1':
+                print("You wander around the hideout, trying to find any clues.")
+
+def dragon_battle():
+    ...
 
 mainMenu()
+
+
+
 
 
 
