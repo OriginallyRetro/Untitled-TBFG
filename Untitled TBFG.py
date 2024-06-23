@@ -4,7 +4,16 @@ import os, random, time, sys
 
 ###Entry Point###
 global userName
-userName = input("Please enter your name: ")
+while True:
+    userName = input("Please enter your name: ")
+    if  ' ' in userName:
+        print("Name cannot be empty. Please try again.")
+        os.system("cls")
+    else:
+        break
+
+
+
 os.system("cls")
 
 #--- DELAYING PRINT CODE ---#
@@ -21,7 +30,7 @@ def fast_print(s):
         time.sleep(0.02)
 
 #--- GLOBAL VARIABLES ---#
-global attack_buff, health_buff, fire_level_buff, water_level_buff, Xp, Experience, storyExperience, starting_point
+global attack_buff, health_buff, fire_level_buff, water_level_buff, Xp, Experience, starting_point
 
 attack_buff = 0
 health_buff = 0
@@ -29,12 +38,6 @@ health_buff = 0
 Xp = 0
 
 
-
-
-#This was to see if a person had compelted a part of the game if so it would skip some things.
-storyExperience = 0
-
-#Create 1 little mini boss of each element. Then create 3 little dungeon elemental mages
 
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
@@ -47,6 +50,9 @@ class weapon:
         weapon.level_requirement = level_requirement
         weapon.attack = attack
         weapon.style = style
+    
+    def __str__(weapon) -> str:
+        return f'\n--------------------------------------------------------------------\nWeapon Name: {weapon.name}:\n--------------------------------------------------------------------\n\n\nDamage Range: {weapon.attack}\n--------------------------------------------------------------------\n\n\nSTYLE: {weapon.style}'
 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -117,11 +123,13 @@ aetherial_armor = armor(name = "Ethereal armor", added_defense = 1250, level_req
 #---------------------------------------------------------------------------------------------------------
 #-- DEFAULT CHARACTER CLASS {WIP} ---#
 class defaultCharacter:
-    def __init__(player, name, Xp: int, level: int, attack: int, light_attack: int, equipped_weapon, health: int, defense: int, equipped_armor, light_level: int, startingFight: int, victories: int, xp: int, coins: int, first_time_in_light_mage_hideout: int) -> None:
+    def __init__(player, name, Xp: int, level: int, attack: int, weapons_collection: list, armor_collection: list, light_attack: int, equipped_weapon, health: int, defense: int, equipped_armor, light_level: int, startingFight: int, progress: int, xp: int, coins: int, victories: int, first_time_in_light_mage_hideout: int) -> None:
         player.name = name
         player.Xp = Xp
         player.health = health
         player.attack = attack
+        player.weapons_collection = []
+        player.armor_collection = []
         player.equipped_weapon = None
         player.light_attack = light_attack
         player.level = level
@@ -129,15 +137,16 @@ class defaultCharacter:
         player.defense = defense
         player.equipped_armor = None
         player.startingFight = startingFight
-        player.victories = victories
+        player.progress = progress
         player.xp = xp
         player.coins = coins
+        player.victories = victories
         player.first_time_in_light_mage_hideout = first_time_in_light_mage_hideout
         
     #Code to have random amount of damage 30-53    
 player_damage = (30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43 ,44 ,45 ,46, 47, 48, 49, 50, 51, 52, 53, 55)
 
-Player = defaultCharacter(name = {userName}, Xp = 0, level = 0, attack = player_damage, light_attack = 60, equipped_weapon = None, health = 750, defense = 300, equipped_armor = None, light_level = 0, startingFight = 0, victories = 0, xp = 0, coins = 0, first_time_in_light_mage_hideout = 0)
+Player = defaultCharacter(name = {userName}, Xp = 0, level = 0, attack = player_damage, weapons_collection = [], armor_collection = [], light_attack = 60, equipped_weapon = None, health = 750, defense = 300, equipped_armor = None, light_level = 0, startingFight = 0, progress = 0, xp = 0, coins = 0, victories= 0, first_time_in_light_mage_hideout = 0)
 
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
@@ -166,7 +175,7 @@ test_subject = elementalBoss(attack = test_subject_damage, health = 1000, name =
 #--- MAIN MENU ---#
 def mainMenu():
     os.system("cls")
-    if Player.victories > 3:
+    if Player.progress > 3:
         print("[1] Endless Mode")
         print("[2] Story Mode")
         print("[3] Tutorial")
@@ -181,13 +190,13 @@ def mainMenu():
             case _:
                 os.system("cls")
                 mainMenu()
-    if Player.victories > 0:
+    if Player.progress > 0:
         print("[1] (Continue) Story Mode")
         print("[2] Tutorial")
         print("[3] Inspiration")
         print("[4] Progress")     
         print("[5] Go to (Weapons) Inventory")
-        print("[6] Go to (Armor) Inventory")	
+        print("[6] Go to (Armor) Inventory")
         print("[7] Go to Light Mages Hideout ")		
         match input(f"Choose, {userName}: "):
             case ('1'):
@@ -199,9 +208,9 @@ def mainMenu():
             case ('4'):
                 userProgression()
             case ('5'):
-                weapons_inventory()
+                weapon_system()
             case ('6'):
-                armor_inventory()
+                armor_system()
             case ('7'):
                 light_mages_hideout()
             case _:
@@ -240,7 +249,7 @@ def endlessMode():
 
 #--- EXPLAINS BASIC GAME MECHANICS ---#
 def tutorialMode():
-    if Player.victories == 0:
+    if Player.progress == 0:
        match input("Return to story mode for the full scoop. If you're still puzzled, swing by again. Press 'm' to warp to the main menu."):
             case 'm':
                 mainMenu()
@@ -408,6 +417,14 @@ def fight(Player, target)-> None:
                         damage = random.choice(Player.attack)
                         Rdamage = random.choice(target.attack)
                         Player.health -= Rdamage
+                    
+                    if target.health <= 0:
+                        good_aftermath()
+                        break
+
+                    if Player.health <= 0:
+                        bad_aftermath()
+                        break
 
                     weapon_reponse_status(Player, target)
                     input()  
@@ -432,6 +449,14 @@ def fight(Player, target)-> None:
                         damage = random.choice(Player.attack)
                         Rdamage = random.choice(target.attack)
                         Player.health -= Rdamage
+                    
+                    if target.health <= 0:
+                        good_aftermath()
+                        break
+
+                    if Player.health <= 0:
+                        bad_aftermath()
+                        break
 
                     weapon_reponse_status(Player, target)
                     input()   
@@ -457,6 +482,14 @@ def fight(Player, target)-> None:
                         Rdamage = random.choice(target.attack)
                         Player.health -= Rdamage
 
+                    if target.health <= 0:
+                        good_aftermath()
+                        break
+
+                    if Player.health <= 0:
+                        bad_aftermath()
+                        break
+
                     weapon_reponse_status(Player, target)
                     input()   
 
@@ -481,6 +514,14 @@ def fight(Player, target)-> None:
                         Rdamage = random.choice(target.attack)
                         Player.health -= Rdamage
 
+                    if target.health <= 0:
+                        good_aftermath()
+                        break
+
+                    if Player.health <= 0:
+                        bad_aftermath()
+                        break
+
                     weapon_reponse_status(Player, target)
                     input()   
                 
@@ -504,6 +545,14 @@ def fight(Player, target)-> None:
                         damage = random.choice(Player.attack)
                         Rdamage = random.choice(target.attack)
                         Player.health -= Rdamage
+                    
+                    if target.health <= 0:
+                        good_aftermath()
+                        break
+
+                    if Player.health <= 0:
+                        bad_aftermath()
+                        break
 
                     weapon_reponse_status(Player, target)
                     input()   
@@ -528,6 +577,15 @@ def fight(Player, target)-> None:
                         Rdamage = random.choice(target.attack)
                         Player.defense = 0
                         Player.health -= Rdamage
+                    
+                    if target.health <= 0:
+                        Player.progress += 1
+                        good_aftermath()
+                        break
+
+                    if Player.health <= 0:
+                        bad_aftermath()
+                        break
 
                 if Player.equipped_weapon == nova_nexus:
                     SSD = random.choice(nova_nexus_damage)
@@ -549,6 +607,15 @@ def fight(Player, target)-> None:
                         Rdamage = random.choice(target.attack)
                         Player.defense = 0
                         Player.health -= Rdamage
+
+                    if target.health <= 0:
+                        Player.progress += 1
+                        good_aftermath()
+                        break
+
+                    if Player.health <= 0:
+                        bad_aftermath()
+                        break
 
                     weapon_reponse_status(Player, target)
                     input()   
@@ -595,7 +662,8 @@ def fight(Player, target)-> None:
     # the 'f' and the 'd' stands for delay print and fast print
     # the reason that its like that because its faster to test when I go through it.
 def storyMode():
-    if Player.victories == 0:
+    if Player.progress == 0:
+        os.system("cls")
         print('     Narrator: "Within the foreboding depths of the Elemental Spirit Dungeon, darkness reigns supreme.Twisted corridors of jagged stone stretch endlessly, flickering torchlight casting eerie shadows that dance with malevolent intent. Traps lie in wait, eager to ensnare the unwary, while spectral entities haunt every corner, their mournful wails a constant reminder of the horrors lurking within.\n\nBut amidst the peril, there are treasures to be found and challenges to be overcome, for those brave or foolish enough to dare the dungeon\'s depths. Yet, beware, for in the heart of darkness, even the most valiant souls may find themselves consumed by the abyss. Steel yourself, light mage, for your greatest trial begins now."\n\n\n')
         os.system("cls")
         print('  ???:\n"Hey! Wake up! Are you alright?"')
@@ -627,6 +695,11 @@ def storyMode():
         while True:
             fight(Player, firstWindSpirit)
             break
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
+    #IMPROVE THE STORY PELASESEEEEE
+    if Player.progress == 1:
+        os.system("cls")
         input('\n')
         print('  You:\n"Seriously, who are you? And what’s going on here?"')
         input('\n')
@@ -635,12 +708,9 @@ def storyMode():
         os.system('cls')
         print('  You (Thinking): "This guy knows something he’s not telling me. I need to stay alert... and figure out what’s really happening here."')
         input('\n')
-        print('  ???:\n""Great job in that fight! We need to get out of here now to keep you safe."')
-        input
-#--------------------------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------------------------
-    #IMPROVE THE STORY PELASESEEEEE
-    if Player.victories == 1:
+        print('  ???:\n""Great job in that earlier though fight! We need to get out of here now to keep you safe."')
+        input()
+        os.system("cls")
         #f
         print('   Narrator:\n"Emerging from the depths of the evil elemental spirit dungeon, You breathe a sigh of relief, your holy heart blazes with triumphant victory. The burden of darkness lifts, but a flicker of concern remains for the lingering shadows left behind. As you step into the light outside of the dungeon, victorious yet vigilant, the need for tranquillity resonates within..."   ')
         input('\n')
@@ -726,12 +796,9 @@ def storyMode():
         os.system("cls")
         print(' (To yourself) "How can he tell me not to spend it all in one place when I can only spend it on weapons and armor, which are technically in the same place?"')
         Player.coins += 5000
-        Player.victories += 1
         input()
         os.system("cls")
         shop()
-        if Player.victories == 2:
-            print('   Narrator:\n"Your journey through the dungeon has been a testament to your strength and resilience. As you continue your journey, you may encounter more dungeons and encounters, but for now you can rest easily and rest in peace." ')
 
 
 #--------------------------------------------------------------------------------------------------------------------
@@ -755,7 +822,7 @@ def shop():
             shop()
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
-#--- ARMOR SHOP ---# WORK ON THE  SHOP #
+#--- ARMOR SHOP ---# WORK ON THE  SHOP ---#
 def armor_shop():
     os.system("cls")
     print(f"Your current number of coins: {Player.coins}\n-------------------------------------------------------------------------------------------------------------------------------\n")
@@ -772,67 +839,70 @@ def armor_shop():
                 scythes_shop() 
             elif leather_tunic.level_requirement > Player.level:
                 input(f"You need to be at least level {leather_tunic.level_requirement} to wear {leather_tunic.name}.")
-                scythes_shop()
+                armor_shop()
             else:
-                Player.equipped_armor = leather_tunic
+                Player.equipped_weapon = leather_tunic
+                Player.armor_collection.append(leather_tunic)
                 Player.coins -= leather_tunic.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {leather_tunic.name}. Press ENTER to continue.")
-                scythes_shop()
+                armor_shop()
         case '2': 
             if Player.coins < ironweaved_chainmail_armor.price:
                 print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
                 scythes_shop() 
             elif ironweaved_chainmail_armor.level_requirement > Player.level:
                 input(f"You need to be at least level {ironweaved_chainmail_armor.level_requirement} to wear {ironweaved_chainmail_armor.name}.")
-                scythes_shop()
+                armor_shop()
             else:
-                Player.equipped_armor = ironweaved_chainmail_armor
+                Player.equipped_weapon = ironweaved_chainmail_armor
+                Player.armor_collection.append(ironweaved_chainmail_armor)
                 Player.coins -= ironweaved_chainmail_armor.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {ironweaved_chainmail_armor.name}. Press ENTER to continue.")
-                scythes_shop()
+                armor_shop()
         case '3': 
             if Player.coins < astral_armor.price:
                 print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
-                scythes_shop() 
+                armor_shop() 
             elif astral_armor.level_requirement > Player.level:
                 input(f"You need to be at least level {astral_armor.level_requirement} to wear {astral_armor.name}.")
-                scythes_shop()
+                armor_shop()
             else:
-                Player.equipped_armor = astral_armor
-                Player.defense = Player.defense + astral_armor.added_defense
-                #Maybe the above would work  i truly got no idea but thats coding for ya
+                Player.armor_collection.append(astral_armor)
+                Player.equipped_weapon = astral_armor
                 Player.coins -= astral_armor.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {astral_armor.name}. Press ENTER to continue.")
-                scythes_shop()
+                armor_shop()
         case '4':
             if Player.coins < pheonix_armor.price:
                 print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
-                scythes_shop() 
+                armor_shop() 
             elif pheonix_armor.level_requirement > Player.level:
                 input(f"You need to be at least level {pheonix_armor.level_requirement} to wear {pheonix_armor.name}.")
-                scythes_shop()
+                armor_shop()
             else:
                 Player.equipped_armor = pheonix_armor
+                Player.armor_collection.append(pheonix_armor)
                 Player.coins -= pheonix_armor.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {pheonix_armor.name}. Press ENTER to continue.")
-                scythes_shop()
+                armor_shop()
         case '5':
             if Player.coins < aetherial_armor.price:
                 print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
-                scythes_shop() 
+                armor_shop() 
             elif aetherial_armor.level_requirement > Player.level:
                 input(f"You need to be at least level {aetherial_armor.level_requirement} to wear {aetherial_armor.name}.")
-                scythes_shop()
+                armor_shop()
             else:
                 Player.equipped_armor = aetherial_armor
+                Player.armor_collection.append(aetherial_armor)
                 Player.coins -= aetherial_armor.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {aetherial_armor.name}. Press ENTER to continue.")
-                scythes_shop()
+                armor_shop()
         case _:
             armor_shop()
 #--------------------------------------------------------------------------------------------------------------------
@@ -857,9 +927,10 @@ def swords_shop():
                 swords_shop()
             else:
                 Player.equipped_weapon = stone_sword
+                Player.weapons_collection.append(stone_sword)
                 Player.coins -= stone_sword.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
-                input(f"You have equipped {stone_sword.name}. Press Enter to continue.")
+                input(f"You have equipped {stone_sword.name}. Press ENTER to continue.")
                 swords_shop()
         case '2':
             if Player.coins < iron_sword.price:
@@ -869,6 +940,7 @@ def swords_shop():
                 swords_shop()
             else:
                 Player.equipped_weapon = iron_sword
+                Player.weapons_collection.append(iron_sword)
                 Player.coins -= iron_sword.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {iron_sword.name}. Press ENTER to continue.")
@@ -882,7 +954,8 @@ def swords_shop():
                     swords_shop()
             else:
                 Player.equipped_weapon = diamond_sword
-                Player.coins -= 3000
+                Player.weapons_collection.append(diamond_sword)
+                Player.coins -= diamond_sword.price
                 print("Pleasure doin business with you ya bo-yo!")
                 input(f"You have equipped a {diamond_sword.name}")
                 swords_shop()
@@ -899,7 +972,7 @@ Hurry = "Ryker:\n'Get on with it kid."
 choose_words = (Already, Hurry)
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
-#--- SCYTHES WEAPON SHOP ---#
+#--- SCYTHES WEAPON SHOP ---# Make a attribute that says if first time int he shop delcare global variable weapons_tuple = (). same thing for armors
 def scythes_shop():
     os.system("cls")
     print(f"Your current # of coins: {Player.coins}\n-------------------------------------------------------------------------------------------------------------------------------\n")
@@ -916,6 +989,7 @@ def scythes_shop():
                 scythes_shop()
             else:
                 Player.equipped_weapon = peasant_reaper
+                Player.weapons_collection.append(peasant_reaper)
                 Player.coins -= peasant_reaper.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {peasant_reaper.name}. Press ENTER to continue.")
@@ -929,6 +1003,7 @@ def scythes_shop():
                 scythes_shop()
             else:
                 Player.equipped_weapon = shadowsoul_requiem
+                Player.weapons_collection.append(shadowsoul_requiem)
                 Player.coins -= shadowsoul_requiem.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {shadowsoul_requiem.name}. Press ENTER to continue.")
@@ -960,6 +1035,7 @@ def staffs_shop():
             else:
                 # Player meets both money and level requirements
                 Player.equipped_weapon = celestial_staff
+                Player.weapons_collection.append(celestial_staff)
                 Player.coins -= celestial_staff.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {celestial_staff.name}. Press ENTER to continue.")
@@ -973,6 +1049,7 @@ def staffs_shop():
                 staffs_shop()
             else:
                 Player.equipped_weapon = nova_nexus
+                Player.weapons_collection.append(nova_nexus)
                 Player.coins -= nova_nexus.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {nova_nexus.name}. Press ENTER to continue.")
@@ -997,6 +1074,7 @@ def good_aftermath():
     Player.light_level += 3
     if Player.light_level > 3:
         Player.light_attack + 35
+    Player.progress += 1
     Player.victories += 1
     Player.coins += 750
     fast_print(f"Level up! {Player.level} Total XP: {Player.xp} Items gained: None\n")
@@ -1024,7 +1102,7 @@ def userProgression():
     print(f"Light Level: {Player.light_level}")
     print(f"Attack Strength: {Player.attack}")
     print(f"Health: {Player.health}\n")
-    print(f"Number of Victories: {Player.victories}")
+    print(f"Number of progress: {Player.progress}")
     print(f"Number of Coins: {Player.coins}")
     print(f"Weapon {Player.equipped_weapon}")
     print(f"Armor {Player.equipped_armor}")
@@ -1038,49 +1116,8 @@ def userProgression():
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
-#THIS DOESNT WORK
-def weapons_inventory():
-    os.system("cls")
-    try:
-        os.systeM("cls")
-        print(f"{userName}'s Inventory:")
-        print(f"\n-------------------------\n")
-        print(f"\nWeapons:")
-        for equipped_weapon in Player.equipped_weapons:
-            print(f"{equipped_weapon.name} - {equipped_weapon.description} - {equipped_weapon.price} - DMGE: {equipped_weapon.damage} - Level Requirement: {equipped_weapon.level_requirement}") 
-        print(f"\nArmor:")
-        for equipped_armor in Player.equipped_armor:
-            print(f"{equipped_armor.name} - {equipped_armor.description}")
-        match input("-------------------------------\nHeres is where you can view all your items/weapons/armor Type 'm' to go back to main menu "):
-            case 'm':
-                mainMenu()
-            case _:
-                os.system("cls")
-                weapons_inventory()
-    except:
-        fast_print("No weapons in inventory")
-        input()
-        mainMenu()
 
-def armor_inventory():
-    os.system("cls")
-    try:
-        os.system("cls")
-        print(f"{userName}'s Armor collection:")
-        print(f"\n-------------------------\n")
-        print(f"\nArmor:")
-        for equipped_armor in Player.equipped_armor:
-            print(f"Armor Name: {equipped_armor.name}\n{equipped_armor.description}\nDefense: {equipped_armor.added_defense}")
-        match input("-------------------------------\nHeres is where you can view all your items/weapons/armor Type 'm' to go back to main menu "):
-            case 'm':
-                mainMenu()
-            case _:
-                os.system("cls")
-                armor_inventory()
-    except:
-        fast_print("No armor in inventory")
-        input()
-        mainMenu()
+
 
 def light_mages_hideout():
     os.system("cls")
@@ -1121,7 +1158,68 @@ def light_mages_hideout():
 def dragon_battle():
     ...
 
+def armor_system():
+    os.system("cls")
+    print(f"Your current number of coins: {Player.coins}\n-------------------------------------------------------------------------------------------------------------------------------\n")
+    print("Equipped Armor: " + Player.equipped_armor.name if Player.equipped_armor else "No armor equipped")
+    print("\nArmors:")
+    for i, armor in enumerate(Player.armor_collection, start=1):
+        print(f"[{i}] Armor Name: {armor.name}: Added Defense: +{armor.added_defense}\n======================================================================================================================\n")
+    print("\n\n\nType 'm' to go to main menu")
+    choice = input("What would you like to do?: ")
+
+    match choice:
+        case 'm':
+            mainMenu()
+        case choice:
+            if choice.isdigit():
+                user_input = int(choice) - 1
+                if 0 <= user_input < len(Player.armor_collection):
+                    Player.equipped_armor = Player.armor_collection[user_input]
+                    print(f"You have equipped {Player.equipped_armor.name}.")
+                else:
+                    print("Invalid option. Press ENTER to continue.")
+                    input()
+                    armor_system()
+            else:
+                print("Invalid option. Press ENTER to continue.")
+                input()
+                armor_system()
+
+def weapon_system():
+    os.system("cls")
+    print(f"Your current number of coins: {Player.coins}\n-------------------------------------------------------------------------------------------------------------------------------\n")
+    print("Equipped Weapon: " + Player.equipped_weapon.name if Player.equipped_weapon else "No weapon equipped")
+    print("\nWeapons:")
+    for i, weapon in enumerate(Player.weapons_collection, start=1):
+        print(f"[{i}] Weapon Name: {weapon.name}: Range of Damage: {weapon.attack}\n======================================================================================================================\n")
+    print("\n\n\nType 'm' to go to main menu")
+    choice = input("What would you like to do?: ")
+
+    match choice:
+        case 'm':
+            mainMenu()
+        case choice:
+            if choice.isdigit():
+                user_input = int(choice) - 1
+                if 0 <= user_input < len(Player.weapons_collection):
+                    Player.equipped_weapon = Player.weapons_collection[user_input]
+                    print(f"You have equipped {Player.equipped_weapon.name}.")
+                else:
+                    print("Invalid option. Press ENTER to continue.")
+                    input()
+                    weapon_system()
+            else:
+                print("Invalid option. Press ENTER to continue.")
+                input()
+                weapon_system()
+
+
+
 mainMenu()
+
+
+
 
 
 
