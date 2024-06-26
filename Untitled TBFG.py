@@ -6,8 +6,7 @@ import os, random, time, sys
 global userName
 while True:
     userName = input("Please enter your name: ")
-    if  ' ' in userName:
-        print("Name cannot be empty. Please try again.")
+    if userName == "" or userName.isdigit():
         os.system("cls")
     else:
         break
@@ -191,13 +190,13 @@ def mainMenu():
                 os.system("cls")
                 mainMenu()
     if Player.progress > 0:
+        os.system("cls")      
         print("[1] (Continue) Story Mode")
         print("[2] Tutorial")
         print("[3] Inspiration")
         print("[4] Progress")     
         print("[5] Go to (Weapons) Inventory")
-        print("[6] Go to (Armor) Inventory")
-        print("[7] Go to Light Mages Hideout ")		
+        print("[6] Go to (Armor) Inventory")	
         match input(f"Choose, {userName}: "):
             case ('1'):
                 storyMode()
@@ -211,12 +210,11 @@ def mainMenu():
                 weapon_system()
             case ('6'):
                 armor_system()
-            case ('7'):
-                light_mages_hideout()
             case _:
                 os.system("cls")
                 mainMenu()
     else:
+        os.system("cls")
         print("[1] Story Mode")
         print("[2] Tutorial")
         print("[3] Inspiration")
@@ -266,11 +264,32 @@ def tutorialMode():
 
     
 def fight(Player, target)-> None:
+    Player.defense = 300
+    Player.health = 750
+
+    if Player.equipped_armor is leather_tunic:
+        Player.defense += leather_tunic.added_defense
+
+    elif Player.equipped_armor is ironweaved_chainmail_armor:
+        Player.defense += ironweaved_chainmail_armor.added_defense
+        
+    elif Player.equipped_armor is astral_armor:
+        Player.defense += astral_armor.added_defense
+
+    elif Player.equipped_armor is pheonix_armor:
+        Player.defense += pheonix_armor.added_defense
+
+    elif Player.equipped_armor is aetherial_armor:
+        Player.defense += aetherial_armor.added_defense
+
+    else:
+        Player.defense = Player.defense  # No armor equipped, use default defense
+
     def weapon_reponse_status(Player, target)-> None:
         os.system("cls")
         print(f"{target.name} DEALT {Rdamage}!")
         print("\n------------------------------------\n")
-        print(f"{userName} DEALT {DSG}!")
+        print(f"{userName} DEALT {EWD} USING {Player.equipped_weapon.name}!")
         print("\n------------------------------------\n")
         print(f"{userName}s' HLTH {Player.health}" )
         print(f"{userName}s' DEF {Player.defense}")
@@ -321,7 +340,7 @@ def fight(Player, target)-> None:
     fighting_words = (Haste, Wise, Regular)
     rcf = random.choice(fighting_words)
     #--- Code for randomized damage for more game authenticity ---#
-    global damage, Rdamage, DSG, SSD, ISD, PRD, SSRD, CSD, NND
+    global damage, Rdamage, DSG, SSD, ISD, PRD, SSRD, CSD, NND, EWD
     DSG = random.choice(diamond_sword_damage)
     SSD = random.choice(stone_sword_damage)
     ISD = random.choice(iron_sword_damage)
@@ -398,7 +417,7 @@ def fight(Player, target)-> None:
                     input()
             case '3':
                 if Player.equipped_weapon == diamond_sword:
-                    DSG = random.choice(diamond_sword_damage)
+                    EWD = DSG = random.choice(diamond_sword_damage)
 
                     if target.defense >= 0:
                         target.defense -= DSG
@@ -408,17 +427,16 @@ def fight(Player, target)-> None:
                         target.health -= DSG
 
                     if Player.defense >= 0:
-                        damage = random.choice(Player.attack)
                         Rdamage = random.choice(target.attack)
                         Player.defense -= Rdamage
-        
+
                     if Player.defense <= 0:
-                        Player.defense = 0
-                        damage = random.choice(Player.attack)
                         Rdamage = random.choice(target.attack)
+                        Player.defense = 0
                         Player.health -= Rdamage
-                    
+
                     if target.health <= 0:
+                        Player.progress += 1
                         good_aftermath()
                         break
 
@@ -427,10 +445,10 @@ def fight(Player, target)-> None:
                         break
 
                     weapon_reponse_status(Player, target)
-                    input()  
+                    input()
 
-                if Player.equipped_weapon == stone_sword:
-                    SSD = random.choice(stone_sword_damage)
+                elif Player.equipped_weapon == stone_sword:
+                    EWD = SSD = random.choice(stone_sword_damage)
 
                     if target.defense >= 0:
                         target.defense -= SSD
@@ -440,13 +458,11 @@ def fight(Player, target)-> None:
                         target.health -= SSD
 
                     if Player.defense >= 0:
-                        damage = random.choice(Player.attack)
                         Rdamage = random.choice(target.attack)
                         Player.defense -= Rdamage
         
                     if Player.defense <= 0:
                         Player.defense = 0
-                        damage = random.choice(Player.attack)
                         Rdamage = random.choice(target.attack)
                         Player.health -= Rdamage
                     
@@ -461,8 +477,8 @@ def fight(Player, target)-> None:
                     weapon_reponse_status(Player, target)
                     input()   
 
-                if Player.equipped_weapon == iron_sword:
-                    SSD = random.choice(stone_sword_damage)
+                elif Player.equipped_weapon == iron_sword:
+                    EWD = SSD = random.choice(stone_sword_damage)
 
                     if target.defense >= 0:
                         target.defense -= ISD
@@ -472,7 +488,6 @@ def fight(Player, target)-> None:
                         target.health -= ISD
 
                     if Player.defense >= 0:
-                        damage = random.choice(Player.attack)
                         Rdamage = random.choice(target.attack)
                         Player.defense -= Rdamage
         
@@ -493,8 +508,8 @@ def fight(Player, target)-> None:
                     weapon_reponse_status(Player, target)
                     input()   
 
-                if Player.equipped_weapon == peasant_reaper:
-                    SSD = random.choice(peasant_reaper_damage)
+                elif Player.equipped_weapon == peasant_reaper:
+                    EWD = SSD = random.choice(peasant_reaper_damage)
 
                     if target.defense >= 0:
                         target.defense -= PRD
@@ -525,8 +540,8 @@ def fight(Player, target)-> None:
                     weapon_reponse_status(Player, target)
                     input()   
                 
-                if Player.equipped_weapon == shadowsoul_requiem:
-                    SSD = random.choice(shadowsoul_requiem_damage)
+                elif Player.equipped_weapon == shadowsoul_requiem:
+                    EWD = SSD = random.choice(shadowsoul_requiem_damage)
 
                     if target.defense >= 0:
                         target.defense -= SSRD
@@ -557,8 +572,8 @@ def fight(Player, target)-> None:
                     weapon_reponse_status(Player, target)
                     input()   
                 
-                if Player.equipped_weapon == celestial_staff:
-                    SSD = random.choice(celestial_staff_damage)
+                elif Player.equipped_weapon == celestial_staff:
+                    EWD = SSD = random.choice(celestial_staff_damage)
 
                     if target.defense >= 0:
                         target.defense -= CSD
@@ -586,9 +601,12 @@ def fight(Player, target)-> None:
                     if Player.health <= 0:
                         bad_aftermath()
                         break
+                        
+                    weapon_reponse_status(Player, target)
+                    input()      
 
-                if Player.equipped_weapon == nova_nexus:
-                    SSD = random.choice(nova_nexus_damage)
+                elif Player.equipped_weapon == nova_nexus:
+                    EWD = SSD = random.choice(nova_nexus_damage)
 
                     if target.defense >= 0:
                         target.defense -= NND
@@ -625,24 +643,24 @@ def fight(Player, target)-> None:
                     print(f"{userName} takes 10 damage!")
                     Player.health -= 10
 
-                if Player.defense >= 0:
-                    Player.defense -= 10
+                    if Player.defense >= 0:
+                        Player.defense -= 10
 
-                if Player.defense <= 0:
-                    Player.defense = 0
-                    Player.health -= 10
+                    if Player.defense <= 0:
+                        Player.defense = 0
+                        Player.health -= 10
 
-                if target.health <= 0:
-                    good_aftermath()
-                    break
+                    if target.health <= 0:
+                        good_aftermath()
+                        break
 
-                if Player.health <= 0:
-                    bad_aftermath()
-                    break
-                        
+                    if Player.health <= 0:
+                        bad_aftermath()
+                        break
+                            
 
-                invalid_response_status(Player, target)
-                input()
+                    invalid_response_status(Player, target)
+                    input()
 
             case _:
                 Regular2 = (f"You've lost your turn {userName}!")
@@ -650,6 +668,12 @@ def fight(Player, target)-> None:
                 Funny = (f"Bozo He hit you!")
                 invalid_words = (Regular2, Mean, Funny)
                 input(("[-10 HLTH and -10 DEF]", ((random.choice(invalid_words)))))
+                Player.health -= 10
+                Player.defense -= 10
+
+                if Player.defense <= 0:
+                    Player.defense = 0
+                
 
                 if Player.health <= 0:
                     bad_aftermath()
@@ -698,7 +722,6 @@ def storyMode():
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
     #IMPROVE THE STORY PELASESEEEEE
-    if Player.progress == 1:
         os.system("cls")
         input('\n')
         print('  You:\n"Seriously, who are you? And what’s going on here?"')
@@ -799,6 +822,11 @@ def storyMode():
         input()
         os.system("cls")
         shop()
+        Player.progress += 1
+    if Player.progress == 2:
+        input("Does this work proper? If so, lets continue on with the game." )
+        while True:
+            fight(Player, test_subject)
 
 
 #--------------------------------------------------------------------------------------------------------------------
@@ -831,8 +859,8 @@ def armor_shop():
     print(f"[3] - NAME: {astral_armor.name}: ADDED DEF: +{astral_armor.added_defense}\nDescription: {astral_armor.description}\nPrice: {astral_armor.price}\n\n ")
     print(f"[4] - NAME: {pheonix_armor.name}: ADDED DEF: +{pheonix_armor.added_defense}\nDescription: {pheonix_armor.description}\nPrice: {pheonix_armor.price}\n\n ")
     print(f"[5] - NAME: {aetherial_armor.name}: ADDED DEF: +{aetherial_armor.added_defense}\nDescription: {aetherial_armor.description}\nPrice: {aetherial_armor.price}\n\n ")
-    print("\n\n\nType m to go to main menu")
-    match input("Which weapon would you like lad?"):
+    print("\n\n\nType m to go to main menu\n\n\nType s to go back to the shop: ")
+    match input("Which armor set would you like lad?"):
         case '1':
             if Player.coins < leather_tunic.price:
                 print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
@@ -841,7 +869,7 @@ def armor_shop():
                 input(f"You need to be at least level {leather_tunic.level_requirement} to wear {leather_tunic.name}.")
                 armor_shop()
             else:
-                Player.equipped_weapon = leather_tunic
+                Player.equipped_armor = leather_tunic
                 Player.armor_collection.append(leather_tunic)
                 Player.coins -= leather_tunic.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
@@ -855,7 +883,7 @@ def armor_shop():
                 input(f"You need to be at least level {ironweaved_chainmail_armor.level_requirement} to wear {ironweaved_chainmail_armor.name}.")
                 armor_shop()
             else:
-                Player.equipped_weapon = ironweaved_chainmail_armor
+                Player.equipped_armor = ironweaved_chainmail_armor
                 Player.armor_collection.append(ironweaved_chainmail_armor)
                 Player.coins -= ironweaved_chainmail_armor.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
@@ -870,7 +898,7 @@ def armor_shop():
                 armor_shop()
             else:
                 Player.armor_collection.append(astral_armor)
-                Player.equipped_weapon = astral_armor
+                Player.equipped_armor = astral_armor
                 Player.coins -= astral_armor.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {astral_armor.name}. Press ENTER to continue.")
@@ -903,6 +931,10 @@ def armor_shop():
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {aetherial_armor.name}. Press ENTER to continue.")
                 armor_shop()
+        case 'm':
+            mainMenu()
+        case 's':
+            shop()
         case _:
             armor_shop()
 #--------------------------------------------------------------------------------------------------------------------
@@ -914,7 +946,7 @@ def swords_shop():
     print(f"[1] - NAME: {stone_sword.name}: DMGE: 60-90.\nDescription: {stone_sword.description}\nPrice: {stone_sword.price}\n\n")
     print(f"[2] - NAME: {iron_sword.name}: DMGE: 90-130.\nDescription: {iron_sword.description}\nPrice: {iron_sword.price}\n\n")
     print(f"[3] - NAME: {diamond_sword.name}: DMGE: 90-130.\nDescription: {diamond_sword.description}\nPrice: {diamond_sword.price}\n\n")
-    print("\n\n\nType 'm' to go to main menu")
+    print("\n\n\nType 'm' to go to main menu\n\n\nType s to go back to the shop: ")
     match input("Which weapon would you like lad?"):
         case '1':
             if Player.coins < stone_sword.price:
@@ -961,6 +993,8 @@ def swords_shop():
                 swords_shop()
         case 'm':
             mainMenu()
+        case 's':
+            shop()
         case _:
             input(random.choice(choose_words))
             swords_shop()
@@ -978,7 +1012,7 @@ def scythes_shop():
     print(f"Your current # of coins: {Player.coins}\n-------------------------------------------------------------------------------------------------------------------------------\n")
     print(f"[1] - NAME: {peasant_reaper.name} DMGE: 250-365.\nDescription: {peasant_reaper_description}\nPrice: {peasant_reaper.price}\n\n")
     print(f"[2] - NAME: {shadowsoul_requiem.name} DMGE: 1000-1250.\nDescription: {shadowsoul_requiem_description}\nPrice: {shadowsoul_requiem.price}\n\n")
-    print("\n\n\nType 'm' to go to main menu")
+    print("\n\n\nType 'm' to go to main menu\n\n\nType s to go back to the shop: ")
     match input("Which weapon would you like lad?"):
         case '1':
             if Player.coins < peasant_reaper.price:
@@ -1010,6 +1044,8 @@ def scythes_shop():
                 scythes_shop() 
         case 'm':
             mainMenu()
+        case 's':
+            shop()
         case _:
             input(random.choice(choose_words))
             scythes_shop()
@@ -1021,14 +1057,12 @@ def staffs_shop():
     print(f"Your current # of coins: {Player.coins}\n-------------------------------------------------------------------------------------------------------------------------------\n")
     print(f"[1] - NAME: {celestial_staff.name} DMGE: 600-825.\nDescription: {celestial_staff_description}\nPrice: {celestial_staff.price}\n\n")
     print(f"[2] - NAME: {nova_nexus.name} DMGE: 600-825.\nDescription: {nova_nexus_description}\nPrice: {nova_nexus.price}\n\n")
-    print("\n\n\nType 'm' to go to main menu")
+    print("\n\n\nType 'm' to go to main menu\n\n\nType s to go back to the shop: ")
     match input("Which weapon would you like lad?"):
         case '1':
-            # Check if the player has enough coins to buy the celestial_staff
             if Player.coins < celestial_staff.price:
                 input("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
                 staffs_shop() 
-            # Check if the player meets the level requirement for the stone_sword
             elif celestial_staff.level_requirement > Player.level:
                 input(f"You have to be at least level {celestial_staff.level_requirement} to buy this weapon!")
                 staffs_shop() 
@@ -1056,6 +1090,8 @@ def staffs_shop():
                 staffs_shop()
         case 'm':
             mainMenu()
+        case 's':
+            shop()
         case _:
             input(random.choice(choose_words))
             staffs_shop()
@@ -1063,7 +1099,7 @@ def staffs_shop():
 #--------------------------------------------------------------------------------------------------------------------
 #--- CUSTOM AFTERMATH WORDS SO THAT THE GAME DOESNT FEEL BLAND ---#
 Day = "Another day another victory! "
-Easy = "That wasnt so bad, nice victory light mage!"
+Easy = "That wasnt so bad, nice victory light mage! "
 victory_words = (Day, Easy)
 
 def good_aftermath():    
@@ -1082,8 +1118,8 @@ def good_aftermath():
     mainMenu()
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
-Regular = "You have fallen in battle! No rewards"
-Rough = "Better luck next time eh? No rewards for you!"
+Regular = "You have fallen in battle! No rewards "
+Rough = "Better luck next time eh? No rewards for you! "
 loser_words = (Regular, Rough)  
 def bad_aftermath():       
     os.system("cls")
@@ -1102,7 +1138,7 @@ def userProgression():
     print(f"Light Level: {Player.light_level}")
     print(f"Attack Strength: {Player.attack}")
     print(f"Health: {Player.health}\n")
-    print(f"Number of progress: {Player.progress}")
+    print(f"Number of Vctories: {Player.victories}")
     print(f"Number of Coins: {Player.coins}")
     print(f"Weapon {Player.equipped_weapon}")
     print(f"Armor {Player.equipped_armor}")
@@ -1167,7 +1203,6 @@ def armor_system():
         print(f"[{i}] Armor Name: {armor.name}: Added Defense: +{armor.added_defense}\n======================================================================================================================\n")
     print("\n\n\nType 'm' to go to main menu")
     choice = input("What would you like to do?: ")
-
     match choice:
         case 'm':
             mainMenu()
@@ -1176,7 +1211,9 @@ def armor_system():
                 user_input = int(choice) - 1
                 if 0 <= user_input < len(Player.armor_collection):
                     Player.equipped_armor = Player.armor_collection[user_input]
-                    print(f"You have equipped {Player.equipped_armor.name}.")
+                    fast_print(f"You have equipped {Player.equipped_armor.name}.")
+                    input()
+                    armor_system()
                 else:
                     print("Invalid option. Press ENTER to continue.")
                     input()
@@ -1195,7 +1232,6 @@ def weapon_system():
         print(f"[{i}] Weapon Name: {weapon.name}: Range of Damage: {weapon.attack}\n======================================================================================================================\n")
     print("\n\n\nType 'm' to go to main menu")
     choice = input("What would you like to do?: ")
-
     match choice:
         case 'm':
             mainMenu()
@@ -1204,7 +1240,9 @@ def weapon_system():
                 user_input = int(choice) - 1
                 if 0 <= user_input < len(Player.weapons_collection):
                     Player.equipped_weapon = Player.weapons_collection[user_input]
-                    print(f"You have equipped {Player.equipped_weapon.name}.")
+                    fast_print(f"You have equipped {Player.equipped_weapon.name}.")
+                    input()
+                    weapon_system()
                 else:
                     print("Invalid option. Press ENTER to continue.")
                     input()
