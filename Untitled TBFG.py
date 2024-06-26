@@ -11,8 +11,6 @@ while True:
     else:
         break
 
-
-
 os.system("cls")
 
 #--- DELAYING PRINT CODE ---#
@@ -28,16 +26,32 @@ def fast_print(s):
         sys.stdout.flush()
         time.sleep(0.02)
 
-#--- GLOBAL VARIABLES ---#
-global attack_buff, health_buff, fire_level_buff, water_level_buff, Xp, Experience, starting_point
+#---------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------
+#--- the difference bewteen that this class is used to see if the character has reached the next level and if so, it will biring them to the next part. ---#
+#--- I decided to make it two different classes because I didn't want to make the code too complex, and hard to read/comprhend. ---#
+class progressionChecker:
+    def __init__(progressionChecker, experience: int, progress: int, victories: int, first_Time_In_Light_Mage_Hideout: bool, entered_Light_Mage_Hideout: bool) -> None:
+        progressionChecker.experience = experience
+        progressionChecker.progress = progress
+        progressionChecker.victories = victories
+        progressionChecker.first_Time_In_Light_Mage_Hideout = first_Time_In_Light_Mage_Hideout
+        progressionChecker.entered_Light_Mage_Hideout = entered_Light_Mage_Hideout
 
-attack_buff = 0
-health_buff = 0
-
-Xp = 0
+progressionChecker = progressionChecker(0, 0, 0, False, False)
 
 
-
+#---------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------
+#--- PARENT FOR ALL CHARACTERS CLASS ---#
+#--- I used to show my knowledge of inheritance in Python as, and i realised it would be better to create a parent class that all characters could inherit from also I like polymorphism. ---#
+class universalCharaterStats:
+    def __init__(universalCharaterStats, name: str, health: int, attack: int, defense : int) -> None:
+        universalCharaterStats.name = name
+        universalCharaterStats.health = health
+        universalCharaterStats.attack = attack
+        universalCharaterStats.defense = defense
+        
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 #--- CODE FOR WEAPON CLASS ---#
@@ -121,60 +135,79 @@ aetherial_armor = armor(name = "Ethereal armor", added_defense = 1250, level_req
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 #-- DEFAULT CHARACTER CLASS {WIP} ---#
-class defaultCharacter:
-    def __init__(player, name, Xp: int, level: int, attack: int, weapons_collection: list, armor_collection: list, light_attack: int, equipped_weapon, health: int, defense: int, equipped_armor, light_level: int, startingFight: int, progress: int, xp: int, coins: int, victories: int, first_time_in_light_mage_hideout: int) -> None:
-        player.name = name
-        player.Xp = Xp
-        player.health = health
-        player.attack = attack
-        player.weapons_collection = []
-        player.armor_collection = []
-        player.equipped_weapon = None
+class defaultCharacter(universalCharaterStats):
+    def __init__(player, name: str, level: int, attack: int, weapons_collection: list, armor_collection: list, light_attack: int, equipped_weapon: None, health: int, defense: int, equipped_armor: None, light_level: int, Xp: int, coins: int, victories: int) -> None:
+        super().__init__(name, health, attack, defense)
+        player.weapons_collection = weapons_collection
+        player.armor_collection = armor_collection
+        player.equipped_weapon = equipped_weapon
         player.light_attack = light_attack
         player.level = level
         player.light_level = light_level
-        player.defense = defense
-        player.equipped_armor = None
-        player.startingFight = startingFight
-        player.progress = progress
-        player.xp = xp
+        player.equipped_armor = equipped_armor
+        player.Xp = Xp
         player.coins = coins
         player.victories = victories
-        player.first_time_in_light_mage_hideout = first_time_in_light_mage_hideout
-        
-    #Code to have random amount of damage 30-53    
+
 player_damage = (30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43 ,44 ,45 ,46, 47, 48, 49, 50, 51, 52, 53, 55)
 
-Player = defaultCharacter(name = {userName}, Xp = 0, level = 0, attack = player_damage, weapons_collection = [], armor_collection = [], light_attack = 60, equipped_weapon = None, health = 750, defense = 300, equipped_armor = None, light_level = 0, startingFight = 0, progress = 0, xp = 0, coins = 0, victories= 0, first_time_in_light_mage_hideout = 0)
+Player = defaultCharacter(name = {userName}, 
+                          health = 750, 
+                          attack = player_damage, 
+                          defense = 300, 
+                          Xp = 0, 
+                          weapons_collection = [], 
+                          armor_collection = [], 
+                          equipped_weapon = None, 
+                          light_attack = 60, 
+                          level = 0, 
+                          light_level = 0, 
+                          equipped_armor = None, 
+                          coins = 1000, 
+                          victories = 0)
 
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
-#--- CLASSES CODE FOR BOSSES AND MINIONS FOR DUNGEON
-class elementalBoss:
-    def __init__(elementalBoss, attack: int, health: int, name: str, defense: int) -> None:
-        elementalBoss.attack = attack
-        elementalBoss.health = health
+#--- CLASSES CODE FOR BOSSES AND MINIONS FOR DUNGEON --
+
+#-- The difference bewteen bosses, and minions is that they have a loot they has a chance of droping
+class elementalBoss(universalCharaterStats):
+    def __init__(elementalBoss, name: str, attack: int, health: int, defense: int, loot: list) -> None:
+        super().__init__(name, attack, health, defense)
+        elementalBoss.loot = loot
         elementalBoss.name = name
-        elementalBoss.defense = defense
-        
-class elementalMinion:
+
+dragon_scale_description = ('A rare and valuable piece of dragon scale, crafted from the scales of a legendary dragon. It offers great protection against all types of attacks.')
+nothing = 'Nothing'
+dragon_scale = 'Dragon Scale'
+weights = (70, 30)
+random_loot_chance = random.choices([dragon_scale, nothing], weights)
+Dragon = elementalBoss(name = "Mini Dragon", attack = 125, health = 500, defense = 300, loot = [dragon_scale, nothing])
+#---------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------
+    #--- If you have 5 pieces of dragonscale, you can create dragon armor! (FUTURE GAME IDEA) ---#
+
+    #--- This code makes dragon_scale have a 70% chance to drop, and a 30% chance to drop nothing ---#
+
+
+#-- I knoww that I could've just made it inherit no class because it doesnt have any extra methods or attributes. But just for the sake of understanding code better I decided to do this instead.---#
+class elementalMinion(universalCharaterStats):
     def __init__(elementalMinion, name: str, attack: int, health: int, defense: int) -> None:
+        super().__init__(name, attack, health, defense)
         elementalMinion.name = name
         elementalMinion.attack = attack
         elementalMinion.health = health
         elementalMinion.defense = defense
 
-#This is to make it more like an actual fighting game. The damaage is randomized.
-test_subject_damage = (1,1)
+
 windSpiritDamage = (8, 9, 10, 11, 12, 13, 14, 15, 16, 17,)
 firstWindSpirit = elementalMinion(name = "Wind Spirit", attack = windSpiritDamage, health = 150, defense = 60)
-test_subject = elementalBoss(attack = test_subject_damage, health = 1000, name = "test subject", defense = 1000)
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 #--- MAIN MENU ---#
 def mainMenu():
     os.system("cls")
-    if Player.progress > 3:
+    if progressionChecker.progress > 3:
         print("[1] Endless Mode")
         print("[2] Story Mode")
         print("[3] Tutorial")
@@ -189,7 +222,25 @@ def mainMenu():
             case _:
                 os.system("cls")
                 mainMenu()
-    if Player.progress > 0:
+    elif progressionChecker.progress > 0:
+        os.system("cls")      
+        print("[1] (Continue) Story Mode")
+        print("[2] Tutorial")
+        print("[3] Inspiration")
+        print("[4] Progress")     	
+        match input(f"Choose, {userName}: "):
+            case ('1'):
+                storyMode()
+            case ('2'):
+                tutorialMode()
+            case ('3'):
+                inspiration()
+            case ('4'):
+                userProgression()
+            case _:
+                os.system("cls")
+                mainMenu()
+    elif progressionChecker.entered_Light_Mage_Hideout == True:
         os.system("cls")      
         print("[1] (Continue) Story Mode")
         print("[2] Tutorial")
@@ -197,6 +248,7 @@ def mainMenu():
         print("[4] Progress")     
         print("[5] Go to (Weapons) Inventory")
         print("[6] Go to (Armor) Inventory")	
+        print("[7] Go to Light Mage Hideout")	
         match input(f"Choose, {userName}: "):
             case ('1'):
                 storyMode()
@@ -210,6 +262,8 @@ def mainMenu():
                 weapon_system()
             case ('6'):
                 armor_system()
+            case ('7'):
+                light_mages_hideout()
             case _:
                 os.system("cls")
                 mainMenu()
@@ -272,7 +326,7 @@ def fight(Player, target)-> None:
 
     elif Player.equipped_armor is ironweaved_chainmail_armor:
         Player.defense += ironweaved_chainmail_armor.added_defense
-        
+
     elif Player.equipped_armor is astral_armor:
         Player.defense += astral_armor.added_defense
 
@@ -350,9 +404,9 @@ def fight(Player, target)-> None:
     NND = random.choice(nova_nexus_damage)
     while True:
         print(f"---------{userName}s' Turn---------")
-        print("1. Fists Attack")
-        print("2. Light Magic Attack")
-        print("3. Weapon Attack")
+        print("1. Attack with Fists")
+        print("2. Attack using Light Magic")
+        print("3. Attack using Weapon")
         print(f"\n")
         match input(f"{rcf}"):
             case '1':
@@ -661,7 +715,6 @@ def fight(Player, target)-> None:
 
                     invalid_response_status(Player, target)
                     input()
-
             case _:
                 Regular2 = (f"You've lost your turn {userName}!")
                 Mean = (f"Look alive to stay alive {userName}!")
@@ -686,9 +739,10 @@ def fight(Player, target)-> None:
     # the 'f' and the 'd' stands for delay print and fast print
     # the reason that its like that because its faster to test when I go through it.
 def storyMode():
-    if Player.progress == 0:
+    if progressionChecker.progress == 0:
         os.system("cls")
-        print('     Narrator: "Within the foreboding depths of the Elemental Spirit Dungeon, darkness reigns supreme.Twisted corridors of jagged stone stretch endlessly, flickering torchlight casting eerie shadows that dance with malevolent intent. Traps lie in wait, eager to ensnare the unwary, while spectral entities haunt every corner, their mournful wails a constant reminder of the horrors lurking within.\n\nBut amidst the peril, there are treasures to be found and challenges to be overcome, for those brave or foolish enough to dare the dungeon\'s depths. Yet, beware, for in the heart of darkness, even the most valiant souls may find themselves consumed by the abyss. Steel yourself, light mage, for your greatest trial begins now."\n\n\n')
+        print('  Narrator: "Within the foreboding depths of the Elemental Spirit Dungeon, darkness reigns supreme.\nTwisted corridors of jagged stone stretch endlessly, flickering torchlight casting eerie shadows that dance with malevolent intent.\nTraps lie in wait, eager to ensnare the unwary, while spectral entities haunt every corner, their mournful wails a constant reminder of the horrors lurking within.\nBut amidst the peril, there are treasures to be found and challenges to be overcome, for those brave or foolish enough to dare the dungeon\'s depths.\nYet, beware, for in the heart of darkness, even the most valiant souls may find themselves consumed by the abyss.\nSteel your heart, light mage, for your trials and tribulations begin now..."\n\n\n')
+        input('\n')
         os.system("cls")
         print('  ???:\n"Hey! Wake up! Are you alright?"')
         input('\n')
@@ -731,13 +785,13 @@ def storyMode():
         os.system('cls')
         print('  You (Thinking): "This guy knows something he’s not telling me. I need to stay alert... and figure out what’s really happening here."')
         input('\n')
-        print('  ???:\n""Great job in that earlier though fight! We need to get out of here now to keep you safe."')
-        input()
-        os.system("cls")
-        #f
-        print('   Narrator:\n"Emerging from the depths of the evil elemental spirit dungeon, You breathe a sigh of relief, your holy heart blazes with triumphant victory. The burden of darkness lifts, but a flicker of concern remains for the lingering shadows left behind. As you step into the light outside of the dungeon, victorious yet vigilant, the need for tranquillity resonates within..."   ')
+        print('  ???:\n""Great job in that fight though! We need to get out of here now to keep you safe."')
         input('\n')
-        print('  ???:\n"Good moves back there!"   ')
+        os.system('cls  ')
+        print(' Narrator:\n"The wind spirit that you defeated slowly disappears, into thin air, leaving behind a trail of darkness.\nYou feel the urge to leave this place. So, you run out of the dungeon."')
+        input('\n')
+        os.system("cls")
+        print('   Narrator:\n"Emerging from the depths of the evil elemental spirit dungeon, You breathe a sigh of relief, your holy heart blazes with triumphant victory. The burden of darkness lifts, but a flicker of concern remains for the lingering shadows left behind. As you step into the light outside of the dungeon, victorious yet vigilant, the need for tranquillity resonates within..."   ')
         input('\n')
         os.system("cls")
         print('  You:\n"What the hell was that back there?!"  ')
@@ -750,83 +804,49 @@ def storyMode():
         print('  ???:\n"I recommend getting armor next time you go through one though that fight looked a little rough"   ')
         input('\n')
         os.system("cls")
-        print('  You:\n(To yourself) "Why does he keep ignoring my questions?"')
+        print('  You:\n(Thinking) "Why does he keep ignoring my questions?"')
         input('\n')
-        print('  You:\n(To yourself) "Hes most likely correct sadly..."  ')
+        print('  You:\n(Thinking) "Hes most likely correct sadly..."  ')
         input('\n')
-        print(' ???:\n"Here I might as well show you this, its a sketch of a larger more vital dungeon" ')
-        input('\n')
-        #FAST PRINT ALL OF THIS
-        print("                                    WATER BOSS                                                    ")
-        print("                                   |           |                                                   ")
-        print("                                   |           |                                                   ")
-        print("                                   |           |                                                   ")
-        print("                                   |           |                                                   ")
-        print("                                   |           |                                                   ")
-        print("           ________________________|           |________________________                           ")
-        print("                                                                                                  ")
-        print("   FIRE BOSS                                                           EARTH BOSS       ")
-        print("           ________________________            ________________________                           ")
-        print("                                   |           |                                                    ")
-        print("                                   |           |                                                    ")
-        print("                                   |           |                                                    ")
-        print("                                   |           |                                                    ")
-        print("                                   |           |                                                    ")
-        print("                                   |           |                                                    ")
-        print("                                   |           |                                                    ")
-        print("                                     WIND BOSS                                                             ")
-        print("                                                                                                  ")
-        print("                                                                                                  ")
-        input()
         os.system("cls")
-        #d
+        print(' ???:\n"The dungeon we were just shaped like a cross but dont let that fool you. If we went any deeper you would\'ve certainly died." ')
+        input('\n')
+        print(' Narrator:\n"With that thought it gets quiet in the conversation bewteen you two." ')
+        input('\n')
+        os.system("cls")
+        print(' You:\n"Well that doesnt sound good." ')
+        input('\n')
         print(' ???:\n"The plan is to bassicaly just eradicate them from the face of the earth. Couldnt put it any simplier. They keep coming, back they feed and live off evil thoughts of men. I know what your thinking their dungeon looks like a cross how can they truly be evil right? To be honest we dont really know for certain there are a lot of theories out there to why that is but no one truly knows." ')
         input('\n')
-        print(' ???:\n"Ill ignore the last part but...I assume up to us light mages to take care of em."')
+        print(' ???:\n"Ill ignore the last part but...I assume its up to us light mages to take care of em."')
         input('\n')
         os.system("cls")
         print(' ???:\n"Indeed" ')
         input('\n')
-        print(' You:\n"So whats a light mage? Also do we get a super cool base or something?" ')
+        print(' You:\n"So whats a light mage? Also, do we get a super cool base or something?" ')
         input('\n')
         os.system("cls")
-        print(' ???:\n"A light mage are people who fight against the darkness of evil, born with the gift of being able to use light magic abilities."')
+        print(' ???:\n"I suppose you could call it that... Anywho, A light mage are people who fight against the darkness of evil, born with the gift of being able to use light magic abilities."')
         input('\n')
         print(' You:\n"Thats cool."')
         input('\n')
         os.system("cls")
-        print(' ???:\n"Indudably my names Myles by the way but you can call me Isaiah" ')
+        print(' ???:\n"Indudably my names Myles by the way but you can call me Isaiah." ')
         input('\n')
-        print(' Isaiah:\n"Lets head back to our base ill explain more there" ')
+        print(' Isaiah:\n"Lets head back to our base I\'ll explain more there." ')
         input('\n')
         os.system("cls")
         print(' Narrator: \n"Returning to your base, you walk side by side, your sudden found unity a beacon of hope in the ongoing struggle against the forces of darkness." ')
         input('\n')
+        os.system("cls")
         print(' Narrator:\n"Upon returning to your newfound base, the other light mages greeted you with a scene of bustling activity and camaraderie. Within the safety of their stronghold, you find not only weapons and provisions but also the warm embrace of fellow allies and friends. Amidst the flickering torchlight, laughter and conversation filled the air, a testament to the resilience of their bond forged in battle. Strengthened by their unity and fortified by the support of their companions, they prepared to face the challenges ahead with renewed determination and unwavering resolve. In this sanctuary of light and friendship, they found solace and strength to confront the darkness that loomed beyond their walls, united in their shared quest for peace and prosperity." ')
         input('\n')
+        os.system("cls")
         print(' Isaiah:\n"The light mages have come together to defeat the darkness and restore peace to the world. It is truly a sacred place to remember for generations to come." ')
         input('\n')
         os.system("cls")
-        print(' Narrator:\n"Hidden within a sacred mountain and concealed by an illusionary rock face, the Ancient Light Hideout was once a refuge for a mystical order of light-wielding mages.\nInside, the walls are embedded with luminous crystals that emit a soft, ambient light, creating an atmosphere of calm and serenity.\nThe architecture is elegant and ethereal, with high vaulted ceilings, sweeping archways, and intricate carvings depicting scenes of light’s triumph over darkness.\nThe central area of the hideout is a large, circular chamber with a domed ceiling featuring a grand mosaic of a radiant sun, serving as a gathering place and housing a central altar for light-based rituals.\nUnderneath the mosaic is a fireplace. Branching off from the main chamber are living quarters with simple, comfortable furnishings, and a vast library filled with ancient texts detailing the secrets of light magic.\nAdditionally, there is a spacious training hall with mirrored walls for practicing light magic, and an indoor garden illuminated by sunlight channeled through crystal prisms, filled with bioluminescent plants and flowers.\nGuarding the hideout are ethereal light spirits and ancient statues that come to life in times of need. There is a quest board area where mages can take challenges in exchange for weapons or money.\nAll of this makes up the Ancient Light Hideout a place of mystery, discovery, and adventure.')
-        os.system("cls")
-        print(' Narrator:\n"As you make your way through the Ancient Light Hideout, you come to see a training hall full of light mages practicing their light magic. Isaiah then pulls you aside to tell you a few things...')
-        input('\n')
-        os.system("cls")
-        print(' Isaiah:\n"Let me teach you the basics real quick on how to fight and get weapons and armor! First off to get weapons you can buy them from the shop and you can also switch weapons in your inventory. You get paid in coins when you defeat spirits, which you use to buy weapons, as well as armor. Your armor provides a boost of defense as well!" ') 
-        input('\n')
-        print(' Isaiah:\n"Here kid, I saved up some money to use for other purposes, but you seem like you\'re worth here heres 5000 coin. Dont spend it in one place! Lets head over to the shop and pick you out a fine weapon, and/or armor.!"')
-        input('\n')
-        os.system("cls")
-        print(' (To yourself) "How can he tell me not to spend it all in one place when I can only spend it on weapons and armor, which are technically in the same place?"')
-        Player.coins += 5000
-        input()
-        os.system("cls")
-        shop()
-        Player.progress += 1
-    if Player.progress == 2:
-        input("Does this work proper? If so, lets continue on with the game." )
-        while True:
-            fight(Player, test_subject)
+        progressionChecker.entered_light_mage_hideout = True
+        light_mages_hideout()
 
 
 #--------------------------------------------------------------------------------------------------------------------
@@ -835,22 +855,27 @@ def storyMode():
 def shop():
     os.system("cls")
     print(f"Your current number of coins: {Player.coins}\n-------------------------------------------------------------------------------------------------------------------------------\n")
-    print(' Ryker:\n"Welcome young lad! Havent seen you around here before welcome to my shop. ')
-    match input("Avavaible weapons:\n'Swords', 'Scythes' 'Staffs' 'Armor' : "):
+    print(' Ryker:\n"Welcome young lad! Please choose the item(s) you would like to buy." )')
+    match input("Avavaible weapons/armor:\n'Swords', 'Scythes' 'Staffs' 'Armor' : "):
         case 'Swords':
+            os.system("cls")
             swords_shop()
         case 'Scythes' :
+            os.system("cls")
             scythes_shop()
         case 'Staffs':
+            os.system("cls")
             staffs_shop()
         case 'Armor':
+            os.system("cls")
             armor_shop()
         case _:
-            input("Please enter a weapons name you would like to buy!")
+            input("\nPlease enter a weapons name you would like to buy!")
+            os.system("cls")
             shop()
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
-#--- ARMOR SHOP ---# WORK ON THE  SHOP ---#
+#--- ARMOR SHOP ---#
 def armor_shop():
     os.system("cls")
     print(f"Your current number of coins: {Player.coins}\n-------------------------------------------------------------------------------------------------------------------------------\n")
@@ -860,7 +885,7 @@ def armor_shop():
     print(f"[4] - NAME: {pheonix_armor.name}: ADDED DEF: +{pheonix_armor.added_defense}\nDescription: {pheonix_armor.description}\nPrice: {pheonix_armor.price}\n\n ")
     print(f"[5] - NAME: {aetherial_armor.name}: ADDED DEF: +{aetherial_armor.added_defense}\nDescription: {aetherial_armor.description}\nPrice: {aetherial_armor.price}\n\n ")
     print("\n\n\nType m to go to main menu\n\n\nType s to go back to the shop: ")
-    match input("Which armor set would you like lad?"):
+    match input("Which armor set would you like lad?:"):
         case '1':
             if Player.coins < leather_tunic.price:
                 print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
@@ -952,10 +977,12 @@ def swords_shop():
             if Player.coins < stone_sword.price:
                 print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
                 input()
+                os.system("cls")
                 swords_shop()
             elif stone_sword.level_requirement > Player.level:
                 print(f"You need to be at least level {stone_sword.level_requirement} to wield {stone_sword.name}.")
                 input()
+                os.system("cls")
                 swords_shop()
             else:
                 Player.equipped_weapon = stone_sword
@@ -967,8 +994,11 @@ def swords_shop():
         case '2':
             if Player.coins < iron_sword.price:
                 input("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                os.system("cls")
+                swords_shop()
             elif iron_sword.level_requirement > Player.level:
                 input(f"Ryker:\nYou need to be at least level {iron_sword.level_requirement} to wield {iron_sword.name}.")
+                os.system("cls")
                 swords_shop()
             else:
                 Player.equipped_weapon = iron_sword
@@ -976,20 +1006,24 @@ def swords_shop():
                 Player.coins -= iron_sword.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {iron_sword.name}. Press ENTER to continue.")
+                os.system("cls")
                 swords_shop()
         case '3':
             if Player.coins < diamond_sword.price:
                 input("You dont have enough money young man. You try to scam the legendary Ryker?")
+                os.system("cls")
                 swords_shop()
-                if diamond_sword.level_requirement > Player.level:
-                    input(f"You have to be at least level {diamond_sword.level_requirement} to buy this weapon!")
-                    swords_shop()
+            elif diamond_sword.level_requirement > Player.level:
+                input(f"You have to be at least level {diamond_sword.level_requirement} to buy this weapon!")
+                os.system("cls")
+                swords_shop()
             else:
                 Player.equipped_weapon = diamond_sword
                 Player.weapons_collection.append(diamond_sword)
                 Player.coins -= diamond_sword.price
                 print("Pleasure doin business with you ya bo-yo!")
                 input(f"You have equipped a {diamond_sword.name}")
+                os.system("cls")
                 swords_shop()
         case 'm':
             mainMenu()
@@ -1017,9 +1051,11 @@ def scythes_shop():
         case '1':
             if Player.coins < peasant_reaper.price:
                 input("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                os.system("cls")
                 scythes_shop() 
             elif peasant_reaper.level_requirement > Player.level:
                 input(f"You need to be at least level {peasant_reaper.level_requirement} to wield {peasant_reaper.name}.")
+                os.system("cls")
                 scythes_shop()
             else:
                 Player.equipped_weapon = peasant_reaper
@@ -1027,13 +1063,16 @@ def scythes_shop():
                 Player.coins -= peasant_reaper.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {peasant_reaper.name}. Press ENTER to continue.")
+                os.system("cls")
                 scythes_shop()
         case '2':
             if Player.coins < shadowsoul_requiem.price:
                 input("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                os.system("cls")
                 scythes_shop()  
             elif shadowsoul_requiem.level_requirement > Player.level:
                 print(f"You need to be at least level {shadowsoul_requiem.level_requirement} to wield {shadowsoul_requiem.name}.")
+                os.system("cls")
                 scythes_shop()
             else:
                 Player.equipped_weapon = shadowsoul_requiem
@@ -1041,6 +1080,7 @@ def scythes_shop():
                 Player.coins -= shadowsoul_requiem.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {shadowsoul_requiem.name}. Press ENTER to continue.")
+                os.system("cls")
                 scythes_shop() 
         case 'm':
             mainMenu()
@@ -1062,17 +1102,19 @@ def staffs_shop():
         case '1':
             if Player.coins < celestial_staff.price:
                 input("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                os.system("cls")
                 staffs_shop() 
             elif celestial_staff.level_requirement > Player.level:
                 input(f"You have to be at least level {celestial_staff.level_requirement} to buy this weapon!")
+                os.system("cls")
                 staffs_shop() 
             else:
-                # Player meets both money and level requirements
                 Player.equipped_weapon = celestial_staff
                 Player.weapons_collection.append(celestial_staff)
                 Player.coins -= celestial_staff.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {celestial_staff.name}. Press ENTER to continue.")
+                os.system("cls")
                 staffs_shop()
         case '2':
             if Player.coins < nova_nexus.price:
@@ -1080,6 +1122,7 @@ def staffs_shop():
                 staffs_shop()
             elif nova_nexus.level_requirement > Player.level:
                 print(f"You need to be at least level {nova_nexus.level_requirement} to wield {nova_nexus.name}.")
+                os.system("cls")
                 staffs_shop()
             else:
                 Player.equipped_weapon = nova_nexus
@@ -1087,6 +1130,7 @@ def staffs_shop():
                 Player.coins -= nova_nexus.price
                 print("Ryker:\nPleasure doing business with you, ya bo-yo!")
                 input(f"You have equipped {nova_nexus.name}. Press ENTER to continue.")
+                os.system("cls")
                 staffs_shop()
         case 'm':
             mainMenu()
@@ -1105,15 +1149,15 @@ victory_words = (Day, Easy)
 def good_aftermath():    
     os.system("cls")
     fast_print(random.choice(victory_words))
-    Player.xp += 100
+    Player.Xp += 100
     Player.level += 5
     Player.light_level += 3
     if Player.light_level > 3:
         Player.light_attack + 35
-    Player.progress += 1
-    Player.victories += 1
+    progressionChecker.progress += 1
+    progressionChecker.victories += 1
     Player.coins += 750
-    fast_print(f"Level up! {Player.level} Total XP: {Player.xp} Items gained: None\n")
+    fast_print(f"Level up! {Player.level} Total XP: {Player.Xp} Items gained: None\n")
     input()
     mainMenu()
 #--------------------------------------------------------------------------------------------------------------------
@@ -1150,50 +1194,102 @@ def userProgression():
             userProgression()
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------------------------
-
-
-
 def light_mages_hideout():
     os.system("cls")
-    if Player.first_time_in_light_mage_hideout == 0:
+    if progressionChecker.first_Time_In_Light_Mage_Hideout == 0:
+        os.system("cls")
+        print(' Narrator:\n"Hidden within a sacred mountain and concealed by an illusionary rock face, the Ancient Light Hideout was once a refuge for a mystical order of light-wielding mages.\nInside, the walls are embedded with luminous crystals that emit a soft, ambient light, creating an atmosphere of calm and serenity.\nThe architecture is elegant and ethereal, with high vaulted ceilings, sweeping archways, and intricate carvings depicting scenes of light’s triumph over darkness.\nThe central area of the hideout is a large, circular chamber with a domed ceiling featuring a grand mosaic of a radiant sun, serving as a gathering place and housing a central altar for light-based rituals.\nUnderneath the mosaic is a fireplace. Branching off from the main chamber are living quarters with simple, comfortable furnishings, and a vast library filled with ancient texts detailing the secrets of light magic.\nAdditionally, there is a spacious training hall with mirrored walls for practicing light magic, and an indoor garden illuminated by sunlight channeled through crystal prisms, filled with bioluminescent plants and flowers.\nGuarding the hideout are ethereal light spirits and ancient statues that come to life in times of need. There are also meaning intruging things around that seem to peak your curiosity \nAll of this makes up the Ancient Light Hideout a place of mystery, light, and adventure.')
+        input('\n')
+        os.system("cls")
+        print(' Narrator:\n"As you make your way through the Ancient Light Hideout, you come to see a training hall full of light mages practicing their light magic. Isaiah then pulls you aside to tell you a few things...')
+        input('\n')
+        os.system("cls")
+        print(' Isaiah:\n"Let me teach you the basics real quick on how to fight and get weapons and armor! First off to get weapons you can buy them from the shop and you can also switch weapons in your inventory. You get paid in coins when you defeat spirits, which you use to buy weapons, as well as armor. Your armor provides a boost of defense as well!" ') 
+        input('\n')
+        os.system("cls")
+        print(' Narrator:\n"Isaiah the hands you a medium sized bag filled with coins. He also recommends you go buy some armor again. "Dont spend it all in the small place he adds with a smirk." "')
+        input('\n')
+        print(' (To yourself) "How can he tell me not to spend it all in one place when I can only spend it on weapons and armor, which are technically in the same place?"')
+        input('\n')
+        os.system("cls")    
+        print("******************************************************")
         print("Welcome to the Light Mage Hideout!")
         print(f"\n-------------------------\n")
-        print(f"You find yourself in a hidden chamber filled with ancient runes and mystical creatures.")
-        print(f"A group of friendly light mages are gathered around a fireplace, discussing their latest magical tricks.")
-        print(f"One of the mages, a wisdom radiating wizard, reveals a hidden passage leading to the next chamber.")
-        print(f"You decide to follow the wizard's lead, but you soon come across a dark and treacherous cave.")
-        print(f"A powerful dragon lurks in the shadows, and you must outwit it and retrieve a legendary weapon!")
+        print("[1] Go to the shop to get some weapons and armor.")
+        print("[2] Go to the training hall to practice light magic.")
+        print("[3] Wander around the hideout to find some cool things.")
+        print("[4] Rest in the hideout to recover. (HEALS HP TO MAX)")
+        #--- This code is going to be replaced with actual code. ---#
         match input("Do you want to go through the dark cave? (Y/N): "):
-            case 'Y':
-                dragon_battle()
-                Player.first_time_in_light_mage_hideout =+  1
-            case 'N':
-                Player.first_time_in_light_mage_hideout =+ 1
-                print('You decide to backtrack and return to the Light Mage Hideout. Knowing that you might not be the best choice in this situation. Isaiah says, "Ima going to go fight that dragon I need some more coin sent I just gave you a pretty penny I\' probably just sell like usual...See ya later."\n\n')
-                print('Isaiah\n"Wait! But before I go you never told me you name."')
-                print(f'Its {userName}')
-                print(f'Isaiah\n"Well, see ya soon {userName}!"')
-                print("You return to the Light Mage Hideout, feeling a bit disappointed. While Isaiah ventures deeper into the passage to go fight the dragon.")
-                input()
-                os.system("cls")
-                light_mages_hideout()
+            case '1':
+                shop()
+            case '2':
+                training_Hall()
+            case '3':
+                wander_Around_Hideout()
+            case '4':
+                players_Room()
             case _:
                 print("Invalid input, please try again.")
                 light_mages_hideout()
-    if Player.first_time_in_light_mage_hideout == 1:
-        print("[1] You look around, wandering")
-        print("[2] You look at the fireplace, and think?")
-        print("[3] You go to the shop to get weapons?")
-        print("[4] You decide to go back to shop to get more weapons")
-        match input("Choose your action: "):
-            case '1':
-                print("You wander around the hideout, trying to find any clues.")
+    
+#--- This code is going to be replaced with actual code. ---#    
+def wander_around_Hideout():
+print("  You wander around the hideout, trying to find anything inturging you find a large board with papers on it.")
+input('\n')
+print(' ???:\n"You seem new around here, my names Voithos pronuced Vee-thos. This is a board full of quests you can take."')
+input('\n')
+print('  Voithos\n"These quests can be very rewarding. If you complete a quest you will receive coins, but beware for they are also dangerous..."')
+input('\n')
+os.system("cls")
+print("[1] Inspect the quest board")
+print("[2] Ignore")
+match input(f"Choose your action: {userName}"):
+case '1':
+    print("  Narrator:\nYou inspect the quest board. There are many different quests, some of which are very dangerous.")
+    input('\n')
+    print(' "You decide to go for a small quest for now thinking later you will choose to go for the biggers ones it says: Defeat the fire spirit and his minions."')
+    input('\n')
+    os.system("cls")
+    print(' Isaiah comes back after his fight with the dragon a little scathed but with a new weapon thats draws all eyes around him. Isaiah:\n"I see you found a quest you should get some rest first lets get you to bed tough guy."')
+    input('\n')
+    print(' Narrator:\n"After a day of being woken up to a stranger, and fighting a windspirit you go to bed. You follow Isaiah to a small chamber and find a room.')
+    input('\n')
+    os.system("cls")
+    print(' Narrator:\n"As you step into your room, sunlight pours through the large windows, illuminating the space with a soft, warm glow.\nCrystal chandeliers and floating orbs cast a gentle light, while pastel furnishings and enchanted plants create an atmosphere of serene, magical beauty.')
+    input('\n')
+    print(' You:\n"If we are underground how is there sunlight in this room?"')
+    input('\n')
+    os.system("cls")
+    print(' Isaiah smurks and says:\n"Thats magic. What you dont like it?"')
+    input('\n')
+    print(' You trying not to be rude respond with:\nNo, its super cool never seen anything like it before. I\'m going to go get some rest. Then do the quest in the morning."')
+    os.system("cls")
+    print(' Isaiah:\n"Alright, I will go get some rest. You can take your rest now. I\'ll bring to your quest in the morning."')
+    os.system("cls")
+    print("WIP")
+case '2':
+    print("You decide to continue your wandering around the hideout.")
+    light_mages_hideout()
+case _:
+    print("Invalid input, please try again.")
+                            
 
+#--- This code is going to be replaced with actual code. ---#
+case '2':
+    print("You think about the fireplace, warm sparkling almost punctancting your words in your mind. You continue to thinking about the legendary weapon you left behind in your fear. ")
+case '3':
+    print("You go to the shop to get weapons. You meet the energetic wizard who sells weapons.")
+    shop()
+case _:
+    print("Invalid input, please try again.")
+    light_mages_hideout()
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
 def dragon_battle():
     ...
-
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
 def armor_system():
     os.system("cls")
     print(f"Your current number of coins: {Player.coins}\n-------------------------------------------------------------------------------------------------------------------------------\n")
@@ -1222,7 +1318,8 @@ def armor_system():
                 print("Invalid option. Press ENTER to continue.")
                 input()
                 armor_system()
-
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
 def weapon_system():
     os.system("cls")
     print(f"Your current number of coins: {Player.coins}\n-------------------------------------------------------------------------------------------------------------------------------\n")
@@ -1251,6 +1348,8 @@ def weapon_system():
                 print("Invalid option. Press ENTER to continue.")
                 input()
                 weapon_system()
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
 
 
 
