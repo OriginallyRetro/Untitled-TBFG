@@ -31,16 +31,20 @@ def fast_print(s):
 #--- the difference bewteen that this class is used to see if the character has reached the next level and if so, it will biring them to the next part. ---#
 #--- I decided to make it two different classes because I didn't want to make the code too complex, and hard to read/comprhend. ---#
 class progressionChecker:
-    def __init__(progressionChecker, experience: int, progress: int, victories: int, first_Time_In_Light_Mage_Hideout: bool, entered_Light_Mage_Hideout: bool) -> None:
+    def __init__(progressionChecker, experience: int, progress: int, victories: int, first_Time_In_Light_Mage_Hideout: bool, entered_Light_Mage_Hideout: bool, first_time_entered_light_mage_library: bool, defeated_fire_dungeon: bool, defeated_earth_dungeon: bool, defeated_water_dungeon: bool, defeated_wind_dungeon: bool) -> None:
         progressionChecker.experience = experience
         progressionChecker.progress = progress
         progressionChecker.victories = victories
         progressionChecker.first_Time_In_Light_Mage_Hideout = first_Time_In_Light_Mage_Hideout
         progressionChecker.entered_Light_Mage_Hideout = entered_Light_Mage_Hideout
+        progressionChecker.first_time_entered_light_mage_library = first_time_entered_light_mage_library
+        progressionChecker.defeated_fire_dungeon = defeated_fire_dungeon
+        progressionChecker.defeated_earth_dungeon = defeated_earth_dungeon
+        progressionChecker.defeated_water_dungeon = defeated_water_dungeon
+        progressionChecker.defeated_wind_dungeon = defeated_wind_dungeon
+        
 
-progressionChecker = progressionChecker(0, 0, 0, False, False)
-
-
+progressionChecker = progressionChecker(0, 0, 0, False, False, False, False, False, False, False)
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 #--- PARENT FOR ALL CHARACTERS CLASS ---#
@@ -172,16 +176,27 @@ Player = defaultCharacter(name = {userName},
 
 #-- The difference bewteen bosses, and minions is that they have a loot they has a chance of droping
 class elementalBoss(universalCharaterStats):
-    def __init__(elementalBoss, name: str, attack: int, health: int, defense: int, loot: list) -> None:
+    def __init__(elementalBoss, name: str, attack: int, health: int, defense: int, loot: list, possible_loot) -> None:
         super().__init__(name, attack, health, defense)
         elementalBoss.loot = loot
         elementalBoss.name = name
+        possible_loot = []
 
-dragon_scale_description = ('A rare and valuable piece of dragon scale, crafted from the scales of a legendary dragon. It offers great protection against all types of attacks.')
+
+
+#WIP##
 nothing = 'Nothing'
+trident_of_souls = ('A loot drop from nerus_tidal_sovereign')
+nereus_the_tidal_soverign = elementalBoss(name = "Nereus the Tidal Sovereign", attack = 200, health = 550, defense = 750, loot = [trident_of_souls, nothing])
+
+random_loot_chance_nerus_ = random.choices()
+
+
+#-- A legendary dragon scale has a 70% chance of dropping, and a 30% chance of dropping nothing ---#
+dragon_scale_description = ('A rare and valuable piece of dragon scale, crafted from the scales of a legendary dragon. It offers great protection against all types of attacks.')
 dragon_scale = 'Dragon Scale'
 weights = (70, 30)
-random_loot_chance = random.choices([dragon_scale, nothing], weights)
+random_loot_chance_dragon = random.choices([dragon_scale, nothing], weights)
 Dragon = elementalBoss(name = "Mini Dragon", attack = 125, health = 500, defense = 300, loot = [dragon_scale, nothing])
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
@@ -202,6 +217,8 @@ class elementalMinion(universalCharaterStats):
 
 windSpiritDamage = (8, 9, 10, 11, 12, 13, 14, 15, 16, 17,)
 firstWindSpirit = elementalMinion(name = "Wind Spirit", attack = windSpiritDamage, health = 150, defense = 60)
+
+
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 #--- MAIN MENU ---#
@@ -1211,83 +1228,207 @@ def light_mages_hideout():
         input('\n')
         print(' (To yourself) "How can he tell me not to spend it all in one place when I can only spend it on weapons and armor, which are technically in the same place?"')
         input('\n')
-        os.system("cls")    
+        os.system("cls")
+def entry_point_light_mage_hideout():    
+        os.system("cls")
         print("******************************************************")
         print("Welcome to the Light Mage Hideout!")
         print(f"\n-------------------------\n")
         print("[1] Go to the shop to get some weapons and armor.")
-        print("[2] Go to the training hall to practice light magic.")
+        print("[2] Go to the fireplace to warm up.")
         print("[3] Wander around the hideout to find some cool things.")
-        print("[4] Rest in the hideout to recover. (HEALS HP TO MAX)")
+        print("[4] Go to bed/rest. ")
         #--- This code is going to be replaced with actual code. ---#
         match input("Do you want to go through the dark cave? (Y/N): "):
             case '1':
                 shop()
             case '2':
-                training_Hall()
+                fire_place()
             case '3':
-                wander_Around_Hideout()
+                wander_around_hideout()
             case '4':
-                players_Room()
+                players_room()
             case _:
                 print("Invalid input, please try again.")
                 light_mages_hideout()
     
 #--- This code is going to be replaced with actual code. ---#    
-def wander_around_Hideout():
-print("  You wander around the hideout, trying to find anything inturging you find a large board with papers on it.")
-input('\n')
-print(' ???:\n"You seem new around here, my names Voithos pronuced Vee-thos. This is a board full of quests you can take."')
-input('\n')
-print('  Voithos\n"These quests can be very rewarding. If you complete a quest you will receive coins, but beware for they are also dangerous..."')
-input('\n')
-os.system("cls")
-print("[1] Inspect the quest board")
-print("[2] Ignore")
-match input(f"Choose your action: {userName}"):
-case '1':
-    print("  Narrator:\nYou inspect the quest board. There are many different quests, some of which are very dangerous.")
+def wander_around_hideout():
+    os.system("cls")
+    print("  You wander around the hideout, trying to find anything inturging you find a large board with papers on it.")
     input('\n')
-    print(' "You decide to go for a small quest for now thinking later you will choose to go for the biggers ones it says: Defeat the fire spirit and his minions."')
+    print(' ???:\n"You seem new around here, my names Voithos pronuced Vee-thos. This is a board full of quests you can take."')
+    input('\n')
+    print('  Voithos\n"These quests can be very rewarding. If you complete a quest you will receive coins, but beware for they are also dangerous..."')
     input('\n')
     os.system("cls")
-    print(' Isaiah comes back after his fight with the dragon a little scathed but with a new weapon thats draws all eyes around him. Isaiah:\n"I see you found a quest you should get some rest first lets get you to bed tough guy."')
-    input('\n')
-    print(' Narrator:\n"After a day of being woken up to a stranger, and fighting a windspirit you go to bed. You follow Isaiah to a small chamber and find a room.')
-    input('\n')
-    os.system("cls")
-    print(' Narrator:\n"As you step into your room, sunlight pours through the large windows, illuminating the space with a soft, warm glow.\nCrystal chandeliers and floating orbs cast a gentle light, while pastel furnishings and enchanted plants create an atmosphere of serene, magical beauty.')
-    input('\n')
-    print(' You:\n"If we are underground how is there sunlight in this room?"')
-    input('\n')
-    os.system("cls")
-    print(' Isaiah smurks and says:\n"Thats magic. What you dont like it?"')
-    input('\n')
-    print(' You trying not to be rude respond with:\nNo, its super cool never seen anything like it before. I\'m going to go get some rest. Then do the quest in the morning."')
-    os.system("cls")
-    print(' Isaiah:\n"Alright, I will go get some rest. You can take your rest now. I\'ll bring to your quest in the morning."')
-    os.system("cls")
-    print("WIP")
-case '2':
-    print("You decide to continue your wandering around the hideout.")
-    light_mages_hideout()
-case _:
-    print("Invalid input, please try again.")
+    print("[1] Inspect the quest board")
+    print("[2] Ignore")
+    match input(f"Choose your action: {userName}"):
+        case '1':
+            os.system("cls")
+            print("  Narrator:\nYou inspect the quest board. There are many different quests, some of which are very dangerous.")
+            input('\n')
+            print(' "You decide to go for a small quest for now thinking later you will choose to go for the biggers ones it says: Defeat the fire spirit and his minions."')
+            input('\n')
+            os.system("cls")
+            print(' Isaiah comes back after his fight with the dragon a little scathed but with a new weapon thats draws all eyes around him. Isaiah:\n"I see you found a quest you should get some rest first lets get you to bed tough guy."')
+            input('\n')
+            print(' Narrator:\n"After a day of being woken up to a stranger, and fighting a windspirit you go to bed. You follow Isaiah to a small chamber and find a room.')
+            input('\n')
+            os.system("cls")
+            print(' Narrator:\n"As you step into your room, sunlight pours through the large windows, illuminating the space with a soft, warm glow.\nCrystal chandeliers and floating orbs cast a gentle light, while pastel furnishings and enchanted plants create an atmosphere of serene, magical beauty.')
+            input('\n')
+            print(' You:\n"If we are underground how is there sunlight in this room?"')
+            input('\n')
+            os.system("cls")
+            print(' Isaiah smurks and says:\n"Thats magic. What you dont like it?"')
+            input('\n')
+            print(' You trying not to be rude respond with:\nNo, its super cool never seen anything like it before. I\'m going to go get some rest. Then do the quest in the morning."')
+            os.system("cls")
+            print(' Isaiah:\n"Alright, I will go get some rest aswell. You can take your rest now. I\'ll escort you to your quest in the morning."')
+            input('\n')
+            os.system("cls")
+            print("WIP")
+        case '2':
+            print("You decide to continue your wandering around the hideout.")
+            light_mages_hideout()
+        case _:
+            print("Invalid input, please try again.")
                             
+def fire_place():
+    os.system("cls")
+    input('\n')
+    print('  Narrator:\n"As you step into the fireplace, you feel a newfound sense of peace forgetting about all your worries. You hear and feel the fireplace whispers ancient secrets. You hear the sound of a battle and the laughter, almost, frighting but also endearing in a way.\nAs if a long lost friend is trying to tell you a secret."')
+    input('\n')
+    print('  ???:\n"You\'ve seem to found the fireplace intriuging eh? Well my names Anagnostis, pronuced Ah-nah-gnoh-stees. When I firstcame here I found it intruging aswell. If you would like to go to the library to get some books on our anciet history, I\'d be happy to show you where it is."')
+    input('\n')
+    print("[1] Go to the library")
+    print("[2] Continue your wandering around the hideout.")
+    match input(f"Choose your action: {userName}"):
+        case '1':
+            light_mages_hideout()
+        case '2':
+            print("You decide to continue your wandering around the hideout.")
+            input('\n')
+            entry_point_light_mage_hideout()
+        case _:
+            print("Invalid input, please try again.")
+            input()
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
+def light_mages_library():
+    os.system("cls")
+    if progressionChecker.first_time_in_light_mage_library == False:
+        progressionChecker.entered_light_mage_library = True
+        print('  Anagnostis:\n"I\'s"')
+        print("\n-------------------------\n")
+        print("Anagnostis:\n"'"The library is a place where you can learn about history, magic, and war. It has many books on all things. I recommend staying here and learning some things."')
+        input('\n')
+        light_mages_library()
+    else:
+        print("[1] Find books about War")
+        print("[2] Find books about Magic")
+        print("[3] Find books about History")
+        print("[4] Go to Room")
+        match input(f"Choose your action: {userName}"):
+            case '1':
+                print("You find books about war.")
+                input()
+                light_mages_library()
+            case '2':
+                print("You find books about magic.")
+                input()
+                light_mages_library()
+            case '3':
+                print("You find books about history.")
+                input()
+                light_mages_library()
+            case '4':
+                print("You Go to your room.")
+                input()
+                light_mages_library()
+            case _:
+                print("Invalid input, please try again.")
+                input()
+                light_mages_library()
+        
+def players_room():
+    print("[1] Go to bed")
+    print("[2] Go to the shop")
+    print("[3] Go to the library")
+    print("[4] Go to find mission")
+    match input(f"Where do you head off to now? {userName}: "):
+        case '1':
+            print("You go to bed fully rested.")
+            input()
+            players_room()
+        case '2':
+            print("You go to the shop.")
+            input()
+            shop()
+        case '3':
+            print("You go to the library.")
+            input()
+            light_mages_library()
+        case '4':
+            print("You go to find a mission heading towards to mission board.")
+            input()
+            find_mission_area()
+        case _:
+            print("Invalid input, please try again.")
+            input()
+            players_room()
 
-#--- This code is going to be replaced with actual code. ---#
-case '2':
-    print("You think about the fireplace, warm sparkling almost punctancting your words in your mind. You continue to thinking about the legendary weapon you left behind in your fear. ")
-case '3':
-    print("You go to the shop to get weapons. You meet the energetic wizard who sells weapons.")
-    shop()
-case _:
-    print("Invalid input, please try again.")
-    light_mages_hideout()
-#--------------------------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------------------------
-def dragon_battle():
-    ...
+
+def find_mission_area():
+    print("[1] Defeat the fire spirit and his minions (FIRE DUNGEON) [Cost: 550 coins to attempt].")
+    print("[2] Defeat the wind spirit and his minions (WIND DUNGEON). [Cost: 300 coins to attempt].")
+    print("[3] Defeat the earth spirit and his minions. (EARTH DUNGEON) [Cost: 450 coins to attempt].")
+    print("[4] Go to the water spirit and his minions. (WATER DUNGEON). [Cost: 1250 coins to attpment]")
+    print("[5] Go back to room to ponder about what choice you should make..")
+    match input (f"Choose your action: {userName}"):
+        case '1':
+            if progressionChecker.defeated_fire_dungeon == True:
+                print("You have already defeated the fire dungeon cannot go again.")
+            elif Player.coins <= 549:
+                print("You do not have enough coins to attempt the fire dungeon.")
+                find_mission_area()
+            else:
+                print("You decide to venture to the fire dungeon.")
+                fire_dungeon()
+        case '2':
+            if progressionChecker.defeated_wind_dungeon == True:
+                print("You have already defeated the wind dungeon cannot go again.")
+            elif Player.coins <= 299:
+                print("You do not have enough coins to attempt the wind dungeon.")
+                find_mission_area()
+            else:
+                print("You decide to venture to the wind dungeon.")
+                wind_dungeon()
+        case '3':
+            if progressionChecker.defeated_earth_dungeon == True:
+                print("You have already defeated the earth dungeon cannot go again.")
+            elif Player.coins <= 449:
+                print("You do not have enough coins to attempt the earth dungeon.")
+                find_mission_area()
+            else:
+                print("You decide to venture to the earth dungeon.")
+                earth_dungeon()
+        case '4':
+            if progressionChecker.defeated_water_dungeon == True:
+                print("You have already defeated the water dungeon cannot go again.")
+            elif Player.coins <= 1249:
+                print("You do not have enough coins to attempt the water dungeon.")
+                find_mission_area()
+            else:
+                print("You decide to venture to the water dungeon.")
+                water_dungeon()
+        case '5':
+            print("You decide to return to the room to ponder about what choice you should make.")
+            input()
+            players_room()
+
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 def armor_system():
@@ -1351,6 +1492,27 @@ def weapon_system():
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 
+def fire_dungeon():
+    ...
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
+
+def water_dungeon():
+    ...
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
+def wind_dungeon():
+    ...
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
+def earth_dungeon():    
+    ...
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
+def loot_trade_hub():
+    ...
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
 
 
 mainMenu()
