@@ -74,6 +74,16 @@ class weapon:
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+#--- CODE FOR ALL WEAPON DROPS ---#
+gaunlets_damage = (200, 201, 202, 203, 204, 205, 206, 207, 208, 209, 210, 211, 212, 213, 214, 215, 216, 217, 218, 219, 220, 221, 222, 223, 224, 225, 226, 227, 228, 229, 230, 231, 232, 233, 234, 235, 236, 237, 238, 239, 240, 241, 242, 243, 244, 245, 246, 247, 248, 249, 250.)
+gaunlets_description = ' Forged from the heart of an ancient mountain, these gauntlets were once said to imbue the wearer with immense strength and the power to create stone barriers and trigger minor earthquakes.'
+gaunlets = weapon(name = 'Gaunlets', description = gaunlets_description, price = 0, level_requirement = 0, attack = gaunlets_damage, style = 'Blunt (GAUNLET)')
+
+trident_of_souls_damage = (600, 601, 602, 603, 604, 605, 606, 607, 608, 609, 610, 611, 612, 613, 614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 625.)
+trident_of_souls_description = ('The Trident of Souls is a mystical weapon that harnesses the essence of departed souls, empowering its wielder with spectral abilities in combat.')
+trident_of_souls = weapon(name = 'Trident of Souls', description = trident_of_souls_description, price = 0, level_requirement = 0, attack = trident_of_souls_damage, style = 'Slash Jab (TRIDENT)')
+
+
 #--- CODE FOR ALL SWORDS ---#
 stone_sword_damage = (60, 61, 62, 63, 64, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 90)
 stone_sword_description = 'The Stone Sword: a primal weapon, born from the earths core. With rugged charm and unwavering strength, it serves as a steadfast companion for those beginning their journey into the realm of combat.'
@@ -140,10 +150,11 @@ aetherial_armor = armor(name = "Ethereal armor", added_defense = 1250, level_req
 #---------------------------------------------------------------------------------------------------------
 #-- DEFAULT CHARACTER CLASS {WIP} ---#
 class defaultCharacter(universalCharaterStats):
-    def __init__(player, name: str, level: int, attack: int, weapons_collection: list, armor_collection: list, light_attack: int, equipped_weapon: None, health: int, defense: int, equipped_armor: None, light_level: int, Xp: int, coins: int, victories: int) -> None:
+    def __init__(player, name: str, level: int, attack: int, weapons_collection: list, armor_collection: list, buff_collection: list, light_attack: int, equipped_weapon: None, health: int, defense: int, equipped_armor: None, light_level: int, Xp: int, coins: int, victories: int, buff: any) -> None:
         super().__init__(name, health, attack, defense)
         player.weapons_collection = weapons_collection
         player.armor_collection = armor_collection
+        player.buff_collection = buff_collection
         player.equipped_weapon = equipped_weapon
         player.light_attack = light_attack
         player.level = level
@@ -152,6 +163,7 @@ class defaultCharacter(universalCharaterStats):
         player.Xp = Xp
         player.coins = coins
         player.victories = victories
+        player.buff = None
 
 player_damage = (30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43 ,44 ,45 ,46, 47, 48, 49, 50, 51, 52, 53, 55)
 
@@ -161,14 +173,16 @@ Player = defaultCharacter(name = {userName},
                           defense = 300, 
                           Xp = 0, 
                           weapons_collection = [], 
-                          armor_collection = [], 
+                          armor_collection = [],
+                          buff_collection = [],  
                           equipped_weapon = None, 
                           light_attack = 60, 
                           level = 0, 
                           light_level = 0, 
                           equipped_armor = None, 
                           coins = 1000, 
-                          victories = 0)
+                          victories = 0,
+                          buff = None)
 
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
@@ -176,32 +190,42 @@ Player = defaultCharacter(name = {userName},
 
 #-- The difference bewteen bosses, and minions is that they have a loot they has a chance of droping
 class elementalBoss(universalCharaterStats):
-    def __init__(elementalBoss, name: str, attack: int, health: int, defense: int, loot: list, possible_loot) -> None:
+    def __init__(elementalBoss, name: str, attack: int, health: int, defense: int, loot: list) -> None:
         super().__init__(name, attack, health, defense)
         elementalBoss.loot = loot
         elementalBoss.name = name
-        possible_loot = []
 
-
-
-#WIP##
+weights = (70, 30)
 nothing = 'Nothing'
+winds_favor = ('A loot drop from Zephyrus')
+#-- Zephyrus has a 70% chance of dropping a winds favor, and a 30% chance of dropping nothing ---#
+wind_boss_description = ('Zephyrus is a swift and unpredictable master of the skies, capable of conjuring powerful storms and hurricanes. His control over the winds allows him to strike with lightning speed and disappear into the air.')
+Zephyrus = elementalBoss(name = "Zephyrus", attack = 100 , health = 300, defense = 300, loot = [winds_favor, nothing])
+random_loot_chance_zephyrus = random.choices([winds_favor, nothing], weights)
+
+#-- Ignatius the Flame Tyrant has a 70% chance of dropping an emberheart amulet, and a 30% chance of dropping nothing ---#
+fire_boss_description = ('WIP')
+emberheart_amulet = ('A loot drop from Ignatius, the Flame Tyrant')
+ignatius_the_flame_tyrant = elementalBoss(name = "Ignatius the Flame Tyrant", attack = 175, health = 400, defense = 450, loot = [emberheart_amulet, nothing])
+random_loot_chance_ignatius = random.choices([emberheart_amulet, nothing], weights)
+
+#-- Nerus the Tidal Sovereign has a 70% chance of dropping a trident of souls, and a 30% chance of dropping nothing ---#
+water_boss_description = ('WIP')
 trident_of_souls = ('A loot drop from nerus_tidal_sovereign')
-nereus_the_tidal_soverign = elementalBoss(name = "Nereus the Tidal Sovereign", attack = 200, health = 550, defense = 750, loot = [trident_of_souls, nothing])
+nereus_the_tidal_soverign = elementalBoss(name = "Nereus the Tidal Sovereign", attack = 200, health = 550, defense = 650, loot = [trident_of_souls, nothing])
+random_loot_chance_nerus_ = random.choices([trident_of_souls, nothing], weights)
 
-random_loot_chance_nerus_ = random.choices()
-
-
+#--- Nerus the Gorah has a 70% chance of dropping gaulents, and a 30% chance of dropping nothing ---#
+gorah = elementalBoss(name = "Gorah", attack = 250, health = 350 , defense = 325, loot = [gaunlets, nothing])
+random_loot_chance_nerus_gorah = random.choices([gaunlets, nothing], weights)
 #-- A legendary dragon scale has a 70% chance of dropping, and a 30% chance of dropping nothing ---#
 dragon_scale_description = ('A rare and valuable piece of dragon scale, crafted from the scales of a legendary dragon. It offers great protection against all types of attacks.')
 dragon_scale = 'Dragon Scale'
-weights = (70, 30)
 random_loot_chance_dragon = random.choices([dragon_scale, nothing], weights)
-Dragon = elementalBoss(name = "Mini Dragon", attack = 125, health = 500, defense = 300, loot = [dragon_scale, nothing])
+dragon = elementalBoss(name = "Mini Dragon", attack = 125, health = 500, defense = 300, loot = [dragon_scale, nothing])
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
     #--- If you have 5 pieces of dragonscale, you can create dragon armor! (FUTURE GAME IDEA) ---#
-
     #--- This code makes dragon_scale have a 70% chance to drop, and a 30% chance to drop nothing ---#
 
 
@@ -337,6 +361,8 @@ def tutorialMode():
 def fight(Player, target)-> None:
     Player.defense = 300
     Player.health = 750
+    firstWindSpirit.health = 150
+    firstWindSpirit.defense = 60
 
     if Player.equipped_armor is leather_tunic:
         Player.defense += leather_tunic.added_defense
@@ -826,14 +852,14 @@ def storyMode():
         print('  You:\n(Thinking) "Hes most likely correct sadly..."  ')
         input('\n')
         os.system("cls")
-        print(' ???:\n"The dungeon we were just shaped like a cross but dont let that fool you. If we went any deeper you would\'ve certainly died." ')
+        print(' ???:\n"If we went any deeper you would\'ve certainly died. Still good job for a newbie..." ')
         input('\n')
         print(' Narrator:\n"With that thought it gets quiet in the conversation bewteen you two." ')
         input('\n')
         os.system("cls")
         print(' You:\n"Well that doesnt sound good." ')
         input('\n')
-        print(' ???:\n"The plan is to bassicaly just eradicate them from the face of the earth. Couldnt put it any simplier. They keep coming, back they feed and live off evil thoughts of men. I know what your thinking their dungeon looks like a cross how can they truly be evil right? To be honest we dont really know for certain there are a lot of theories out there to why that is but no one truly knows." ')
+        print(' ???:\n"The plan is to bassicaly just eradicate them from the face of the earth. Couldnt put it any simplier. They keep coming, back they feed and live off evil thoughts of men." ')
         input('\n')
         print(' ???:\n"Ill ignore the last part but...I assume its up to us light mages to take care of em."')
         input('\n')
@@ -853,10 +879,10 @@ def storyMode():
         print(' Isaiah:\n"Lets head back to our base I\'ll explain more there." ')
         input('\n')
         os.system("cls")
-        print(' Narrator: \n"Returning to your base, you walk side by side, your sudden found unity a beacon of hope in the ongoing struggle against the forces of darkness." ')
+        print(' Narrator: \n"going to your base, you walk side by side, your sudden found unity a beacon of hope in the ongoing struggle against the forces of darkness." ')
         input('\n')
         os.system("cls")
-        print(' Narrator:\n"Upon returning to your newfound base, the other light mages greeted you with a scene of bustling activity and camaraderie. Within the safety of their stronghold, you find not only weapons and provisions but also the warm embrace of fellow allies and friends. Amidst the flickering torchlight, laughter and conversation filled the air, a testament to the resilience of their bond forged in battle. Strengthened by their unity and fortified by the support of their companions, they prepared to face the challenges ahead with renewed determination and unwavering resolve. In this sanctuary of light and friendship, they found solace and strength to confront the darkness that loomed beyond their walls, united in their shared quest for peace and prosperity." ')
+        print(' Narrator:\n"Upon going to your newfound base, the other light mages greeted you with a scene of bustling activity and camaraderie. Within the safety of their stronghold, you find not only weapons and provisions but also the warm embrace of fellow allies and friends. Amidst the flickering torchlight, laughter and conversation filled the air, a testament to the resilience of their bond forged in battle. Strengthened by their unity and fortified by the support of their companions, they prepared to face the challenges ahead with renewed determination and unwavering resolve. In this sanctuary of light and friendship, they found solace and strength to confront the darkness that loomed beyond their walls, united in their shared quest for peace and prosperity." ')
         input('\n')
         os.system("cls")
         print(' Isaiah:\n"The light mages have come together to defeat the darkness and restore peace to the world. It is truly a sacred place to remember for generations to come." ')
@@ -1215,6 +1241,7 @@ def light_mages_hideout():
     os.system("cls")
     if progressionChecker.first_Time_In_Light_Mage_Hideout == 0:
         os.system("cls")
+        #break this into small peices of text with a delay print
         print(' Narrator:\n"Hidden within a sacred mountain and concealed by an illusionary rock face, the Ancient Light Hideout was once a refuge for a mystical order of light-wielding mages.\nInside, the walls are embedded with luminous crystals that emit a soft, ambient light, creating an atmosphere of calm and serenity.\nThe architecture is elegant and ethereal, with high vaulted ceilings, sweeping archways, and intricate carvings depicting scenes of light’s triumph over darkness.\nThe central area of the hideout is a large, circular chamber with a domed ceiling featuring a grand mosaic of a radiant sun, serving as a gathering place and housing a central altar for light-based rituals.\nUnderneath the mosaic is a fireplace. Branching off from the main chamber are living quarters with simple, comfortable furnishings, and a vast library filled with ancient texts detailing the secrets of light magic.\nAdditionally, there is a spacious training hall with mirrored walls for practicing light magic, and an indoor garden illuminated by sunlight channeled through crystal prisms, filled with bioluminescent plants and flowers.\nGuarding the hideout are ethereal light spirits and ancient statues that come to life in times of need. There are also meaning intruging things around that seem to peak your curiosity \nAll of this makes up the Ancient Light Hideout a place of mystery, light, and adventure.')
         input('\n')
         os.system("cls")
@@ -1224,11 +1251,12 @@ def light_mages_hideout():
         print(' Isaiah:\n"Let me teach you the basics real quick on how to fight and get weapons and armor! First off to get weapons you can buy them from the shop and you can also switch weapons in your inventory. You get paid in coins when you defeat spirits, which you use to buy weapons, as well as armor. Your armor provides a boost of defense as well!" ') 
         input('\n')
         os.system("cls")
-        print(' Narrator:\n"Isaiah the hands you a medium sized bag filled with coins. He also recommends you go buy some armor again. "Dont spend it all in the small place he adds with a smirk." "')
+        print(' Narrator:\n"Isaiah then hands you a medium sized bag filled with coins. He also recommends you go buy some armor again. "Dont spend it all in the small place" He adds with a smirk.')
         input('\n')
         print(' (To yourself) "How can he tell me not to spend it all in one place when I can only spend it on weapons and armor, which are technically in the same place?"')
         input('\n')
         os.system("cls")
+        entry_point_light_mage_hideout()
 def entry_point_light_mage_hideout():    
         os.system("cls")
         print("******************************************************")
@@ -1238,8 +1266,7 @@ def entry_point_light_mage_hideout():
         print("[2] Go to the fireplace to warm up.")
         print("[3] Wander around the hideout to find some cool things.")
         print("[4] Go to bed/rest. ")
-        #--- This code is going to be replaced with actual code. ---#
-        match input("Do you want to go through the dark cave? (Y/N): "):
+        match input(f"Choose your action, {userName}: "):
             case '1':
                 shop()
             case '2':
@@ -1250,7 +1277,7 @@ def entry_point_light_mage_hideout():
                 players_room()
             case _:
                 print("Invalid input, please try again.")
-                light_mages_hideout()
+                entry_point_light_mage_hideout()
     
 #--- This code is going to be replaced with actual code. ---#    
 def wander_around_hideout():
@@ -1264,7 +1291,7 @@ def wander_around_hideout():
     os.system("cls")
     print("[1] Inspect the quest board")
     print("[2] Ignore")
-    match input(f"Choose your action: {userName}"):
+    match input(f"Choose your action: {userName}: "):
         case '1':
             os.system("cls")
             print("  Narrator:\nYou inspect the quest board. There are many different quests, some of which are very dangerous.")
@@ -1299,15 +1326,15 @@ def wander_around_hideout():
 def fire_place():
     os.system("cls")
     input('\n')
-    print('  Narrator:\n"As you step into the fireplace, you feel a newfound sense of peace forgetting about all your worries. You hear and feel the fireplace whispers ancient secrets. You hear the sound of a battle and the laughter, almost, frighting but also endearing in a way.\nAs if a long lost friend is trying to tell you a secret."')
+    print('  Narrator:\n"As you step closer to the fireplace, you feel a newfound sense of peace forgetting about all your worries. You hear and feel the fireplace whispers to you, ancient secrets. You hear the sound of a battle and the laughter almost, frighting but also endearing in a way.\nAs if a long lost friend is trying to tell you a story."')
     input('\n')
-    print('  ???:\n"You\'ve seem to found the fireplace intriuging eh? Well my names Anagnostis, pronuced Ah-nah-gnoh-stees. When I firstcame here I found it intruging aswell. If you would like to go to the library to get some books on our anciet history, I\'d be happy to show you where it is."')
+    print('  ???:\n"You\'ve seem to find the fireplace intriuging eh? Well my names Anagnostis, pronuced Ah-nah-gnoh-stees. When I first came here I found it intruging aswell. If you would like to go to the library to get some books on our anciet history, I\'d be happy to show you where it is."')
     input('\n')
     print("[1] Go to the library")
     print("[2] Continue your wandering around the hideout.")
-    match input(f"Choose your action: {userName}"):
+    match input(f"Choose your action, {userName}: "):
         case '1':
-            light_mages_hideout()
+            light_mages_library()
         case '2':
             print("You decide to continue your wandering around the hideout.")
             input('\n')
@@ -1317,23 +1344,20 @@ def fire_place():
             input()
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
+#WIP
 def light_mages_library():
     os.system("cls")
-    if progressionChecker.first_time_in_light_mage_library == False:
-        progressionChecker.entered_light_mage_library = True
-        print('  Anagnostis:\n"I\'s"')
-        print("\n-------------------------\n")
-        print("Anagnostis:\n"'"The library is a place where you can learn about history, magic, and war. It has many books on all things. I recommend staying here and learning some things."')
-        input('\n')
-        light_mages_library()
-    else:
+    if progressionChecker.first_time_entered_light_mage_library == True:
         print("[1] Find books about War")
         print("[2] Find books about Magic")
         print("[3] Find books about History")
+        print("[4] Find books about Prophecy")
         print("[4] Go to Room")
         match input(f"Choose your action: {userName}"):
             case '1':
-                print("You find books about war.")
+                print("You pick up a book about war heres what it says:")
+                print("TITLE: The Prophecy of the Tratior")
+                print("Author: There is said to ")
                 input()
                 light_mages_library()
             case '2':
@@ -1345,6 +1369,76 @@ def light_mages_library():
                 input()
                 light_mages_library()
             case '4':
+                print("You find books about prophecy.")
+                input()
+                light_mages_library()
+            case '5':
+                print("You Go to your room.")
+                input()
+                light_mages_library()
+    if progressionChecker.first_time_entered_light_mage_library == False:
+        progressionChecker.first_time_entered_light_mage_library = True
+        print("\n-------------------------\n")
+        print("Anagnostis:\n"'"The library is a place where you can learn about history, magic, and war. It has many books on all things. I recommend staying here and learning some things."')
+        input('\n')
+        print("[1] Find books about War")
+        print("[2] Find books about Magic")
+        print("[3] Find books about History")
+        print("[4] Find books about Prophecy")
+        print("[4] Go to Room")
+        match input(f"Choose your action: {userName}"):
+            case '1':
+                print("You pick up a book about war. Here's what it says:")
+                input()
+                os.system("cls")
+                print("TITLE: The Prophecy of Shadows")
+                print("Author: UNKNOWN SAGE")
+                print("Story:")
+                print("Within these pages unfolds a haunting prophecy of the Shadows.")
+                input('\n')
+                print("As the forces of light battle against darkness, the Shadows appear defeated.")
+                input('\n')
+                print("Yet amidst this conflict, a traitor may emerge.")
+                input('\n')
+                print("The line between friend and foe will blur.")
+                input('\n')
+                print("We, wise sages of ages past, cannot foresee the future.")
+                input('\n')
+                print("But we wish you luck.") 
+                #The traitor shall be one you know, you would not wish to fight him as you do want to kill neither a friend nor a foe.
+                print("Proditor erit quis novisti, nec pugnare vis cum eo, nam neque amicum neque inimicum interficere cupis.")
+                input('\n')
+                print("  Narrator:\nYou put the book down feeling uneasy.")
+                input()
+                light_mages_library()
+            case '2':
+                print("You find a bookk about magic.")
+                input()
+                print("TITLE: Radiance Unveiled: The Genesis of Light Magic")
+                #name means light of fire
+                print("Author: Lucius Ignis")
+                input('\n')
+                print("In the dawn of ancient times, when darkness threatened to engulf the world, wise sages sought a beacon of hope.")
+                input('\n')
+                print("Through years of study and meditation, they discovered the radiant essence woven into the fabric of the cosmos.")
+                input('\n')
+                print("Harnessing this ethereal light, they forged the art of light magic, weaving spells of illumination and protection.")
+                input('\n')
+                print("With each generation, the knowledge grew, passed down through scrolls and whispered in the halls of mystical academies.")
+                input('\n')
+                print("Today, light magic stands as a testament to the enduring spirit of enlightenment and the eternal battle against the shadows.")
+                input()
+                print("You put the book down.")
+                light_mages_library()
+            case '3':
+                print("You find books about history.")
+                input()
+                light_mages_library()
+            case '4':
+                print("You find books about prophecy.")
+                input()
+                light_mages_library()
+            case '5':
                 print("You Go to your room.")
                 input()
                 light_mages_library()
@@ -1352,6 +1446,7 @@ def light_mages_library():
                 print("Invalid input, please try again.")
                 input()
                 light_mages_library()
+
         
 def players_room():
     print("[1] Go to bed")
