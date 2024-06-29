@@ -31,20 +31,19 @@ def fast_print(s):
 #--- the difference bewteen that this class is used to see if the character has reached the next level and if so, it will biring them to the next part. ---#
 #--- I decided to make it two different classes because I didn't want to make the code too complex, and hard to read/comprhend. ---#
 class progressionChecker:
-    def __init__(progressionChecker, experience: int, progress: int, victories: int, first_Time_In_Light_Mage_Hideout: bool, entered_Light_Mage_Hideout: bool, first_time_entered_light_mage_library: bool, defeated_fire_dungeon: bool, defeated_earth_dungeon: bool, defeated_water_dungeon: bool, defeated_wind_dungeon: bool) -> None:
+    def __init__(progressionChecker, experience: int, progress: int, victories: int, first_Time_In_Light_Mage_Hideout: bool, entered_Light_Mage_Hideout: bool, defeated_fire_dungeon: bool, defeated_earth_dungeon: bool, defeated_water_dungeon: bool, defeated_wind_dungeon: bool) -> None:
         progressionChecker.experience = experience
         progressionChecker.progress = progress
         progressionChecker.victories = victories
         progressionChecker.first_Time_In_Light_Mage_Hideout = first_Time_In_Light_Mage_Hideout
         progressionChecker.entered_Light_Mage_Hideout = entered_Light_Mage_Hideout
-        progressionChecker.first_time_entered_light_mage_library = first_time_entered_light_mage_library
         progressionChecker.defeated_fire_dungeon = defeated_fire_dungeon
         progressionChecker.defeated_earth_dungeon = defeated_earth_dungeon
         progressionChecker.defeated_water_dungeon = defeated_water_dungeon
         progressionChecker.defeated_wind_dungeon = defeated_wind_dungeon
         
 
-progressionChecker = progressionChecker(0, 0, 0, False, False, False, False, False, False, False)
+progressionChecker = progressionChecker(0, 0, 0, False, False, False, False, False, False)
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 #--- PARENT FOR ALL CHARACTERS CLASS ---#
@@ -330,7 +329,8 @@ def mainMenu():
 #--- INSPIRATION BEHIND GAME ---#
 def inspiration():
     os.system("cls")
-    match input(f"It's time to get serious.\nLet's be real, all my friends who are playing this game by force know that the entry/description to the story mode of that dungeon was authored by the renowned ChatGPT.\nAs well as some of the description to the weapons.\nI did edit them a little so its not entirely ChatGPT!\nSo, please don't sue me, I've given credit.\nI appreciate it though, good job ChatGPT.\nI hope you enjoy I just was kind of board of playing games and wanted to make one and i wanted to learn more about functions and OOP.\n\n\nType 'm' to go make to main menu."):
+    #Change this to fast print 
+    match input("Hey there, my names Myles and I'm the creator of this game.\nI've been working on it for more days than I can count, and I'm really proud of what I've accomplished so far.\nI hope you enjoy the game and I hope you have fun! Not everything in this game is made by me.\nI've gotten some help from Tabnine AI which I recommend, it have helped me out a few times.\nI've also use a GPT to help spice up my story so it would be more enjoyable and descrptive since its only a text game.\nThanks for all the people that have helped me in my GameDev journey so far.\n\n\n[Type 'm' to return to the main menu.]"):
         case 'm':
             mainMenu()
         case _:
@@ -342,7 +342,7 @@ def endlessMode():
 
 #--- EXPLAINS BASIC GAME MECHANICS ---#
 def tutorialMode():
-    if Player.progress == 0:
+    if progressionChecker.progress == 0:
        match input("Return to story mode for the full scoop. If you're still puzzled, swing by again. Press 'm' to warp to the main menu."):
             case 'm':
                 mainMenu()
@@ -350,7 +350,7 @@ def tutorialMode():
                 os.system("cls")
                 tutorialMode()
     else:
-        input("Alright, here's the rundown. In battle, you'll have three options: a Light Magic Attack for a guaranteed 60 DMGE, a regular fists attack (or basic attack for those without a weapon), and a weapon attack, whether it's with a sword, staff, or other.\nAfter each victory, you'll earn rewards like armor and weapons through story mode. So, gear up and embark on your adventure, light mage!")
+        input("Alright, here's the rundown. In battle, you'll have three options: a Light Magic Attack for a guaranteed a certian amount of damage no matter what (starts as 60). A regular fists attack (or basic attack for those without a weapon), and a weapon attack, whether it's with a sword, staff, or other.\nAfter each victory, you'll earn rewards like armor and weapons through story mode. So, gear up and embark on your adventure, light mage!")
         mainMenu()
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
@@ -779,8 +779,6 @@ def fight(Player, target)-> None:
         
                             
 #--- ENTIRE STORY/DIALOUGE ---#
-    # the 'f' and the 'd' stands for delay print and fast print
-    # the reason that its like that because its faster to test when I go through it.
 def storyMode():
     if progressionChecker.progress == 0:
         os.system("cls")
@@ -861,7 +859,7 @@ def storyMode():
         input('\n')
         print(' ???:\n"The plan is to bassicaly just eradicate them from the face of the earth. Couldnt put it any simplier. They keep coming, back they feed and live off evil thoughts of men." ')
         input('\n')
-        print(' ???:\n"Ill ignore the last part but...I assume its up to us light mages to take care of em."')
+        print(' ???:\n"Ill ignore the fact your not really paying attention to what I say l but...I assume its up to us light mages to take care of em."')
         input('\n')
         os.system("cls")
         print(' ???:\n"Indeed" ')
@@ -879,9 +877,6 @@ def storyMode():
         print(' Isaiah:\n"Lets head back to our base I\'ll explain more there." ')
         input('\n')
         os.system("cls")
-        print(' Narrator: \n"going to your base, you walk side by side, your sudden found unity a beacon of hope in the ongoing struggle against the forces of darkness." ')
-        input('\n')
-        os.system("cls")
         print(' Narrator:\n"Upon going to your newfound base, the other light mages greeted you with a scene of bustling activity and camaraderie. Within the safety of their stronghold, you find not only weapons and provisions but also the warm embrace of fellow allies and friends. Amidst the flickering torchlight, laughter and conversation filled the air, a testament to the resilience of their bond forged in battle. Strengthened by their unity and fortified by the support of their companions, they prepared to face the challenges ahead with renewed determination and unwavering resolve. In this sanctuary of light and friendship, they found solace and strength to confront the darkness that loomed beyond their walls, united in their shared quest for peace and prosperity." ')
         input('\n')
         os.system("cls")
@@ -890,7 +885,8 @@ def storyMode():
         os.system("cls")
         progressionChecker.entered_light_mage_hideout = True
         light_mages_hideout()
-
+    if progressionChecker.progress == 2:
+        players_room()
 
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
@@ -899,7 +895,7 @@ def shop():
     os.system("cls")
     print(f"Your current number of coins: {Player.coins}\n-------------------------------------------------------------------------------------------------------------------------------\n")
     print(' Ryker:\n"Welcome young lad! Please choose the item(s) you would like to buy." )')
-    match input("Avavaible weapons/armor:\n'Swords', 'Scythes' 'Staffs' 'Armor' : "):
+    match input("Avavaible weapons/armor:\n'Swords', 'Scythes' 'Staffs' 'Armor'\n\n\n(Type 'm' to go to main menu) : "):
         case 'Swords':
             os.system("cls")
             swords_shop()
@@ -912,6 +908,8 @@ def shop():
         case 'Armor':
             os.system("cls")
             armor_shop()
+        case 'm':
+            mainMenu()
         case _:
             input("\nPlease enter a weapons name you would like to buy!")
             os.system("cls")
@@ -932,9 +930,11 @@ def armor_shop():
         case '1':
             if Player.coins < leather_tunic.price:
                 print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                input()
                 scythes_shop() 
             elif leather_tunic.level_requirement > Player.level:
-                input(f"You need to be at least level {leather_tunic.level_requirement} to wear {leather_tunic.name}.")
+                print(f"You need to be at least level {leather_tunic.level_requirement} to wear {leather_tunic.name}.")
+                input()
                 armor_shop()
             else:
                 Player.equipped_armor = leather_tunic
@@ -946,9 +946,11 @@ def armor_shop():
         case '2': 
             if Player.coins < ironweaved_chainmail_armor.price:
                 print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                input()
                 scythes_shop() 
             elif ironweaved_chainmail_armor.level_requirement > Player.level:
-                input(f"You need to be at least level {ironweaved_chainmail_armor.level_requirement} to wear {ironweaved_chainmail_armor.name}.")
+                print(f"You need to be at least level {ironweaved_chainmail_armor.level_requirement} to wear {ironweaved_chainmail_armor.name}.")
+                input()
                 armor_shop()
             else:
                 Player.equipped_armor = ironweaved_chainmail_armor
@@ -960,9 +962,11 @@ def armor_shop():
         case '3': 
             if Player.coins < astral_armor.price:
                 print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                input()
                 armor_shop() 
             elif astral_armor.level_requirement > Player.level:
-                input(f"You need to be at least level {astral_armor.level_requirement} to wear {astral_armor.name}.")
+                print(f"You need to be at least level {astral_armor.level_requirement} to wear {astral_armor.name}.")
+                input()
                 armor_shop()
             else:
                 Player.armor_collection.append(astral_armor)
@@ -974,9 +978,11 @@ def armor_shop():
         case '4':
             if Player.coins < pheonix_armor.price:
                 print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                input()
                 armor_shop() 
             elif pheonix_armor.level_requirement > Player.level:
-                input(f"You need to be at least level {pheonix_armor.level_requirement} to wear {pheonix_armor.name}.")
+                print(f"You need to be at least level {pheonix_armor.level_requirement} to wear {pheonix_armor.name}.")
+                input()
                 armor_shop()
             else:
                 Player.equipped_armor = pheonix_armor
@@ -988,9 +994,11 @@ def armor_shop():
         case '5':
             if Player.coins < aetherial_armor.price:
                 print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                input()
                 armor_shop() 
             elif aetherial_armor.level_requirement > Player.level:
-                input(f"You need to be at least level {aetherial_armor.level_requirement} to wear {aetherial_armor.name}.")
+                print(f"You need to be at least level {aetherial_armor.level_requirement} to wear {aetherial_armor.name}.")
+                input()
                 armor_shop()
             else:
                 Player.equipped_armor = aetherial_armor
@@ -1036,11 +1044,13 @@ def swords_shop():
                 swords_shop()
         case '2':
             if Player.coins < iron_sword.price:
-                input("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                input()
                 os.system("cls")
                 swords_shop()
             elif iron_sword.level_requirement > Player.level:
-                input(f"Ryker:\nYou need to be at least level {iron_sword.level_requirement} to wield {iron_sword.name}.")
+                print(f"Ryker:\nYou need to be at least level {iron_sword.level_requirement} to wield {iron_sword.name}.")
+                input()
                 os.system("cls")
                 swords_shop()
             else:
@@ -1053,11 +1063,13 @@ def swords_shop():
                 swords_shop()
         case '3':
             if Player.coins < diamond_sword.price:
-                input("You dont have enough money young man. You try to scam the legendary Ryker?")
+                print("You dont have enough money young man. You try to scam the legendary Ryker?")
+                input()
                 os.system("cls")
                 swords_shop()
             elif diamond_sword.level_requirement > Player.level:
-                input(f"You have to be at least level {diamond_sword.level_requirement} to buy this weapon!")
+                print(f"You have to be at least level {diamond_sword.level_requirement} to buy this weapon!")
+                input()
                 os.system("cls")
                 swords_shop()
             else:
@@ -1093,11 +1105,13 @@ def scythes_shop():
     match input("Which weapon would you like lad?"):
         case '1':
             if Player.coins < peasant_reaper.price:
-                input("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                input()
                 os.system("cls")
                 scythes_shop() 
             elif peasant_reaper.level_requirement > Player.level:
-                input(f"You need to be at least level {peasant_reaper.level_requirement} to wield {peasant_reaper.name}.")
+                print(f"You need to be at least level {peasant_reaper.level_requirement} to wield {peasant_reaper.name}.")
+                input()
                 os.system("cls")
                 scythes_shop()
             else:
@@ -1110,11 +1124,13 @@ def scythes_shop():
                 scythes_shop()
         case '2':
             if Player.coins < shadowsoul_requiem.price:
-                input("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                input()
                 os.system("cls")
                 scythes_shop()  
             elif shadowsoul_requiem.level_requirement > Player.level:
                 print(f"You need to be at least level {shadowsoul_requiem.level_requirement} to wield {shadowsoul_requiem.name}.")
+                input()
                 os.system("cls")
                 scythes_shop()
             else:
@@ -1144,11 +1160,13 @@ def staffs_shop():
     match input("Which weapon would you like lad?"):
         case '1':
             if Player.coins < celestial_staff.price:
-                input("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                print("Ryker:\nYou don't have enough money, young man. You trying to scam the legendary Ryker?")
+                input()
                 os.system("cls")
                 staffs_shop() 
             elif celestial_staff.level_requirement > Player.level:
-                input(f"You have to be at least level {celestial_staff.level_requirement} to buy this weapon!")
+                print(f"You have to be at least level {celestial_staff.level_requirement} to buy this weapon!")
+                input()
                 os.system("cls")
                 staffs_shop() 
             else:
@@ -1165,6 +1183,7 @@ def staffs_shop():
                 staffs_shop()
             elif nova_nexus.level_requirement > Player.level:
                 print(f"You need to be at least level {nova_nexus.level_requirement} to wield {nova_nexus.name}.")
+                input()
                 os.system("cls")
                 staffs_shop()
             else:
@@ -1195,8 +1214,7 @@ def good_aftermath():
     Player.Xp += 100
     Player.level += 5
     Player.light_level += 3
-    if Player.light_level > 3:
-        Player.light_attack + 35
+    Player.light_attack + 35
     progressionChecker.progress += 1
     progressionChecker.victories += 1
     Player.coins += 750
@@ -1220,10 +1238,10 @@ def userProgression():
     os.system("cls")
     print(f"{userName} Stats/Progression:")
     print(f"\n-------------------------\n")
-    print(f"XP: {Player.xp}")
+    print(f"XP: {Player.Xp}")
     print(f"Level: {Player.level}")
     print(f"Light Level: {Player.light_level}")
-    print(f"Attack Strength: {Player.attack}")
+    print(f"Attack Possiblites: {Player.attack}")
     print(f"Health: {Player.health}\n")
     print(f"Number of Vctories: {Player.victories}")
     print(f"Number of Coins: {Player.coins}")
@@ -1239,24 +1257,25 @@ def userProgression():
 #--------------------------------------------------------------------------------------------------------------------
 def light_mages_hideout():
     os.system("cls")
-    if progressionChecker.first_Time_In_Light_Mage_Hideout == 0:
-        os.system("cls")
-        #break this into small peices of text with a delay print
-        print(' Narrator:\n"Hidden within a sacred mountain and concealed by an illusionary rock face, the Ancient Light Hideout was once a refuge for a mystical order of light-wielding mages.\nInside, the walls are embedded with luminous crystals that emit a soft, ambient light, creating an atmosphere of calm and serenity.\nThe architecture is elegant and ethereal, with high vaulted ceilings, sweeping archways, and intricate carvings depicting scenes of light’s triumph over darkness.\nThe central area of the hideout is a large, circular chamber with a domed ceiling featuring a grand mosaic of a radiant sun, serving as a gathering place and housing a central altar for light-based rituals.\nUnderneath the mosaic is a fireplace. Branching off from the main chamber are living quarters with simple, comfortable furnishings, and a vast library filled with ancient texts detailing the secrets of light magic.\nAdditionally, there is a spacious training hall with mirrored walls for practicing light magic, and an indoor garden illuminated by sunlight channeled through crystal prisms, filled with bioluminescent plants and flowers.\nGuarding the hideout are ethereal light spirits and ancient statues that come to life in times of need. There are also meaning intruging things around that seem to peak your curiosity \nAll of this makes up the Ancient Light Hideout a place of mystery, light, and adventure.')
-        input('\n')
-        os.system("cls")
-        print(' Narrator:\n"As you make your way through the Ancient Light Hideout, you come to see a training hall full of light mages practicing their light magic. Isaiah then pulls you aside to tell you a few things...')
-        input('\n')
-        os.system("cls")
-        print(' Isaiah:\n"Let me teach you the basics real quick on how to fight and get weapons and armor! First off to get weapons you can buy them from the shop and you can also switch weapons in your inventory. You get paid in coins when you defeat spirits, which you use to buy weapons, as well as armor. Your armor provides a boost of defense as well!" ') 
-        input('\n')
-        os.system("cls")
-        print(' Narrator:\n"Isaiah then hands you a medium sized bag filled with coins. He also recommends you go buy some armor again. "Dont spend it all in the small place" He adds with a smirk.')
-        input('\n')
-        print(' (To yourself) "How can he tell me not to spend it all in one place when I can only spend it on weapons and armor, which are technically in the same place?"')
-        input('\n')
-        os.system("cls")
-        entry_point_light_mage_hideout()
+    progressionChecker.progress += 1    
+    os.system("cls")
+    #break this into small peices of text with a delay print
+    print(' Narrator:\n"Hidden within a sacred mountain and concealed by an illusionary rock face, the Ancient Light Hideout was once a refuge for a mystical order of light-wielding mages.\nInside, the walls are embedded with luminous crystals that emit a soft, ambient light, creating an atmosphere of calm and serenity.\nThe architecture is elegant and ethereal, with high vaulted ceilings, sweeping archways, and intricate carvings depicting scenes of light’s triumph over darkness.\nThe central area of the hideout is a large, circular chamber with a domed ceiling featuring a grand mosaic of a radiant sun, serving as a gathering place and housing a central altar for light-based rituals.\nUnderneath the mosaic is a fireplace. Branching off from the main chamber are living quarters with simple, comfortable furnishings, and a vast library filled with ancient texts detailing the secrets of light magic.\nAdditionally, there is a spacious training hall with mirrored walls for practicing light magic, and an indoor garden illuminated by sunlight channeled through crystal prisms, filled with bioluminescent plants and flowers.\nGuarding the hideout are ethereal light spirits and ancient statues that come to life in times of need. There are also meaning intruging things around that seem to peak your curiosity \nAll of this makes up the Ancient Light Hideout a place of mystery, light, and adventure.')
+    input('\n')
+    os.system("cls")
+    print(' Narrator:\n"As you make your way through the Ancient Light Hideout, you come to see a training hall full of light mages practicing their light magic. Isaiah then pulls you aside to tell you a few things...')
+    input('\n')
+    os.system("cls")
+    print(' Isaiah:\n"Let me teach you the basics real quick on how to fight and get weapons and armor! First off to get weapons you can buy them from the shop and you can also switch weapons in your inventory. You get paid in coins when you defeat spirits, which you use to buy weapons, as well as armor. Your armor provides a boost of defense as well!" ') 
+    input('\n')
+    os.system("cls")
+    print(' Narrator:\n"Isaiah then hands you a medium sized bag filled with coins. He also recommends you go buy some armor again. "Dont spend it all in the small place" He adds with a smirk.')
+    input('\n')
+    print(' (To yourself) "How can he tell me not to spend it all in one place when I can only spend it on weapons and armor, which are technically in the same place?"')
+    input('\n')
+    os.system("cls")
+    entry_point_light_mage_hideout()
+
 def entry_point_light_mage_hideout():    
         os.system("cls")
         print("******************************************************")
@@ -1296,12 +1315,12 @@ def wander_around_hideout():
             os.system("cls")
             print("  Narrator:\nYou inspect the quest board. There are many different quests, some of which are very dangerous.")
             input('\n')
-            print(' "You decide to go for a small quest for now thinking later you will choose to go for the biggers ones it says: Defeat the fire spirit and his minions."')
+            print(' Narrator:\n"You decide to go for a small quest for now thinking later you will choose to go for the biggers ones it says: Defeat the fire spirit and his minions."')
             input('\n')
             os.system("cls")
             print(' Isaiah comes back after his fight with the dragon a little scathed but with a new weapon thats draws all eyes around him. Isaiah:\n"I see you found a quest you should get some rest first lets get you to bed tough guy."')
             input('\n')
-            print(' Narrator:\n"After a day of being woken up to a stranger, and fighting a windspirit you go to bed. You follow Isaiah to a small chamber and find a room.')
+            print(' Narrator:\n"After a day of full of mystery involving: Being knocked out by a windspirit. Then being woken up to a stranger, and fighting a windspirit you go to bed. You follow Isaiah to a small chamber and find a room.')
             input('\n')
             os.system("cls")
             print(' Narrator:\n"As you step into your room, sunlight pours through the large windows, illuminating the space with a soft, warm glow.\nCrystal chandeliers and floating orbs cast a gentle light, while pastel furnishings and enchanted plants create an atmosphere of serene, magical beauty.')
@@ -1319,7 +1338,7 @@ def wander_around_hideout():
             print("WIP")
         case '2':
             print("You decide to continue your wandering around the hideout.")
-            light_mages_hideout()
+            entry_point_light_mage_hideout()
         case _:
             print("Invalid input, please try again.")
                             
@@ -1342,113 +1361,101 @@ def fire_place():
         case _:
             print("Invalid input, please try again.")
             input()
+            fire_place()
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 #WIP
 def light_mages_library():
     os.system("cls")
-    if progressionChecker.first_time_entered_light_mage_library == True:
-        print("[1] Find books about War")
-        print("[2] Find books about Magic")
-        print("[3] Find books about History")
-        print("[4] Find books about Prophecy")
-        print("[4] Go to Room")
-        match input(f"Choose your action: {userName}"):
-            case '1':
-                print("You pick up a book about war heres what it says:")
-                print("TITLE: The Prophecy of the Tratior")
-                print("Author: There is said to ")
-                input()
-                light_mages_library()
-            case '2':
-                print("You find books about magic.")
-                input()
-                light_mages_library()
-            case '3':
-                print("You find books about history.")
-                input()
-                light_mages_library()
-            case '4':
-                print("You find books about prophecy.")
-                input()
-                light_mages_library()
-            case '5':
-                print("You Go to your room.")
-                input()
-                light_mages_library()
-    if progressionChecker.first_time_entered_light_mage_library == False:
-        progressionChecker.first_time_entered_light_mage_library = True
-        print("\n-------------------------\n")
-        print("Anagnostis:\n"'"The library is a place where you can learn about history, magic, and war. It has many books on all things. I recommend staying here and learning some things."')
-        input('\n')
-        print("[1] Find books about War")
-        print("[2] Find books about Magic")
-        print("[3] Find books about History")
-        print("[4] Find books about Prophecy")
-        print("[4] Go to Room")
-        match input(f"Choose your action: {userName}"):
-            case '1':
-                print("You pick up a book about war. Here's what it says:")
-                input()
-                os.system("cls")
-                print("TITLE: The Prophecy of Shadows")
-                print("Author: UNKNOWN SAGE")
-                print("Story:")
-                print("Within these pages unfolds a haunting prophecy of the Shadows.")
-                input('\n')
-                print("As the forces of light battle against darkness, the Shadows appear defeated.")
-                input('\n')
-                print("Yet amidst this conflict, a traitor may emerge.")
-                input('\n')
-                print("The line between friend and foe will blur.")
-                input('\n')
-                print("We, wise sages of ages past, cannot foresee the future.")
-                input('\n')
-                print("But we wish you luck.") 
-                #The traitor shall be one you know, you would not wish to fight him as you do want to kill neither a friend nor a foe.
-                print("Proditor erit quis novisti, nec pugnare vis cum eo, nam neque amicum neque inimicum interficere cupis.")
-                input('\n')
-                print("  Narrator:\nYou put the book down feeling uneasy.")
-                input()
-                light_mages_library()
-            case '2':
-                print("You find a bookk about magic.")
-                input()
-                print("TITLE: Radiance Unveiled: The Genesis of Light Magic")
-                #name means light of fire
-                print("Author: Lucius Ignis")
-                input('\n')
-                print("In the dawn of ancient times, when darkness threatened to engulf the world, wise sages sought a beacon of hope.")
-                input('\n')
-                print("Through years of study and meditation, they discovered the radiant essence woven into the fabric of the cosmos.")
-                input('\n')
-                print("Harnessing this ethereal light, they forged the art of light magic, weaving spells of illumination and protection.")
-                input('\n')
-                print("With each generation, the knowledge grew, passed down through scrolls and whispered in the halls of mystical academies.")
-                input('\n')
-                print("Today, light magic stands as a testament to the enduring spirit of enlightenment and the eternal battle against the shadows.")
-                input()
-                print("You put the book down.")
-                light_mages_library()
-            case '3':
-                print("You find books about history.")
-                input()
-                light_mages_library()
-            case '4':
-                print("You find books about prophecy.")
-                input()
-                light_mages_library()
-            case '5':
-                print("You Go to your room.")
-                input()
-                light_mages_library()
-            case _:
-                print("Invalid input, please try again.")
-                input()
-                light_mages_library()
+    print("\n--------***********----------\n")
+    print("Light Mage Library")
+    input('\n')
+    print("[1] Find books about Prophecy")
+    print("[2] Find books about Magic")
+    print("[3] Find books about History")
+    print("[4] Go to Room")
+    match input(f"Choose your action: {userName}: "):
+        case '1':
+            os.system("cls")
+            print("You pick up a book about Prohpecy. Here's what it says:")
+            input('\n')
+            os.system("cls")
+            print("TITLE: The Prophecy of Shadows")
+            print("Author: UNKNOWN SAGE")
+            input('\n')
+            print("Story:")
+            print("Within these pages unfolds a haunting prophecy of the Shadows.")
+            print("As the forces of light battle against darkness, the Shadows appear defeated.")
+            input('\n')
+            print("Yet amidst this conflict, a traitor may emerge.")
+            input('\n')
+            print("The line between friend and foe will blur.")
+            input('\n')
+            print("We, wise sages of ages past, cannot foresee the future.")
+            input('\n')
+            print("But we wish you luck.") 
+            #The traitor shall be one you know, you would not wish to fight him as you do want to kill neither a friend nor a foe.
+            print("Proditor erit quis novisti, nec pugnare vis cum eo, nam neque amicum neque inimicum interficere cupis.")
+            input('\n')
+            print("  Narrator:\nYou put the book down feeling uneasy.")
+            input()
+            light_mages_library()
+        case '2':
+            os.system("cls")
+            print("You pick up a book about magic. Heres what it says:")
+            input('\n')
+            os.system("cls")
+            print("TITLE: Radiance Unveiled: The Genesis of Light Magic")
+            #name means light of fire
+            print("Author: Lucius Ignis")
+            input('\n')
+            print("In the dawn of ancient times, when darkness threatened to engulf the world, wise sages sought a beacon of hope.")
+            input('\n')
+            print("Through years of study and meditation, they discovered the radiant essence woven into the fabric of the cosmos.")
+            input('\n')
+            print("Harnessing this ethereal light, they forged the art of light magic, weaving spells of illumination and protection.")
+            input('\n')
+            print("With each generation, the knowledge grew, passed down through scrolls and whispered in the halls of mystical academies.")
+            input('\n')
+            print("Today, light magic stands as a testament to the enduring spirit of enlightenment and the eternal battle against the shadows.")
+            input()
+            print("You put the book down.")
+            light_mages_library()
+        case '3':
+            os.system("cls")
+            print("You pick up a book about history. Heres what it says:")
+            input('\n')
+            os.system("cls")
+            print("This book recounts the epic wars and heroes, providing the captivating backstory of Ryker.")
+            input('\n')
+            print("Once hailed as the greatest hero of all time, he was a force to be reckoned with on the battlefield.")
+            input('\n')
+            print("Unstoppable and fearless, he led countless victories, earning the admiration of all.")
+            input('\n')
+            print("However, after a near-fatal injury, his days of fighting came to an abrupt end.")
+            input('\n')
+            print("Despite his wounds, Ryker's spirit remained unbroken, and he sought a new way to contribute.")
+            input('\n')
+            print("Determined to continue helping others, he opened his own shop, becoming the first in the light mage community.")
+            input('\n')
+            print("Through this endeavor, he provided essential supplies and wisdom, inspiring future generations.")
+            input('\n')
+            print("This story fills you with hope and newfound respect for Ryker, the hero who never gave up.")
+            input('\n')
+            light_mages_library()
+        case '4':
+            os.system("cls")
+            delay_print("You Go to your room.")
+            input()
+            players_room()
+        case _:
+            print("Invalid input, please try again.")
+            input()
+            light_mages_library()
 
         
 def players_room():
+    os.system("cls")
     print("[1] Go to bed")
     print("[2] Go to the shop")
     print("[3] Go to the library")
@@ -1477,6 +1484,7 @@ def players_room():
 
 
 def find_mission_area():
+    os.system("cls")
     print("[1] Defeat the fire spirit and his minions (FIRE DUNGEON) [Cost: 550 coins to attempt].")
     print("[2] Defeat the wind spirit and his minions (WIND DUNGEON). [Cost: 300 coins to attempt].")
     print("[3] Defeat the earth spirit and his minions. (EARTH DUNGEON) [Cost: 450 coins to attempt].")
@@ -1486,44 +1494,57 @@ def find_mission_area():
         case '1':
             if progressionChecker.defeated_fire_dungeon == True:
                 print("You have already defeated the fire dungeon cannot go again.")
+                input()
             elif Player.coins <= 549:
                 print("You do not have enough coins to attempt the fire dungeon.")
+                input()
                 find_mission_area()
             else:
                 print("You decide to venture to the fire dungeon.")
+                input()
                 fire_dungeon()
         case '2':
             if progressionChecker.defeated_wind_dungeon == True:
                 print("You have already defeated the wind dungeon cannot go again.")
+                input()
             elif Player.coins <= 299:
                 print("You do not have enough coins to attempt the wind dungeon.")
+                input()
                 find_mission_area()
             else:
                 print("You decide to venture to the wind dungeon.")
+                input()
                 wind_dungeon()
         case '3':
             if progressionChecker.defeated_earth_dungeon == True:
                 print("You have already defeated the earth dungeon cannot go again.")
+                input()
             elif Player.coins <= 449:
                 print("You do not have enough coins to attempt the earth dungeon.")
+                input()
                 find_mission_area()
             else:
                 print("You decide to venture to the earth dungeon.")
+                input()
                 earth_dungeon()
         case '4':
             if progressionChecker.defeated_water_dungeon == True:
                 print("You have already defeated the water dungeon cannot go again.")
+                input()
             elif Player.coins <= 1249:
                 print("You do not have enough coins to attempt the water dungeon.")
+                input()
                 find_mission_area()
             else:
                 print("You decide to venture to the water dungeon.")
+                input()
                 water_dungeon()
         case '5':
             print("You decide to return to the room to ponder about what choice you should make.")
             input()
             players_room()
-
+        case _:
+            find_mission_area()
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 def armor_system():
