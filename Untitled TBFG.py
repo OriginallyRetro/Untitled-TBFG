@@ -26,6 +26,24 @@ def fast_print(s):
         sys.stdout.flush()
         time.sleep(0.02)
 
+
+#---------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------
+class elementalMinion():
+    def __init__(elementalMinion, name: str, attack: int, health: int, defense: int) -> None:
+        super().__init__(name, attack, health, defense)
+        elementalMinion.name = name
+        elementalMinion.attack = attack
+        elementalMinion.health = health
+        elementalMinion.defense = defense
+
+
+windSpiritDamage = (8, 9, 10, 11, 12, 13, 14, 15, 16, 17,)
+firstWindSpirit = elementalMinion(name = "Wind Spirit", attack = windSpiritDamage, health = 150, defense = 60)
+
+water_spirit_damage = (70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130)
+first_water_spirit = elementalMinion(name = "Water Spirit", attack = water_spirit_damage, health = 300, defense = 125)
+
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 #--- the difference bewteen that this class is used to see if the character has reached the next level and if so, it will biring them to the next part. ---#
@@ -43,18 +61,7 @@ class progressionChecker:
         progressionChecker.defeated_wind_dungeon = defeated_wind_dungeon
         
 
-progressionChecker = progressionChecker(0, 0, 0, False, False, False, False, False, False)
-#---------------------------------------------------------------------------------------------------------
-#---------------------------------------------------------------------------------------------------------
-#--- PARENT FOR ALL CHARACTERS CLASS ---#
-#--- I used to show my knowledge of inheritance in Python as, and i realised it would be better to create a parent class that all characters could inherit from also I like polymorphism. ---#
-class universalCharaterStats:
-    def __init__(universalCharaterStats, name: str, health: int, attack: int, defense : int) -> None:
-        universalCharaterStats.name = name
-        universalCharaterStats.health = health
-        universalCharaterStats.attack = attack
-        universalCharaterStats.defense = defense
-        
+progressionChecker = progressionChecker(experience = 0, progress = 0, victories = 0, first_Time_In_Light_Mage_Hideout = 0, entered_Light_Mage_Hideout = False, defeated_fire_dungeon = False, defeated_earth_dungeon = False, defeated_water_dungeon = False, defeated_wind_dungeon = False)
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 #--- CODE FOR WEAPON CLASS ---#
@@ -70,6 +77,8 @@ class weapon:
     def __str__(weapon) -> str:
         return f'\n--------------------------------------------------------------------\nWeapon Name: {weapon.name}:\n--------------------------------------------------------------------\n\n\nDamage Range: {weapon.attack}\n--------------------------------------------------------------------\n\n\nSTYLE: {weapon.style}'
 
+
+#--- 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -130,6 +139,12 @@ class armor:
         armor.description = description
         armor.price = price
 
+#--- Armor from bosses ---#
+############WHAT I NEED TO DO NEXT IS CODE THE BOSS DROPS!###########
+dragon_armor_description = ("dragon_scale_description = ('A rare and valuable piece of dragon scale, crafted from the scales of a legendary dragon. It offers great protection against all types of attacks.'")
+dragon_armor = armor(name = "Dragon Armor", added_defense = 1350, level_requirement = 0, descrption = dragon_armor_description, price = 0)
+
+#---                   ---#
 leather_tunic_description = ('A simple leather tunic, stitched together with basic craftsmanship. Provides basic protection against minor threats.')
 leather_tunic = armor(name = "Leather Tunic", added_defense = 50, level_requirement = 1, description = leather_tunic_description, price = 800)
 
@@ -148,7 +163,7 @@ aetherial_armor = armor(name = "Ethereal armor", added_defense = 1250, level_req
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 #-- DEFAULT CHARACTER CLASS {WIP} ---#
-class defaultCharacter(universalCharaterStats):
+class defaultCharacter(elementalMinion):
     def __init__(player, name: str, level: int, attack: int, weapons_collection: list, armor_collection: list, buff_collection: list, light_attack: int, equipped_weapon: None, health: int, defense: int, equipped_armor: None, light_level: int, Xp: int, coins: int, victories: int, buff: any) -> None:
         super().__init__(name, health, attack, defense)
         player.weapons_collection = weapons_collection
@@ -188,7 +203,7 @@ Player = defaultCharacter(name = {userName},
 #--- CLASSES CODE FOR BOSSES AND MINIONS FOR DUNGEON --
 
 #-- The difference bewteen bosses, and minions is that they have a loot they has a chance of droping
-class elementalBoss(universalCharaterStats):
+class elementalBoss(elementalMinion):
     def __init__(elementalBoss, name: str, attack: int, health: int, defense: int, loot: list) -> None:
         super().__init__(name, attack, health, defense)
         elementalBoss.loot = loot
@@ -199,13 +214,13 @@ nothing = 'Nothing'
 winds_favor = ('A loot drop from Zephyrus')
 #-- Zephyrus has a 70% chance of dropping a winds favor, and a 30% chance of dropping nothing ---#
 wind_boss_description = ('Zephyrus is a swift and unpredictable master of the skies, capable of conjuring powerful storms and hurricanes. His control over the winds allows him to strike with lightning speed and disappear into the air.')
-Zephyrus = elementalBoss(name = "Zephyrus", attack = 100 , health = 300, defense = 300, loot = [winds_favor, nothing])
+Zephyrus = elementalBoss(name = "Zephyrus", attack = 100 , health = 300, defense = 400, loot = [winds_favor, nothing])
 random_loot_chance_zephyrus = random.choices([winds_favor, nothing], weights)
 
 #-- Ignatius the Flame Tyrant has a 70% chance of dropping an emberheart amulet, and a 30% chance of dropping nothing ---#
 fire_boss_description = ('WIP')
 emberheart_amulet = ('A loot drop from Ignatius, the Flame Tyrant')
-ignatius_the_flame_tyrant = elementalBoss(name = "Ignatius the Flame Tyrant", attack = 175, health = 400, defense = 450, loot = [emberheart_amulet, nothing])
+ignatius_the_flame_tyrant = elementalBoss(name = "Ignatius the Flame Tyrant", attack = 175, health = 400, defense = 550, loot = [emberheart_amulet, nothing])
 random_loot_chance_ignatius = random.choices([emberheart_amulet, nothing], weights)
 
 #-- Nerus the Tidal Sovereign has a 70% chance of dropping a trident of souls, and a 30% chance of dropping nothing ---#
@@ -215,33 +230,13 @@ nereus_the_tidal_soverign = elementalBoss(name = "Nereus the Tidal Sovereign", a
 random_loot_chance_nerus_ = random.choices([trident_of_souls, nothing], weights)
 
 #--- Nerus the Gorah has a 70% chance of dropping gaulents, and a 30% chance of dropping nothing ---#
-gorah = elementalBoss(name = "Gorah", attack = 250, health = 350 , defense = 325, loot = [gaunlets, nothing])
+gorah = elementalBoss(name = "Gorah", attack = 250, health = 350 , defense = 425, loot = [gaunlets, nothing])
 random_loot_chance_nerus_gorah = random.choices([gaunlets, nothing], weights)
 #-- A legendary dragon scale has a 70% chance of dropping, and a 30% chance of dropping nothing ---#
 dragon_scale_description = ('A rare and valuable piece of dragon scale, crafted from the scales of a legendary dragon. It offers great protection against all types of attacks.')
 dragon_scale = 'Dragon Scale'
 random_loot_chance_dragon = random.choices([dragon_scale, nothing], weights)
-dragon = elementalBoss(name = "Mini Dragon", attack = 125, health = 500, defense = 300, loot = [dragon_scale, nothing])
-#---------------------------------------------------------------------------------------------------------
-#---------------------------------------------------------------------------------------------------------
-    #--- If you have 5 pieces of dragonscale, you can create dragon armor! (FUTURE GAME IDEA) ---#
-    #--- This code makes dragon_scale have a 70% chance to drop, and a 30% chance to drop nothing ---#
-
-
-#-- I knoww that I could've just made it inherit no class because it doesnt have any extra methods or attributes. But just for the sake of understanding code better I decided to do this instead.---#
-class elementalMinion(universalCharaterStats):
-    def __init__(elementalMinion, name: str, attack: int, health: int, defense: int) -> None:
-        super().__init__(name, attack, health, defense)
-        elementalMinion.name = name
-        elementalMinion.attack = attack
-        elementalMinion.health = health
-        elementalMinion.defense = defense
-
-
-windSpiritDamage = (8, 9, 10, 11, 12, 13, 14, 15, 16, 17,)
-firstWindSpirit = elementalMinion(name = "Wind Spirit", attack = windSpiritDamage, health = 150, defense = 60)
-
-
+dragon = elementalBoss(name = "Mini Dragon", attack = 125, health = 500, defense = 400, loot = [dragon_scale, nothing])
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 #--- MAIN MENU ---#
@@ -806,8 +801,9 @@ def storyMode():
         print("---------------------------------------------------")
         print(f"{userName} stats:\n--------------------\n")
         print(f"HLTH = {Player.health}")
-        print(f"ATK =  30-53 DMGE")
-        print(f"WPN = Fists")
+        print(f"BASIC ATK =  30-53 DMGE")
+        print(f"MAGIC ATK = 60 DMGE")
+        print(f"WPN = {Player.equipped_weapon}")
         print(f"DEF = {Player.defense}")
         input()
         os.system("cls")
@@ -1460,6 +1456,8 @@ def players_room():
     print("[2] Go to the shop")
     print("[3] Go to the library")
     print("[4] Go to find mission")
+    print("[5] Weapon Inventory")
+    print("[6] Armor Inventory")
     match input(f"Where do you head off to now? {userName}: "):
         case '1':
             print("You go to bed fully rested.")
@@ -1477,6 +1475,14 @@ def players_room():
             print("You go to find a mission heading towards to mission board.")
             input()
             find_mission_area()
+        case '5':
+            print("You go to your weapons collection.")
+            input()
+            weapon_system()
+        case '6':
+            print("You go to your weapons collection.")
+            input()
+            armor_system()
         case _:
             print("Invalid input, please try again.")
             input()
@@ -1485,65 +1491,66 @@ def players_room():
 
 def find_mission_area():
     os.system("cls")
-    print("[1] Defeat the fire spirit and his minions (FIRE DUNGEON) [Cost: 550 coins to attempt].")
-    print("[2] Defeat the wind spirit and his minions (WIND DUNGEON). [Cost: 300 coins to attempt].")
-    print("[3] Defeat the earth spirit and his minions. (EARTH DUNGEON) [Cost: 450 coins to attempt].")
-    print("[4] Go to the water spirit and his minions. (WATER DUNGEON). [Cost: 1250 coins to attpment]")
-    print("[5] Go back to room to ponder about what choice you should make..")
-    match input (f"Choose your action: {userName}"):
+    print(f"Current amount of coins: {Player.coins}")
+    print(f"Fire Dungeon defeated = {progressionChecker.defeated_fire_dungeon}")
+    print(f"Wind Dungeon defeated = {progressionChecker.defeated_wind_dungeon}")
+    print(f"Earth Dungon defeated = {progressionChecker.defeated_earth_dungeon}")
+    print(f"Water Dungeon defeated = {progressionChecker.defeated_water_dungeon}")
+    print("+____________________________________________________________________________________________+")
+    print(" |[1] Defeat the fire spirit and his minions (FIRE DUNGEON) [Cost: 550 coins to attempt]    |")
+    print(" |[2] Defeat the wind spirit and his minions (WIND DUNGEON) [Cost: 300 coins to attempt]    |")
+    print(" |[3] Defeat the earth spirit and his minions. (EARTH DUNGEON) [Cost: 450 coins to attempt] |")
+    print(" |[4] Go to the water spirit and his minions. (WATER DUNGEON) [Cost: 1250 coins to attpment]|")
+    print(" |__________________________________________________________________________________________|\n")
+    print(" |[5] Go back to room to ponder about what choice you should make..")
+    match input (f"Choose your action: {userName}: "):
         case '1':
-            if progressionChecker.defeated_fire_dungeon == True:
-                print("You have already defeated the fire dungeon cannot go again.")
-                input()
-            elif Player.coins <= 549:
-                print("You do not have enough coins to attempt the fire dungeon.")
-                input()
-                find_mission_area()
-            else:
-                print("You decide to venture to the fire dungeon.")
+            if Player.coins > 549 and progressionChecker.defeated_fire_dungeon == False:
+                Player.coins -= 550
+                print("You venture unto the fire dungeon.")
                 input()
                 fire_dungeon()
-        case '2':
-            if progressionChecker.defeated_wind_dungeon == True:
-                print("You have already defeated the wind dungeon cannot go again.")
-                input()
-            elif Player.coins <= 299:
-                print("You do not have enough coins to attempt the wind dungeon.")
+            else:
+                print("You are not qualifed to enter the fire dungeon.")
                 input()
                 find_mission_area()
-            else:
-                print("You decide to venture to the wind dungeon.")
+        case '2':
+            if Player.coins > 299 and progressionChecker.defeated_wind_dungeon == False:
+                Player.coins -= 300
+                print("You venture unto the wind dungeon.")
                 input()
                 wind_dungeon()
-        case '3':
-            if progressionChecker.defeated_earth_dungeon == True:
-                print("You have already defeated the earth dungeon cannot go again.")
-                input()
-            elif Player.coins <= 449:
-                print("You do not have enough coins to attempt the earth dungeon.")
+            else:
+                print("You are not qualifed to enter the wind dungeon.")
                 input()
                 find_mission_area()
-            else:
-                print("You decide to venture to the earth dungeon.")
+        case '3':
+            if Player.coins > 449 and progressionChecker.defeated_earth_dungeon == False:
+                Player.coins -= 450
+                print("You venture unto the earth dungeon.")
                 input()
                 earth_dungeon()
-        case '4':
-            if progressionChecker.defeated_water_dungeon == True:
-                print("You have already defeated the water dungeon cannot go again.")
-                input()
-            elif Player.coins <= 1249:
-                print("You do not have enough coins to attempt the water dungeon.")
+            else:
+                print("You are not qualifed to enter the earth dungeon.")
                 input()
                 find_mission_area()
-            else:
-                print("You decide to venture to the water dungeon.")
+        case '4':
+            if Player.coins > 1249 and progressionChecker.defeated_fire_dungeon == False:
+                Player.coins -= 1250
+                print("You venture unto the water dungeon.")
                 input()
                 water_dungeon()
+            else:
+                print("You are not qualifed to enter the water dungeon.")
+                input()
+                find_mission_area()
         case '5':
             print("You decide to return to the room to ponder about what choice you should make.")
             input()
             players_room()
         case _:
+            print("Invalid input, please try again.")
+            input()
             find_mission_area()
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
@@ -1609,20 +1616,123 @@ def weapon_system():
 #--------------------------------------------------------------------------------------------------------------------
 
 def fire_dungeon():
-    ...
+    print("Narrator:")
+    print("  As you venture on your new mission, you find yourself in a scorched desert.")
+    input('\n')
+    print("  Suddenly, a fiery spirit emerges from the sands, approaching you.")
+    input('\n')
+    os.system("cls")
+    print('  You hear a voice crackling like flames, saying, "You are not welcome here, traveler."')
+    input('\n')
+    print('You:\n  "It’s okay, I just need to kill some fire spirits!"')
+    input('\n')
+    os.system("cls")
+    print('The Fire Spirit:\n  "Try your best puny human!"')
+    input('\n')
+    os.system("cls")
+    print('Narrator:\n  "The fire spirit ignites the air, launching waves of heat at you.')
+    print('  Your body moves instinctively, dodging and countering the fiery assaults.')
+    print('  Realizing the danger, you prepare for the battle ahead, hoping to overcome the blazing threat."')
+    input('\n')
+    os.system("cls")
+    input('***Brace yourself for BATTLE!***\n\n')
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 
 def water_dungeon():
-    ...
+    print("Narrator:")
+    print("  As you embark on your newfound mission, you find yourself in the middle of a serene lake.")
+    input('\n')
+    print("  Suddenly, a spirit rises from the water and approaches you.")
+    input('\n')
+    os.system("cls")
+    print('  You hear a voice from the depths, saying, "You are not welcome here, traveler."')
+    input('\n')
+    print('  You:\n"It’s okay, I invited myself!"')
+    input('\n')
+    os.system("cls")
+    print('  The Water Spirit:\n"This is your final warning. Leave at once!"')
+    input('\n')
+    print('  You:\n"Looks like we have a problem, huh?"')
+    input('\n')
+    os.system("cls")
+    print('Narrator:\n"The water spirit churns the waves, attacking you fiercely.')
+    print('  Your body moves on its own, dodging and countering the spirit’s assaults.')
+    print('  Realizing the danger, you brace yourself for the battle ahead, hoping to prevail."')
+    input('\n')
+    os.system("cls")
+    input('***Brace yourself for BATTLE!***\n\n')
+    print('------------------------------------------------------------')
+    print(f"Water Spirits stats:\n--------------------\n")
+    print(f"HLTH = {first_water_spirit.health}")
+    print(f"ATK =  70-130 DMGE")
+    print(f"DEF = {first_water_spirit.defense}")
+    print("---------------------------------------------------")
+    print(f"{userName} stats:\n--------------------\n")
+    print(f"HLTH = {Player.health}")
+    print(f"BASIC ATK =  30-53 DMGE")
+    print(f"MAGIC ATK = 60 DMGE")
+    print(f"WPN = {Player.equipped_weapon}")
+    print(f"DEF = {Player.defense}")
+    input()
+    os.system("cls")
+    while True:
+        fight(Player, first_water_spirit)
+        break
+
+
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 def wind_dungeon():
-    ...
+    print("Narrator:")
+    print("  As you embark on your quest, you find yourself atop a windy mountain peak.")
+    input('\n')
+    print("  Suddenly, an air spirit materializes from the swirling winds, approaching you.")
+    input('\n')
+    os.system("cls")
+    print('  You hear a whispering voice carried by the breeze, saying, "You are not welcome here, traveler."')
+    input('\n')
+    print('You:\n  "I mean no harm, but I won’t back down."')
+    input('\n')
+    os.system("cls")
+    print('The Air Spirit:\n  "This is your final warning. Leave, or be swept away!"')
+    input('\n')
+    print('You:\n  "Your probarly full of air but.. If it’s a fight you want, I’m ready to face it!"')
+    input('\n')
+    os.system("cls")
+    print('Narrator:\n  "The air spirit unleashes fierce gusts, buffeting you with powerful winds.')
+    print('  Your body moves instinctively, dodging and countering the spirit’s assaults.')
+    print('  Realizing the danger, you brace yourself for the battle ahead, determined to withstand the storm."')
+    input('\n')
+    os.system("cls")
+    input('***Brace yourself for BATTLE!***\n\n')
+
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 def earth_dungeon():    
-    ...
+    print("Narrator:")
+    print("  As you continue your mission, you find yourself in a dense forest surrounded by ancient trees.")
+    input('\n')
+    print("  Suddenly, an earth spirit rises from the ground, approaching you.")
+    input('\n')
+    os.system("cls")
+    print('  You hear a deep, rumbling voice saying, "You are not welcome here, traveler."')
+    input('\n')
+    print('You:\n  "I do not come in peace and I wont back down."')
+    input('\n')
+    os.system("cls")
+    print('The Earth Spirit:\n  "This is your final warning. Leave now, or face the wrath of the earth!"')
+    input('\n')
+    print('You:\n  "If it’s a challenge you want, I’m ready!"')
+    input('\n')
+    os.system("cls")
+    print('Narrator:\n  "The earth spirit causes the ground to tremble, launching boulders at you.')
+    print('  Your body moves instinctively, dodging and countering the spirit’s attacks.')
+    print('  Realizing the danger, you prepare for the battle ahead, hoping to conquer the elemental force."')
+    input('\n')
+    os.system("cls")
+    input('***Brace yourself for BATTLE!***\n\n')
+
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
 def loot_trade_hub():
