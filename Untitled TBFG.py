@@ -26,24 +26,6 @@ def fast_print(s):
         sys.stdout.flush()
         time.sleep(0.02)
 
-
-#---------------------------------------------------------------------------------------------------------
-#---------------------------------------------------------------------------------------------------------
-class elementalMinion():
-    def __init__(elementalMinion, name: str, attack: int, health: int, defense: int) -> None:
-        super().__init__(name, attack, health, defense)
-        elementalMinion.name = name
-        elementalMinion.attack = attack
-        elementalMinion.health = health
-        elementalMinion.defense = defense
-
-
-windSpiritDamage = (8, 9, 10, 11, 12, 13, 14, 15, 16, 17,)
-firstWindSpirit = elementalMinion(name = "Wind Spirit", attack = windSpiritDamage, health = 150, defense = 60)
-
-water_spirit_damage = (70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130)
-first_water_spirit = elementalMinion(name = "Water Spirit", attack = water_spirit_damage, health = 300, defense = 125)
-
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 #--- the difference bewteen that this class is used to see if the character has reached the next level and if so, it will biring them to the next part. ---#
@@ -61,7 +43,18 @@ class progressionChecker:
         progressionChecker.defeated_wind_dungeon = defeated_wind_dungeon
         
 
-progressionChecker = progressionChecker(experience = 0, progress = 0, victories = 0, first_Time_In_Light_Mage_Hideout = 0, entered_Light_Mage_Hideout = False, defeated_fire_dungeon = False, defeated_earth_dungeon = False, defeated_water_dungeon = False, defeated_wind_dungeon = False)
+progressionChecker = progressionChecker(0, 0, 0, False, False, False, False, False, False)
+#---------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------
+#--- PARENT FOR ALL CHARACTERS CLASS ---#
+#--- I used to show my knowledge of inheritance in Python as, and i realised it would be better to create a parent class that all characters could inherit from also I like polymorphism. ---#
+class universalCharaterStats:
+    def __init__(universalCharaterStats, name: str, health: int, attack: int, defense : int) -> None:
+        universalCharaterStats.name = name
+        universalCharaterStats.health = health
+        universalCharaterStats.attack = attack
+        universalCharaterStats.defense = defense
+        
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 #--- CODE FOR WEAPON CLASS ---#
@@ -77,8 +70,6 @@ class weapon:
     def __str__(weapon) -> str:
         return f'\n--------------------------------------------------------------------\nWeapon Name: {weapon.name}:\n--------------------------------------------------------------------\n\n\nDamage Range: {weapon.attack}\n--------------------------------------------------------------------\n\n\nSTYLE: {weapon.style}'
 
-
-#--- 
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
@@ -139,12 +130,10 @@ class armor:
         armor.description = description
         armor.price = price
 
-#--- Armor from bosses ---#
-############WHAT I NEED TO DO NEXT IS CODE THE BOSS DROPS!###########
 dragon_armor_description = ("dragon_scale_description = ('A rare and valuable piece of dragon scale, crafted from the scales of a legendary dragon. It offers great protection against all types of attacks.'")
-dragon_armor = armor(name = "Dragon Armor", added_defense = 1350, level_requirement = 0, descrption = dragon_armor_description, price = 0)
+dragon_armor = armor(name = "Dragon Armor", added_defense = 1350, level_requirement = 0, description = dragon_armor_description, price = 0)
 
-#---                   ---#
+
 leather_tunic_description = ('A simple leather tunic, stitched together with basic craftsmanship. Provides basic protection against minor threats.')
 leather_tunic = armor(name = "Leather Tunic", added_defense = 50, level_requirement = 1, description = leather_tunic_description, price = 800)
 
@@ -163,7 +152,7 @@ aetherial_armor = armor(name = "Ethereal armor", added_defense = 1250, level_req
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 #-- DEFAULT CHARACTER CLASS {WIP} ---#
-class defaultCharacter(elementalMinion):
+class defaultCharacter(universalCharaterStats):
     def __init__(player, name: str, level: int, attack: int, weapons_collection: list, armor_collection: list, buff_collection: list, light_attack: int, equipped_weapon: None, health: int, defense: int, equipped_armor: None, light_level: int, Xp: int, coins: int, victories: int, buff: any) -> None:
         super().__init__(name, health, attack, defense)
         player.weapons_collection = weapons_collection
@@ -203,7 +192,7 @@ Player = defaultCharacter(name = {userName},
 #--- CLASSES CODE FOR BOSSES AND MINIONS FOR DUNGEON --
 
 #-- The difference bewteen bosses, and minions is that they have a loot they has a chance of droping
-class elementalBoss(elementalMinion):
+class elementalBoss(universalCharaterStats):
     def __init__(elementalBoss, name: str, attack: int, health: int, defense: int, loot: list) -> None:
         super().__init__(name, attack, health, defense)
         elementalBoss.loot = loot
@@ -214,29 +203,56 @@ nothing = 'Nothing'
 winds_favor = ('A loot drop from Zephyrus')
 #-- Zephyrus has a 70% chance of dropping a winds favor, and a 30% chance of dropping nothing ---#
 wind_boss_description = ('Zephyrus is a swift and unpredictable master of the skies, capable of conjuring powerful storms and hurricanes. His control over the winds allows him to strike with lightning speed and disappear into the air.')
-Zephyrus = elementalBoss(name = "Zephyrus", attack = 100 , health = 300, defense = 400, loot = [winds_favor, nothing])
+Zephyrus = elementalBoss(name = "Zephyrus", attack = 100 , health = 300, defense = 300, loot = [winds_favor, nothing])
 random_loot_chance_zephyrus = random.choices([winds_favor, nothing], weights)
 
 #-- Ignatius the Flame Tyrant has a 70% chance of dropping an emberheart amulet, and a 30% chance of dropping nothing ---#
-fire_boss_description = ('WIP')
+fire_boss_description = ('This inferno Tyrant towers over the battlefield, a blazing titan radiating intense heat and fury. Its armor crackles with molten energy as it unleashes scorching firestorms and searing eruptions, reducing everything in its path to ashes.')
 emberheart_amulet = ('A loot drop from Ignatius, the Flame Tyrant')
-ignatius_the_flame_tyrant = elementalBoss(name = "Ignatius the Flame Tyrant", attack = 175, health = 400, defense = 550, loot = [emberheart_amulet, nothing])
+ignatius_the_flame_tyrant = elementalBoss(name = "Ignatius the Flame Tyrant", attack = 175, health = 400, defense = 450, loot = [emberheart_amulet, nothing])
 random_loot_chance_ignatius = random.choices([emberheart_amulet, nothing], weights)
 
 #-- Nerus the Tidal Sovereign has a 70% chance of dropping a trident of souls, and a 30% chance of dropping nothing ---#
-water_boss_description = ('WIP')
+water_boss_description = ('He has been know to emerge from the depths, wielding the power of the ocean to summon colossal waves and whirlpools. His scales glisten with an otherworldly glow as it commands torrents and maelstroms to engulf its enemies and cleanse the battlefield.')
 trident_of_souls = ('A loot drop from nerus_tidal_sovereign')
 nereus_the_tidal_soverign = elementalBoss(name = "Nereus the Tidal Sovereign", attack = 200, health = 550, defense = 650, loot = [trident_of_souls, nothing])
 random_loot_chance_nerus_ = random.choices([trident_of_souls, nothing], weights)
 
 #--- Nerus the Gorah has a 70% chance of dropping gaulents, and a 30% chance of dropping nothing ---#
-gorah = elementalBoss(name = "Gorah", attack = 250, health = 350 , defense = 425, loot = [gaunlets, nothing])
+earth_boss_description = ('Gorah stands as a towering colossus of stone and soil, commanding the power of the earth to crush enemies with sheer force. Her immense strength and resilience are matched only by its ability to summon tremors and raise protective barriers of rock.')    
+gorah = elementalBoss(name = "Gorah", attack = 250, health = 350 , defense = 325, loot = [gaunlets, nothing])
 random_loot_chance_nerus_gorah = random.choices([gaunlets, nothing], weights)
 #-- A legendary dragon scale has a 70% chance of dropping, and a 30% chance of dropping nothing ---#
 dragon_scale_description = ('A rare and valuable piece of dragon scale, crafted from the scales of a legendary dragon. It offers great protection against all types of attacks.')
 dragon_scale = 'Dragon Scale'
 random_loot_chance_dragon = random.choices([dragon_scale, nothing], weights)
-dragon = elementalBoss(name = "Mini Dragon", attack = 125, health = 500, defense = 400, loot = [dragon_scale, nothing])
+dragon = elementalBoss(name = "Mini Dragon", attack = 125, health = 500, defense = 300, loot = [dragon_scale, nothing])
+#---------------------------------------------------------------------------------------------------------
+#---------------------------------------------------------------------------------------------------------
+    #--- If you have 5 pieces of dragonscale, you can create dragon armor! (FUTURE GAME IDEA) ---#
+    #--- This code makes dragon_scale have a 70% chance to drop, and a 30% chance to drop nothing ---#
+
+
+#--- Eventually this will become a parent class ---#
+class elementalMinion(universalCharaterStats):
+    def __init__(elementalMinion, name: str, attack: int, health: int, defense: int) -> None:
+        super().__init__(name, attack, health, defense)
+        elementalMinion.name = name
+        elementalMinion.attack = attack
+        elementalMinion.health = health
+        elementalMinion.defense = defense
+
+
+windSpiritDamage = (8, 9, 10, 11, 12, 13, 14, 15, 16, 17,)
+firstWindSpirit = elementalMinion(name = "Wind Spirit", attack = windSpiritDamage, health = 150, defense = 60)
+
+water_spirit_damage = (70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82, 83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108, 109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 123, 124, 125, 126, 127, 128, 129, 130)
+first_water_spirit = elementalMinion(name = "Water Spirit", attack = water_spirit_damage, health = 300, defense = 125)
+
+second_water_spirit_damage = (8, 9, 10, 11, 12, 13, 14, 15, 16, 17,)
+second_water_spirit = elementalMinion(name = "Water Spirit", attack = second_water_spirit_damage, health = 350, defense = 175,)
+
+
 #---------------------------------------------------------------------------------------------------------
 #---------------------------------------------------------------------------------------------------------
 #--- MAIN MENU ---#
@@ -473,7 +489,7 @@ def fight(Player, target)-> None:
                         break
 
                     if Player.health <= 0:
-                        bad_aftermath()
+                        game_over()
                         break
 
                     status(Player, target)
@@ -502,7 +518,7 @@ def fight(Player, target)-> None:
                         break
 
                     if Player.health <= 0:
-                        bad_aftermath()
+                        game_over()
                         break
                     
                     light_attack_status(Player, target)
@@ -533,7 +549,7 @@ def fight(Player, target)-> None:
                         break
 
                     if Player.health <= 0:
-                        bad_aftermath()
+                        game_over()
                         break
 
                     weapon_reponse_status(Player, target)
@@ -563,7 +579,7 @@ def fight(Player, target)-> None:
                         break
 
                     if Player.health <= 0:
-                        bad_aftermath()
+                        game_over()
                         break
 
                     weapon_reponse_status(Player, target)
@@ -594,7 +610,7 @@ def fight(Player, target)-> None:
                         break
 
                     if Player.health <= 0:
-                        bad_aftermath()
+                        game_over()
                         break
 
                     weapon_reponse_status(Player, target)
@@ -626,7 +642,7 @@ def fight(Player, target)-> None:
                         break
 
                     if Player.health <= 0:
-                        bad_aftermath()
+                        game_over()
                         break
 
                     weapon_reponse_status(Player, target)
@@ -658,7 +674,7 @@ def fight(Player, target)-> None:
                         break
 
                     if Player.health <= 0:
-                        bad_aftermath()
+                        game_over()
                         break
 
                     weapon_reponse_status(Player, target)
@@ -691,7 +707,7 @@ def fight(Player, target)-> None:
                         break
 
                     if Player.health <= 0:
-                        bad_aftermath()
+                        game_over()
                         break
                         
                     weapon_reponse_status(Player, target)
@@ -724,7 +740,7 @@ def fight(Player, target)-> None:
                         break
 
                     if Player.health <= 0:
-                        bad_aftermath()
+                        game_over()
                         break
 
                     weapon_reponse_status(Player, target)
@@ -747,7 +763,7 @@ def fight(Player, target)-> None:
                         break
 
                     if Player.health <= 0:
-                        bad_aftermath()
+                        game_over()
                         break
                             
 
@@ -767,11 +783,10 @@ def fight(Player, target)-> None:
                 
 
                 if Player.health <= 0:
-                    bad_aftermath()
+                    game_over()
                     break
                 
                 invalid_response_status(Player, target)
-        
                             
 #--- ENTIRE STORY/DIALOUGE ---#
 def storyMode():
@@ -801,9 +816,8 @@ def storyMode():
         print("---------------------------------------------------")
         print(f"{userName} stats:\n--------------------\n")
         print(f"HLTH = {Player.health}")
-        print(f"BASIC ATK =  30-53 DMGE")
-        print(f"MAGIC ATK = 60 DMGE")
-        print(f"WPN = {Player.equipped_weapon}")
+        print(f"ATK =  30-53 DMGE")
+        print(f"WPN = Fists")
         print(f"DEF = {Player.defense}")
         input()
         os.system("cls")
@@ -881,7 +895,7 @@ def storyMode():
         os.system("cls")
         progressionChecker.entered_light_mage_hideout = True
         light_mages_hideout()
-    if progressionChecker.progress == 2:
+    if progressionChecker.progress >= 2:
         players_room()
 
 #--------------------------------------------------------------------------------------------------------------------
@@ -1219,16 +1233,6 @@ def good_aftermath():
     mainMenu()
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
-Regular = "You have fallen in battle! No rewards "
-Rough = "Better luck next time eh? No rewards for you! "
-loser_words = (Regular, Rough)  
-def bad_aftermath():       
-    os.system("cls")
-    fast_print(random.choice(loser_words))
-    input()
-    mainMenu()
-#--------------------------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------------------------
 #--- USERS PROGRESSION TO SHOW HOW FAR THE PLAYER HAS CAME ---#
 def userProgression():
     os.system("cls")
@@ -1255,7 +1259,6 @@ def light_mages_hideout():
     os.system("cls")
     progressionChecker.progress += 1    
     os.system("cls")
-    #break this into small peices of text with a delay print
     print(' Narrator:\n"Hidden within a sacred mountain and concealed by an illusionary rock face, the Ancient Light Hideout was once a refuge for a mystical order of light-wielding mages.\nInside, the walls are embedded with luminous crystals that emit a soft, ambient light, creating an atmosphere of calm and serenity.\nThe architecture is elegant and ethereal, with high vaulted ceilings, sweeping archways, and intricate carvings depicting scenes of light’s triumph over darkness.\nThe central area of the hideout is a large, circular chamber with a domed ceiling featuring a grand mosaic of a radiant sun, serving as a gathering place and housing a central altar for light-based rituals.\nUnderneath the mosaic is a fireplace. Branching off from the main chamber are living quarters with simple, comfortable furnishings, and a vast library filled with ancient texts detailing the secrets of light magic.\nAdditionally, there is a spacious training hall with mirrored walls for practicing light magic, and an indoor garden illuminated by sunlight channeled through crystal prisms, filled with bioluminescent plants and flowers.\nGuarding the hideout are ethereal light spirits and ancient statues that come to life in times of need. There are also meaning intruging things around that seem to peak your curiosity \nAll of this makes up the Ancient Light Hideout a place of mystery, light, and adventure.')
     input('\n')
     os.system("cls")
@@ -1334,9 +1337,12 @@ def wander_around_hideout():
             print("WIP")
         case '2':
             print("You decide to continue your wandering around the hideout.")
+            input()
             entry_point_light_mage_hideout()
         case _:
             print("Invalid input, please try again.")
+            input()
+            wander_around_hideout()
                             
 def fire_place():
     os.system("cls")
@@ -1449,9 +1455,12 @@ def light_mages_library():
             input()
             light_mages_library()
 
+
         
 def players_room():
     os.system("cls")
+    print("_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_*_\n")
+    print(f"{userName}s' Room\n\n")
     print("[1] Go to bed")
     print("[2] Go to the shop")
     print("[3] Go to the library")
@@ -1732,17 +1741,46 @@ def earth_dungeon():
     input('\n')
     os.system("cls")
     input('***Brace yourself for BATTLE!***\n\n')
+#--------------------------------------------------------------------------------------------------------------------
+#--------------------------------------------------------------------------------------------------------------------
+def game_over():
+    os.system("cls")
+    input("GAME OVER!\n\n")
+    fast_print(f"{userName}'s Stats:\n--------------------\n")
+    print("Dungeons Defeated:")
+    fast_print(f"  Earth Dungeon: {'Yes' if progressionChecker.defeated_earth_dungeon else 'No'}\n")
+    fast_print(f"  Water Dungeon: {'Yes' if progressionChecker.defeated_water_dungeon else 'No'}\n")
+    fast_print(f"  Fire Dungeon: {'Yes' if progressionChecker.defeated_fire_dungeon else 'No'}\n")
+    fast_print(f"  Wind Dungeon: {'Yes' if progressionChecker.defeated_wind_dungeon else 'No'}\n")
+    input('\n')
+    os.system("cls")
+    delay_print("You have died in battle.")
+    print('\n')
+    delay_print("It was fun while it lasted, huh?")
+    print('\n')
+    delay_print("This game was created by Myles Cooke.")
+    print('\n')
+    delay_print("This is my first game that I've truly dedicated myself to, and it took over a month to finish.")
+    print('\n')
+    delay_print("I hope you enjoyed the game.")
+    print('\n')
+    delay_print("You can find the source code on my GitHub:\n")
+    delay_print("https://github.com/OriginallyRetro")
+    print('\n')
+    delay_print("This project was a fun journey for me, and I'm grateful for the people who helped me along the way.")
+    print('\n')
+    delay_print("Thank you for playing.")
+    print('\n')
+    fast_print("What if instead of dying, you could have won?")
+    print('\n')
+    fast_print("But what if instead of hot fries, it was hot chicken in the bag?")
+    print('\n')
+    delay_print("Game Over.\n\n\n\n")
 
 #--------------------------------------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------------------------------------
-def loot_trade_hub():
-    ...
-#--------------------------------------------------------------------------------------------------------------------
-#--------------------------------------------------------------------------------------------------------------------
-
 
 mainMenu()
-
 
 
 
